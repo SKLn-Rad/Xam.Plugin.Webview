@@ -29,15 +29,11 @@ Xamarin.Forms.Forms.Init(e);
  
 ### Platform Support
 *Please note: I have only put in platforms I have tested myself.*
-| Platform                  | Supported | Version |
-|---------------------------|-----------|---------|
-| Xamarin.iOS               | YES       | iOS 9 + |
-| Xamarin.Droid             | YES       | API 17  |
-| Windows Phone Silverlight | NO        |         |
-| Windows Phone RT          | YES       | 8.1 +   |
-| Windows Store RT          | YES       | 8.1 +   |
-| Windows UWP               | YES       | 10 +    |
-| Xamarin.Mac               | NO        |         |
+* Xamarin.iOS : iOS 9 +
+* Xamarin.Droid : API 17 +
+* Windows Phone/Store RT : 8.1 +
+* Windows UWP : 10 +
+* Xamarin Forms : 2.3.3.180
 
 ### API Usage
 ```c#
@@ -88,8 +84,7 @@ WebView.Navigate("https://www.google.com", WebViewContentType.Internet);
 * **Windows**: Root folder as content
 
 ## Feature Requests
-Please feel free to email me : ryandixon1993@gmail.com
-Alternatively DM me on LinkedIn: http://linkedin.radsrc.com
+DM me on LinkedIn: http://linkedin.radsrc.com
 
 ### Notes
 **For iOS 9 onwards, if you wish to access unsecure sites you may need to configure or disable ATS**
