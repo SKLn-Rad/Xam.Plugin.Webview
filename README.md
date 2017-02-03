@@ -45,7 +45,10 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 /// <summary>
 /// Initialize the WebView, only call navigate once the WebView is visible on the screen.
 /// </summary>
-FormsWebView WebView = new FormsWebView();
+FormsWebView WebView = new FormsWebView() {
+    ContentType = WebContentType.Internet,
+    Uri = "http://www.somewebsite.com"
+}
 ```
 
 ```c#
@@ -90,13 +93,6 @@ private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
 }
 ```
 
-```c#
-/// <summary>
-/// Navigate by using the Navigate method and passing in either:
-/// String HTML data, the path to a bundled HTML file, or a http/s URL.
-/// </summary>
-WebView.Navigate("https://www.google.com", WebViewContentType.Internet);
-```
 
 **Local File Locations**
 *Plans are to eventually allow access from anywhere on the file system, but for now you MUST bundle them*
