@@ -7,8 +7,10 @@ Unfortunately for Xamarin, generally the only common HybridWebView is included a
 
 **Forms WebView** is designed to be a lightweight alternative with only minor configuration needed to be performed by the developer before giving them access to a denser API allowing them more flexibility in creating hybrid applications in the Xamarin platform.
 
+
 ### If this helps you!
 Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
+
 
 ### Setup
 * NuGET package available here: TBA
@@ -24,9 +26,11 @@ FormsWebViewRenderer.Init();
 Xamarin.Forms.Forms.Init(e);
 ```
 
+
 ### Build Status
 * Jenkins build history can be found here: TBA
- 
+
+
 ### Platform Support
 *Please note: I have only put in platforms I have tested myself.*
 * Xamarin.iOS : iOS 9 +
@@ -34,6 +38,7 @@ Xamarin.Forms.Forms.Init(e);
 * Windows Phone/Store RT : 8.1 +
 * Windows UWP : 10 +
 * Xamarin Forms : 2.3.3.180
+
 
 ### API Usage
 ```c#
@@ -83,6 +88,7 @@ WebView.Navigate("https://www.google.com", WebViewContentType.Internet);
 * **Android**: Assets folder as an Android Asset
 * **Windows**: Root folder as content
 
+
 ## Feature Requests
 DM me on LinkedIn: http://linkedin.radsrc.com
 
@@ -96,4 +102,6 @@ DM me on LinkedIn: http://linkedin.radsrc.com
 ```
 
 **For Android make sure to add the "Internet" property to your manifest.**
+
+
 **For Windows make sure to add the websites to your appxmanifest ContentUris to allow JS invoking.**
