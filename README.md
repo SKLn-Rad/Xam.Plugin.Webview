@@ -8,12 +8,8 @@ Unfortunately for Xamarin, generally the only common HybridWebView is included a
 **Forms WebView** is designed to be a lightweight alternative with only minor configuration needed to be performed by the developer before giving them access to a denser API allowing them more flexibility in creating hybrid applications in the Xamarin platform.
 
 
-### If this helps you!
-Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
-
-
 ### Setup
-* NuGET package available here: TBA
+* NuGET package available here: https://www.nuget.org/packages/Xam.Plugin.WebView/1.0.0
 * Install into both your PCL and Platform projects
 * On Android, include the Android.Mono.Export reference for the Javascript Interface
 
@@ -25,6 +21,10 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 FormsWebViewRenderer.Init();
 Xamarin.Forms.Forms.Init(e);
 ```
+
+
+### If this helps you!
+Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 
 
 ### Build Status
