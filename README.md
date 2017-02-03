@@ -106,7 +106,7 @@ WebView.Navigate("https://www.google.com", WebViewContentType.Internet);
 
 
 ## Feature Requests
-DM me on LinkedIn: http://linkedin.radsrc.com
+DM me on LinkedIn / Twitter: http://linkedin.radsrc.com || https://twitter.com/SkysRad
 
 ### Notes
 **For iOS 9 onwards, if you wish to access unsecure sites you may need to configure or disable ATS**
