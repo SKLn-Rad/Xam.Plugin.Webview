@@ -43,7 +43,7 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 ### API Usage
 ```c#
 /// <summary>
-/// Initialize the WebView, only call navigate once the WebView is visible on the screen.
+/// Initialize the WebView, Navigation will occur when the Uri is changed so make sure to set the BaseUrl and ContentType prior.
 /// </summary>
 FormsWebView WebView = new FormsWebView() {
     ContentType = WebContentType.Internet,
