@@ -43,6 +43,22 @@ Xamarin.Forms.Forms.Init(e);
 ### API Usage
 ```c#
 /// <summary>
+/// Initialize the WebView, only call navigate once the WebView is visible on the screen.
+/// </summary>
+FormsWebView WebView = new FormsWebView();
+```
+
+```c#
+/// <summary>
+/// If you wish to further modify the native control, then you can bind to these events in your platform specific code.
+/// These events will be called when the control is preparing and ready.
+/// </summary>
+FormsWebViewRenderer.OnControlChanging += ModifyControlBeforeReady;
+FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
+```
+
+```c#
+/// <summary>
 /// Attach events using a static context, this allows for better decoupling across multiple WebViews.
 /// Each callback will include a sender for its WebView.
 /// </summary>
