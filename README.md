@@ -9,7 +9,7 @@ Unfortunately for Xamarin, generally the only common HybridWebView is included a
 
 
 ### Setup
-* NuGET package available here: https://www.nuget.org/packages/Xam.Plugin.WebView/1.0.0
+* NuGET package available here: https://www.nuget.org/packages/Xam.Plugin.WebView/1.1.0
 * Install into both your PCL and Platform projects
 * On Android, include the Android.Mono.Export reference for the Javascript Interface
 
@@ -62,12 +62,11 @@ FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
 
 ```c#
 /// <summary>
-/// Attach events using a static context, this allows for better decoupling across multiple WebViews.
-/// Each callback will include a sender for its WebView.
+/// Attach events using a instance of the WebView.
 /// </summary>
-FormsWebView.NavigationStarted += OnNavigationStarted;
-FormsWebView.NavigationCompleted += OnNavigationComplete;
-FormsWebView.OnJavascriptResponse += OnJavascriptResponse;
+WebView.NavigationStarted += OnNavigationStarted;
+WebView.NavigationCompleted += OnNavigationComplete;
+WebView.OnJavascriptResponse += OnJavascriptResponse;
 ```
 
 ```c#
