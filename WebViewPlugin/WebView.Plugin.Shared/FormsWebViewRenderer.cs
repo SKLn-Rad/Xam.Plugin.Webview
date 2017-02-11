@@ -1,13 +1,12 @@
 ﻿using System;
-using WebView.Plugin.Abstractions;
-using WebView.Plugin.Abstractions.Enumerations;
-using WebView.Plugin.Shared;
-using WebView.Plugin.Shared.Enumerations;
-using WebView.Plugin.Shared.Resolvers;
-using WebView.Plugin.Abstractions.Inbound;
-using WebView.Plugin.Abstractions.Events.Inbound;
-using WebView.Plugin.Abstractions.Events.Outbound;
-using static WebView.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
+using Xam.Plugin.Abstractions;
+using Xam.Plugin.Abstractions.Enumerations;
+using Xam.Plugin.Shared;
+using Xam.Plugin.Shared.Enumerations;
+using Xam.Plugin.Shared.Resolvers;
+using Xam.Plugin.Abstractions.Events.Inbound;
+using Xam.Plugin.Abstractions.Events.Outbound;
+using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 
 #if WINDOWS_UWP
 using Xamarin.Forms.Platform.UWP;
@@ -16,12 +15,10 @@ using Xamarin.Forms.Platform.WinRT;
 #endif
 
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
-namespace WebView.Plugin.Shared
+namespace Xam.Plugin.Shared
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Windows.UI.Xaml.Controls.WebView>
     {
-
-        internal WebViewEventAbstraction _eventAbstraction;
 
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
@@ -51,10 +48,7 @@ namespace WebView.Plugin.Shared
         private void SetupControl(FormsWebView element)
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.ObtainUri += ReturnUriToUser;
             WebViewControlDelegate.OnInjectJavascriptRequest += InjectJavascript;
-
-            _eventAbstraction = new WebViewEventAbstraction() { Source = new WebViewEventStub() };
             
             var control = new Windows.UI.Xaml.Controls.WebView();
             OnControlChanging?.Invoke(this, Element, control);
@@ -70,25 +64,24 @@ namespace WebView.Plugin.Shared
                 await Control.InvokeScriptAsync("eval", new[] { js });
         }
 
-        private string ReturnUriToUser(FormsWebView sender)
-        {
-            if (sender == Element && Control != null)
-                return Control.Source != null ? Control.Source.AbsoluteUri : "";
-            return "";
-        }
-
         private void SetupElement(FormsWebView element)
         {
             Control.NavigationStarting += OnNavigating;
             Control.NavigationCompleted += OnNavigated;
             Control.ScriptNotify += OnScriptNotify;
+
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         private void DestroyElement(FormsWebView element)
         {
-            Control.NavigationStarting -= OnNavigating;
-            Control.NavigationCompleted -= OnNavigated;
-            Control.ScriptNotify -= OnScriptNotify;
+            if (this != null && Control != null)
+            {
+                Control.NavigationStarting -= OnNavigating;
+                Control.NavigationCompleted -= OnNavigated;
+                Control.ScriptNotify -= OnScriptNotify;
+            }
         }
 
         private async void OnNavigated(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationCompletedEventArgs args)
@@ -96,19 +89,21 @@ namespace WebView.Plugin.Shared
             await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.InjectedFunction });
 
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
-            _eventAbstraction.Target.InvokeEvent(Element, WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, uri));    
+            Element.SetValue(Element.UriProperty, uri);
+
+            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, uri)); 
         }
 
         private void OnNavigating(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationStartingEventArgs args)
         {
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
-            NavigationRequestedDelegate nrd = (NavigationRequestedDelegate) _eventAbstraction.Target.InvokeEvent(Element, WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, uri));
+            NavigationRequestedDelegate nrd = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, uri));
             args.Cancel = nrd.Cancel;
         }
 
         private void OnScriptNotify(object sender, Windows.UI.Xaml.Controls.NotifyEventArgs e)
         {
-            _eventAbstraction.Target.InvokeEvent(Element, WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
+            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
         }
 
         private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")

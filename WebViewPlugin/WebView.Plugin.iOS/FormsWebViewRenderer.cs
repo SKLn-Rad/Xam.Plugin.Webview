@@ -4,20 +4,18 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;
 using System.IO;
-using WebView.Plugin.Abstractions;
-using WebView.Plugin.iOS.Extras;
-using WebView.Plugin.Abstractions.Events.Outbound;
-using WebView.Plugin.Abstractions.Inbound;
-using static WebView.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
-using WebView.Plugin.Abstractions.Events.Inbound;
+using Xam.Plugin.Abstractions;
+using Xam.Plugin.iOS.Extras;
+using Xam.Plugin.Abstractions.Events.Outbound;
+using Xam.Plugin.Abstractions.Events.Inbound;
+using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
+using Xam.Plugin.iOS;
 
-[assembly: ExportRenderer(typeof(FormsWebView), typeof(WebView.Plugin.iOS.FormsWebViewRenderer))]
-namespace WebView.Plugin.iOS
+[assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
+namespace Xam.Plugin.iOS
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WKWebView>, IWKScriptMessageHandler
     {
-
-        internal WebViewEventAbstraction _eventAbstraction;
 
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
@@ -50,10 +48,7 @@ namespace WebView.Plugin.iOS
         private void SetupControl(FormsWebView element)
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.ObtainUri += OnUserRequestUri;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
-
-            _eventAbstraction = new WebViewEventAbstraction() { Source = new WebViewEventStub() };
 
             UserController = new WKUserContentController();
             UserController.AddScriptMessageHandler(this, "invokeAction");
@@ -83,19 +78,14 @@ namespace WebView.Plugin.iOS
 
         private void SetupElement(FormsWebView element)
         {
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         internal void InjectJS(string js)
         {
             if (Control != null)
                 InvokeOnMainThread(async () => await Control.EvaluateJavaScriptAsync(new NSString(js)));
-        }
-
-        private string OnUserRequestUri(FormsWebView sender)
-        {
-            if (sender == Element && Control != null)
-                return Control.Url.AbsoluteUrl.ToString();
-            return "";
         }
 
         private void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType, string baseUri)
@@ -119,7 +109,7 @@ namespace WebView.Plugin.iOS
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            _eventAbstraction.Target.InvokeEvent(Element, WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
         }
     }
 }

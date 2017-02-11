@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebView.Plugin.Abstractions.Enumerations;
+using Xam.Plugin.Abstractions.Enumerations;
 
-namespace WebView.Plugin.Abstractions.Events.Outbound
+namespace Xam.Plugin.Abstractions.Events.Outbound
 {
     public class WebViewControlEventStub
     {

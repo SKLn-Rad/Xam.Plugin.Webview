@@ -40,8 +40,6 @@
     <Compile Include="Events\Inbound\NavigationCompletedDelegate.cs" />
     <Compile Include="Events\Inbound\NavigationRequestedDelegate.cs" />
     <Compile Include="Events\Inbound\WebViewDelegate.cs" />
-    <Compile Include="Events\Inbound\WebViewEventStub.cs" />
-    <Compile Include="Events\Inbound\WebViewEventAbstraction.cs" />
     <Compile Include="Events\Inbound\WebViewEventType.cs" />
     <Compile Include="Events\Outbound\WebViewControlDelegate.cs" />
     <Compile Include="Events\Outbound\WebViewControlEventAbstraction.cs" />

@@ -1,4 +1,4 @@
-﻿namespace WebView.Plugin.Abstractions.Events.Inbound
+﻿namespace Xam.Plugin.Abstractions.Events.Inbound
 {
     public class NavigationCompletedDelegate : WebViewDelegate
     {

@@ -1,6 +1,6 @@
 using Android.Webkit;
 
-namespace WebView.Plugin.Droid.Extras
+namespace Xam.Plugin.Droid.Extras
 {
     public class FormsWebViewChromeClient : WebChromeClient
     {

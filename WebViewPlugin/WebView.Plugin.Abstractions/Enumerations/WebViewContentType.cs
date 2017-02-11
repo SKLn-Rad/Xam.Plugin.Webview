@@ -1,4 +1,4 @@
-﻿namespace WebView.Plugin.Abstractions.Enumerations
+﻿namespace Xam.Plugin.Abstractions.Enumerations
 {
     public enum WebViewContentType
     {

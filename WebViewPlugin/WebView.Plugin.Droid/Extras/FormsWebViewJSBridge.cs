@@ -2,7 +2,7 @@ using System;
 using Java.Interop;
 using Android.Webkit;
 
-namespace WebView.Plugin.Droid.Extras
+namespace Xam.Plugin.Droid.Extras
 {
     public class FormsWebViewJSBridge : Java.Lang.Object
     {

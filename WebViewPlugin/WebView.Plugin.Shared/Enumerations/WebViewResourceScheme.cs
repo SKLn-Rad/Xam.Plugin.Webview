@@ -1,4 +1,4 @@
-﻿namespace WebView.Plugin.Shared.Enumerations
+﻿namespace Xam.Plugin.Shared.Enumerations
 {
     public enum WebViewResourceScheme
     {

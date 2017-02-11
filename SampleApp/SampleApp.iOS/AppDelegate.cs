@@ -4,7 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
-using WebView.Plugin.iOS;
+using Xam.Plugin.iOS;
 
 namespace SampleApp.iOS
 {

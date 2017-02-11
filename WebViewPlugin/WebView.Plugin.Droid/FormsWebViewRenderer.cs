@@ -1,22 +1,19 @@
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using WebView.Plugin.Abstractions;
-using WebView.Plugin.Droid.Extras;
-using static WebView.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
-using WebView.Plugin.Abstractions.Enumerations;
-using WebView.Plugin.Abstractions.Events.Outbound;
-using WebView.Plugin.Abstractions.Inbound;
 using System.IO;
-using WebView.Plugin.Abstractions.Events.Inbound;
+using Xam.Plugin.Abstractions;
+using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
+using Xam.Plugin.Droid.Extras;
+using Xam.Plugin.Abstractions.Events.Outbound;
+using Xam.Plugin.Abstractions.Enumerations;
+using Xam.Plugin.Abstractions.Events.Inbound;
 
-[assembly: ExportRenderer(typeof(FormsWebView), typeof(WebView.Plugin.Droid.FormsWebViewRenderer))]
-namespace WebView.Plugin.Droid
+[assembly: ExportRenderer(typeof(FormsWebView), typeof(Xam.Plugin.Droid.FormsWebViewRenderer))]
+namespace Xam.Plugin.Droid
 {
     public partial class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
     {
-
-        internal WebViewEventAbstraction _eventAbstraction;
 
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
@@ -47,10 +44,7 @@ namespace WebView.Plugin.Droid
         private void SetupControl(FormsWebView element)
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.ObtainUri += OnUserRequestUri;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
-
-            _eventAbstraction = new WebViewEventAbstraction() { Source = new WebViewEventStub() };
 
             var webView = new Android.Webkit.WebView(Forms.Context);
             webView.SetWebViewClient((WebViewClient = new FormsWebViewClient(element, this)));
@@ -70,21 +64,18 @@ namespace WebView.Plugin.Droid
                 InjectJS(js);
         }
 
-        private string OnUserRequestUri(FormsWebView sender)
-        {
-            if (sender == Element && Control != null)
-                return Control.Url.ToString();
-            return "";
-        }
-
         private void SetupElement(FormsWebView element)
         {
             Control.AddJavascriptInterface(new FormsWebViewJSBridge(this), "bridge");
+
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         private void DestroyElement(FormsWebView element)
         {
-            Control.RemoveJavascriptInterface("bridge");
+            if (this != null && Control != null)
+                Control.RemoveJavascriptInterface("bridge");
         }
 
         private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
@@ -114,7 +105,7 @@ namespace WebView.Plugin.Droid
 
         internal void OnScriptNotify(string script)
         {
-            _eventAbstraction.Target.InvokeEvent(Element, WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, script));
+            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, script));
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WebView.Plugin.Abstractions;
-using WebView.Plugin.Abstractions.Enumerations;
-using WebView.Plugin.Abstractions.Events.Inbound;
+using Xam.Plugin.Abstractions;
+using Xam.Plugin.Abstractions.Events.Inbound;
 using Xamarin.Forms;
 
 namespace SampleApp
@@ -20,7 +16,8 @@ namespace SampleApp
             WebView = new FormsWebView()
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Uri = "https://www.google.com"
             };
             
             // The root page of your application
@@ -38,9 +35,9 @@ namespace SampleApp
                 }
             };
 
-            FormsWebView.NavigationStarted += OnNavigationStarted;
-            FormsWebView.NavigationCompleted += OnNavigationComplete;
-            FormsWebView.OnJavascriptResponse += OnJavascriptResponse;
+            WebView.NavigationStarted += OnNavigationStarted;
+            WebView.NavigationCompleted += OnNavigationComplete;
+            WebView.OnJavascriptResponse += OnJavascriptResponse;
 
             content.Appearing += Content_Appearing;
             MainPage = new NavigationPage(content);
@@ -76,8 +73,6 @@ namespace SampleApp
             //WebView.Uri = "https://www.google.com"
             //WebView.Uri = "<html><body>Hello World!</body></html>";
             //WebView.Uri = "Web/Sample.html";
-
-            WebView.Navigate("https://www.google.com", WebViewContentType.Internet);
         }
 
         protected override void OnStart()

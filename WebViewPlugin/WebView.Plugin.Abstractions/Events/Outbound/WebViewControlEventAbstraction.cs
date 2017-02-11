@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WebView.Plugin.Abstractions.Events.Outbound
+namespace Xam.Plugin.Abstractions.Events.Outbound
 {
     [StructLayout(LayoutKind.Explicit)]
     public class WebViewControlEventAbstraction

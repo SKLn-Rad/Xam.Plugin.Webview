@@ -176,7 +176,6 @@ Global
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|iPhone.Deploy.0 = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|x64.ActiveCfg = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|x64.Build.0 = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Release|x64.Deploy.0 = Release|Any CPU
@@ -209,11 +208,12 @@ Global
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Debug|x64.ActiveCfg = Debug|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Debug|x86.ActiveCfg = Debug|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|Any CPU.Build.0 = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|ARM.ActiveCfg = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhone.ActiveCfg = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhone.Build.0 = Release|iPhone
-		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhoneSimulator.ActiveCfg = Release|iPhone
+		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhoneSimulator.Build.0 = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|x64.ActiveCfg = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|x86.ActiveCfg = Release|iPhone
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
@@ -281,7 +281,6 @@ Global
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|iPhone.Deploy.0 = Release|Any CPU
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|x64.ActiveCfg = Release|Any CPU
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|x64.Build.0 = Release|Any CPU
 		{BBBFCD72-2077-4EF7-BEDF-CA5801C99CF1}.Release|x64.Deploy.0 = Release|Any CPU
@@ -339,13 +338,14 @@ Global
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Debug|x86.Build.0 = Debug|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Debug|x86.Deploy.0 = Debug|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|Any CPU.ActiveCfg = Release|x86
+		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|Any CPU.Build.0 = Release|x86
+		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|Any CPU.Deploy.0 = Release|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|ARM.ActiveCfg = Release|ARM
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|ARM.Build.0 = Release|ARM
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|ARM.Deploy.0 = Release|ARM
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|iPhone.ActiveCfg = Release|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|iPhoneSimulator.ActiveCfg = Release|x64
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|iPhoneSimulator.Build.0 = Release|x64
-		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|iPhoneSimulator.Deploy.0 = Release|x64
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|x64.ActiveCfg = Release|x64
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|x64.Build.0 = Release|x64
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Release|x64.Deploy.0 = Release|x64
@@ -417,7 +417,6 @@ Global
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|iPhone.Deploy.0 = Release|Any CPU
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|x64.ActiveCfg = Release|x64
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|x64.Build.0 = Release|x64
 		{4622D5EA-C1A7-4C07-95D1-237CDD10F331}.Release|x64.Deploy.0 = Release|x64

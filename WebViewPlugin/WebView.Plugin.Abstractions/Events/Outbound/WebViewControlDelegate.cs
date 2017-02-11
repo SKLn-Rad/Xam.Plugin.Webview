@@ -1,7 +1,7 @@
-﻿using WebView.Plugin.Abstractions.Enumerations;
+﻿using Xam.Plugin.Abstractions.Enumerations;
 using Xamarin.Forms;
 
-namespace WebView.Plugin.Abstractions.Events.Outbound
+namespace Xam.Plugin.Abstractions.Events.Outbound
 {
     public class WebViewControlDelegate
     {
@@ -25,20 +25,12 @@ namespace WebView.Plugin.Abstractions.Events.Outbound
         public delegate void PerformNavigationDelegate(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "");
         public static event PerformNavigationDelegate OnNavigationRequestedFromUser;
 
-        public delegate string ObtainUriDelegate(FormsWebView sender);
-        public static event ObtainUriDelegate ObtainUri;
-
         public delegate void InjectJavascriptDelegate(FormsWebView sender, string js);
         public static event InjectJavascriptDelegate OnInjectJavascriptRequest;
 
         public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
         {
             OnNavigationRequestedFromUser?.Invoke(sender, uri, contentType, baseUri);
-        }
-
-        internal string GetUri(FormsWebView sender)
-        {
-            return ObtainUri != null ? ObtainUri(sender) : "";
         }
 
         internal void InjectJavascript(FormsWebView sender, string js)

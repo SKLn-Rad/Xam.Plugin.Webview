@@ -5,7 +5,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.Web;
 
-namespace WebView.Plugin.Shared.Resolvers
+namespace Xam.Plugin.Shared.Resolvers
 {
     public class LocalFileStreamResolver : IUriToStreamResolver
     {

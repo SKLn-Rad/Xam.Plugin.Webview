@@ -1,4 +1,4 @@
-﻿namespace WebView.Plugin.Droid.Extras
+﻿namespace Xam.Plugin.Droid.Extras
 {
     public class WebViewStringDataSettings
     {

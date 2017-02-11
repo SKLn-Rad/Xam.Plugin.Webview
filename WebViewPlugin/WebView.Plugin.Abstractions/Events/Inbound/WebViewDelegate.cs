@@ -1,4 +1,4 @@
-﻿namespace WebView.Plugin.Abstractions.Events.Inbound
+﻿namespace Xam.Plugin.Abstractions.Events.Inbound
 {
     /// <summary>
     /// Parent class used in event abstraction and downcasted to obtain fields.
