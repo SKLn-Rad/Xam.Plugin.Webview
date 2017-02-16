@@ -41,6 +41,16 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 
 
 ### API Usage
+## New!
+```c#
+/// <summary>
+/// Bind an action to a Javascript function
+/// </summary>
+FormsWebView WebView = new FormsWebView();
+WebView.RegisterCallback("test", (str) => Debug.WriteLine(str));
+WebView.RemoveCallback("test");
+```
+
 ```c#
 /// <summary>
 /// Initialize the WebView, Navigation will occur when the Uri is changed so make sure to set the BaseUrl and ContentType prior.
