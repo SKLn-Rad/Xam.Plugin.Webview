@@ -45,6 +45,7 @@ namespace Xam.Plugin.Droid
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
+            WebViewControlDelegate.OnActionAdded += OnActionAdded;
 
             var webView = new Android.Webkit.WebView(Forms.Context);
             webView.SetWebViewClient((WebViewClient = new FormsWebViewClient(element, this)));
@@ -56,6 +57,11 @@ namespace Xam.Plugin.Droid
             OnControlChanging?.Invoke(this, element, webView);
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, element, webView);
+        }
+
+        private void OnActionAdded(FormsWebView sender, string key)
+        {
+            InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
         private void OnInjectJavascriptRequest(FormsWebView sender, string js)

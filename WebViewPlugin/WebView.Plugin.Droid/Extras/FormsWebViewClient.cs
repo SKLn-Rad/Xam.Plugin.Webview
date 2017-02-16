@@ -40,7 +40,10 @@ namespace Xam.Plugin.Droid.Extras
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
-            Element.SetValue(Element.UriProperty, url);
+            foreach (var key in Element.GetAllCallbacks())
+                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+
+            Element.SetValue(FormsWebView.UriProperty, url);
 
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
             base.OnPageFinished(view, url);

@@ -18,6 +18,9 @@
       <m2:VisualElements DisplayName="SampleApp.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="SampleApp.Windows" ForegroundText="light" BackgroundColor="#464646">
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
       </m2:VisualElements>
+      <ApplicationContentUriRules>
+        <Rule Match="https://www.google.co.uk" Type="include" />
+      </ApplicationContentUriRules>
     </Application>
   </Applications>
   <Capabilities>

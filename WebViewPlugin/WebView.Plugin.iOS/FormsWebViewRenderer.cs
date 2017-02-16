@@ -49,6 +49,7 @@ namespace Xam.Plugin.iOS
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
+            WebViewControlDelegate.OnActionAdded += OnActionAdded;
 
             UserController = new WKUserContentController();
             UserController.AddScriptMessageHandler(this, "invokeAction");
@@ -64,6 +65,11 @@ namespace Xam.Plugin.iOS
             OnControlChanging?.Invoke(this, Element, Control);
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, Element, Control);
+        }
+
+        private void OnActionAdded(FormsWebView sender, string key)
+        {
+            InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
         private void OnInjectJavascriptRequested(FormsWebView sender, string js)

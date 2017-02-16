@@ -1,18 +1,25 @@
-﻿using Xam.Plugin.Abstractions.Enumerations;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using Xam.Plugin.Abstractions.Extensions;
+using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using Xamarin.Forms;
+using Xam.Plugin.Abstractions.DTO;
+using System.Diagnostics;
 
 namespace Xam.Plugin.Abstractions
 {
     public class FormsWebView : View
     {
 
-        public BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
-        public BindableProperty UriProperty = BindableProperty.Create(nameof(Uri), typeof(string), typeof(FormsWebView), null);
-        public BindableProperty BasePathProperty = BindableProperty.Create(nameof(BasePath), typeof(string), typeof(FormsWebView), "");
-        public BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
-
+        public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
+        public static readonly BindableProperty UriProperty = BindableProperty.Create(nameof(Uri), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty BasePathProperty = BindableProperty.Create(nameof(BasePath), typeof(string), typeof(FormsWebView), "");
+        public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
+        public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<string, Action<string>>), typeof(FormsWebView), new Dictionary<string, Action<string>>());
+        
         public bool Navigating
         {
             get { return (bool) GetValue(NavigatingProperty); }
@@ -37,6 +44,12 @@ namespace Xam.Plugin.Abstractions
             set { SetValue(ContentTypeProperty, value); }
         }
 
+        private Dictionary<string, Action<string>> RegisteredActions
+        {
+            get { return (Dictionary<string, Action<string>>) GetValue(RegisteredActionsProperty); }
+            set { SetValue(RegisteredActionsProperty, value); }
+        }
+
         private WebViewControlEventAbstraction _controlEventAbstraction;
         
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
@@ -58,6 +71,31 @@ namespace Xam.Plugin.Abstractions
             _controlEventAbstraction.Target.InjectJavascript(this, js);
         }
 
+        public void RegisterCallback(string name, Action<string> callback)
+        {
+            if (!RegisteredActions.ContainsKey(name))
+            {
+                RegisteredActions.Add(name, callback);
+                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name);
+            }
+        }
+
+        public void RemoveCallback(string name)
+        {
+            if (RegisteredActions.ContainsKey(name))
+                RegisteredActions.Remove(name);
+        }
+
+        public string[] GetAllCallbacks()
+        {
+            return RegisteredActions.Keys.ToArray();
+        }
+
+        public void RemoveAllCallbacks()
+        {
+            RegisteredActions.Clear();
+        }
+
         /// <summary>
         /// Internal Use Only.
         /// </summary>
@@ -76,7 +114,17 @@ namespace Xam.Plugin.Abstractions
                     break;
 
                 case WebViewEventType.JavascriptCallback:
-                    OnJavascriptResponse?.Invoke(eventObject as JavascriptResponseDelegate);
+                    var data = (eventObject as JavascriptResponseDelegate).Data;
+                    ActionResponse ar;
+                    if (data.ValidateJSON() && (ar = data.AttemptParseActionResponse()) != null)
+                    {
+                        if (RegisteredActions.ContainsKey(ar.Action))
+                            RegisteredActions[ar.Action]?.Invoke(ar.Data);
+                    }
+                    else
+                    {
+                        OnJavascriptResponse?.Invoke(eventObject as JavascriptResponseDelegate);
+                    }
                     break;
             }
 

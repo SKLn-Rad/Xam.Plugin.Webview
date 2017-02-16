@@ -1,11 +1,12 @@
-﻿using Xam.Plugin.Abstractions.Enumerations;
+﻿using System.Text;
+using Xam.Plugin.Abstractions.Enumerations;
 using Xamarin.Forms;
 
 namespace Xam.Plugin.Abstractions.Events.Outbound
 {
     public class WebViewControlDelegate
     {
-
+        
         public static string InjectedFunction
         {
             get
@@ -22,11 +23,26 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
             }
         }
 
+        public static string GenerateFunctionScript(string name)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(string.Concat("function ", name, "(str){csharp( \"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
+            return sb.ToString();
+        }
+
         public delegate void PerformNavigationDelegate(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "");
         public static event PerformNavigationDelegate OnNavigationRequestedFromUser;
 
         public delegate void InjectJavascriptDelegate(FormsWebView sender, string js);
         public static event InjectJavascriptDelegate OnInjectJavascriptRequest;
+
+        public delegate void RegisterActionsAddedDelegate(FormsWebView sender, string key);
+        public static event RegisterActionsAddedDelegate OnActionAdded;
+
+        public void NotifyCallbacksChanged(FormsWebView sender, string key)
+        {
+            OnActionAdded?.Invoke(sender, key);
+        }
 
         public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
         {

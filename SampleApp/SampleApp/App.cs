@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xamarin.Forms;
@@ -19,7 +20,12 @@ namespace SampleApp
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Uri = "https://www.google.com"
             };
-            
+
+            WebView.RegisterCallback("test", (str) =>
+            {
+                Debug.WriteLine(str);
+            });
+
             // The root page of your application
             var content = new ContentPage
             {
@@ -45,7 +51,7 @@ namespace SampleApp
 
         private void OnJavascriptResponse(JavascriptResponseDelegate eventObj)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("Javascript: {0}", eventObj.Data));
+            Debug.WriteLine(string.Format("Javascript: {0}", eventObj.Data));
         }
 
         /// <summary>
@@ -53,8 +59,9 @@ namespace SampleApp
         /// </summary>
         private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Uri));
+            Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Uri));
             eventObj.Sender.InjectJavascript("csharp('Testing');");
+            eventObj.Sender.InjectJavascript("test('Action');");
         }
 
         /// <summary>

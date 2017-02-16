@@ -49,7 +49,7 @@ namespace Xam.Plugin.Shared
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += InjectJavascript;
-            
+            WebViewControlDelegate.OnActionAdded += OnActionAdded;
             var control = new Windows.UI.Xaml.Controls.WebView();
             OnControlChanging?.Invoke(this, Element, control);
             _resolver = new LocalFileStreamResolver();
@@ -84,12 +84,20 @@ namespace Xam.Plugin.Shared
             }
         }
 
+        private async void OnActionAdded(FormsWebView sender, string key)
+        {
+            if (Element == sender && Control != null)
+                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
+        }
+
         private async void OnNavigated(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationCompletedEventArgs args)
         {
             await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.InjectedFunction });
+            foreach (var key in Element.GetAllCallbacks())
+                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
 
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
-            Element.SetValue(Element.UriProperty, uri);
+            Element.SetValue(FormsWebView.UriProperty, uri);
 
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, uri)); 
         }

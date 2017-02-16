@@ -40,9 +40,11 @@ namespace Xam.Plugin.iOS.Extras
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
             Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
-            
+            foreach (var key in Element.GetAllCallbacks())
+                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+
             if (webView.Url.AbsoluteUrl != null)
-                Element.SetValue(Element.UriProperty, webView.Url.AbsoluteUrl.ToString());
+                Element.SetValue(FormsWebView.UriProperty, webView.Url.AbsoluteUrl.ToString());
 
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, webView.Url.AbsoluteUrl.ToString(), true));
         }
