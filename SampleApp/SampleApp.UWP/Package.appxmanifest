@@ -21,8 +21,7 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <uap:ApplicationContentUriRules>
-        <uap:Rule Match="https://*.google.com/*" Type="include" WindowsRuntimeAccess="all" />
-        <uap:Rule Match="https://*.google.co.uk/*" Type="include" WindowsRuntimeAccess="all" />
+        <uap:Rule Match="https://www.xamarin.com/*" Type="include" WindowsRuntimeAccess="all" />
       </uap:ApplicationContentUriRules>
     </Application>
   </Applications>

@@ -18,7 +18,7 @@ namespace SampleApp
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Uri = "https://www.google.com"
+                Uri = "https://www.xamarin.com"
             };
 
             WebView.RegisterCallback("test", (str) =>
@@ -61,7 +61,7 @@ namespace SampleApp
         {
             Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Uri));
             eventObj.Sender.InjectJavascript("csharp('Testing');");
-            eventObj.Sender.InjectJavascript("test('Action');");
+            eventObj.Sender.InjectJavascript("alert('Demonstration Alert');");
         }
 
         /// <summary>

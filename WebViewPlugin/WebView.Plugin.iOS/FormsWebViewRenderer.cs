@@ -10,11 +10,12 @@ using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Xam.Plugin.iOS;
+using UIKit;
 
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.iOS
 {
-    public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WKWebView>, IWKScriptMessageHandler
+    public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WKWebView>, IWKScriptMessageHandler, IWKUIDelegate
     {
 
         public static event WebViewControlChangedDelegate OnControlChanging;
@@ -58,6 +59,7 @@ namespace Xam.Plugin.iOS
             WebViewConfiguration = new WKWebViewConfiguration { UserContentController = UserController };
             
             var webView = new WKWebView(Frame, WebViewConfiguration);
+            webView.UIDelegate = this;
             webView.NavigationDelegate = NavigationDelegate;
             
             UriBase = NSBundle.MainBundle.ResourcePath;
@@ -116,6 +118,57 @@ namespace Xam.Plugin.iOS
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
             Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+        }
+
+        /**
+         * UI Delegate methods from: https://developer.xamarin.com/recipes/ios/content_controls/web_view/handle_javascript_alerts/
+         */
+
+        [Foundation.Export("webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:completionHandler:")]
+        public void RunJavaScriptAlertPanel(WebKit.WKWebView webView, string message, WKFrameInfo frame, Action completionHandler)
+        {
+            var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
+            alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
+
+            completionHandler();
+        }
+
+        [Export("webView:runJavaScriptConfirmPanelWithMessage:initiatedByFrame:completionHandler:")]
+        public void RunJavaScriptConfirmPanel(WKWebView webView, string message, WKFrameInfo frame, Action<bool> completionHandler)
+        {
+            var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
+
+            alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
+                completionHandler(true);
+            }));
+            alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
+                completionHandler(false);
+            }));
+
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
+        }
+
+        [Foundation.Export("webView:runJavaScriptTextInputPanelWithPrompt:defaultText:initiatedByFrame:completionHandler:")]
+        public void RunJavaScriptTextInputPanel(WebKit.WKWebView webView, string prompt, string defaultText, WebKit.WKFrameInfo frame, System.Action<string> completionHandler)
+        {
+            var alertController = UIAlertController.Create(null, prompt, UIAlertControllerStyle.Alert);
+
+            UITextField alertTextField = null;
+            alertController.AddTextField((textField) => {
+                textField.Placeholder = defaultText;
+                alertTextField = textField;
+            });
+
+            alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
+                completionHandler(alertTextField.Text);
+            }));
+
+            alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
+                completionHandler(null);
+            }));
+
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
         }
     }
 }

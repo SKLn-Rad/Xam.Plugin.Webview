@@ -117,6 +117,10 @@
       <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
       <Name>WebView.Plugin.Abstractions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\WebViewPlugin\WebView.Plugin.WindowsPhone\WebView.Plugin.WindowsPhone.csproj">
+      <Project>{5860580e-caaf-425a-936e-ec3fa0312855}</Project>
+      <Name>WebView.Plugin.WindowsPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleApp\SampleApp.csproj">
       <Project>{740d15ef-4c44-4ead-8929-6060185742a2}</Project>
       <Name>SampleApp</Name>
