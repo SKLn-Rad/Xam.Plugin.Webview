@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>W0462</Machine>
+    <WindowsUser>ryan.dixon</WindowsUser>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetOsVersion>6.3</TargetOsVersion>
+    <TargetOsDescription>Windows 8.1</TargetOsDescription>
+    <SolutionConfiguration>Debug|x64</SolutionConfiguration>
+    <PackageArchitecture>x64</PackageArchitecture>
+    <PackageIdentityName>2886e654-01fc-4781-897f-56721eac103d</PackageIdentityName>
+    <PackageIdentityPublisher>CN=ryan.dixon</PackageIdentityPublisher>
+    <IntermediateOutputPath>C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\obj\x64\Debug\</IntermediateOutputPath>
+    <RemoteDeploymentType>
+    </RemoteDeploymentType>
+    <PackageRegistrationPath>
+    </PackageRegistrationPath>
+    <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
+    <RegisteredManifestChecksum>A5810B01BE34A15C45201B87513CF96FAD63E67923F80B4BBF72F428DDEF30F1</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>2886e654-01fc-4781-897f-56721eac103d_1.0.0.0_x64__9f5mrdwf8b8qj</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>2886e654-01fc-4781-897f-56721eac103d_9f5mrdwf8b8qj!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>2886e654-01fc-4781-897f-56721eac103d</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=ryan.dixon</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+    <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:45:43.153</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\SampleApp.Windows.exe">
+      <PackagePath>SampleApp.Windows.exe</PackagePath>
+      <Modified>2017-02-28T10:45:42.243</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll">
+      <PackagePath>Newtonsoft.Json.dll</PackagePath>
+      <Modified>2016-06-13T22:06:14.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\SampleApp.dll">
+      <PackagePath>SampleApp.dll</PackagePath>
+      <Modified>2017-02-28T10:45:40.392</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.Abstractions\bin\Debug\WebView.Plugin.Abstractions.dll">
+      <PackagePath>WebView.Plugin.Abstractions.dll</PackagePath>
+      <Modified>2017-02-28T10:45:40.046</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.WindowsStore\bin\x64\Debug\WebView.Plugin.WindowsStore.dll">
+      <PackagePath>WebView.Plugin.WindowsStore.dll</PackagePath>
+      <Modified>2017-02-28T10:45:40.983</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Core.dll">
+      <PackagePath>Xamarin.Forms.Core.dll</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.dll">
+      <PackagePath>Xamarin.Forms.Platform.dll</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.dll">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.dll</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.Tablet.dll">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.Tablet.dll</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Xaml.dll">
+      <PackagePath>Xamarin.Forms.Xaml.dll</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:42:07.398</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:42:07.406</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:42:07.414</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:42:07.387</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\Sample.html">
+      <PackagePath>Sample.html</PackagePath>
+      <Modified>2017-02-28T10:42:07.453</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\SampleApp.Windows.xr.xml">
+      <PackagePath>SampleApp.Windows.xr.xml</PackagePath>
+      <Modified>2017-02-28T10:45:42.111</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+      <Modified>2017-02-28T10:45:42.185</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\MainPage.xbf">
+      <PackagePath>MainPage.xbf</PackagePath>
+      <Modified>2017-02-28T10:45:42.189</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT\PageControl.xbf">
+      <PackagePath>Xamarin.Forms.Platform.WinRT\PageControl.xbf</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT\StepperControl.xbf">
+      <PackagePath>Xamarin.Forms.Platform.WinRT\StepperControl.xbf</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT\Xamarin.Forms.Platform.WinRT.xr.xml">
+      <PackagePath>Xamarin.Forms.Platform.WinRT\Xamarin.Forms.Platform.WinRT.xr.xml</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.Tablet\FormsTextBoxStyle.xbf">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.Tablet\FormsTextBoxStyle.xbf</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.Tablet\Resources.xbf">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.Tablet\Resources.xbf</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.Tablet\TabletResources.xbf">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.Tablet\TabletResources.xbf</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\packages\Xamarin.Forms.2.3.3.180\lib\win81\Xamarin.Forms.Platform.WinRT.Tablet\Xamarin.Forms.Platform.WinRT.Tablet.xr.xml">
+      <PackagePath>Xamarin.Forms.Platform.WinRT.Tablet\Xamarin.Forms.Platform.WinRT.Tablet.xr.xml</PackagePath>
+      <Modified>2016-12-14T16:02:36.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\bin\x64\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2017-02-28T10:45:42.954</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

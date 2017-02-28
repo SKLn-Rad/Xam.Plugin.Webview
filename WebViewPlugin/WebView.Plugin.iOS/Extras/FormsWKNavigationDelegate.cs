@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using System;
 using WebKit;
+using WebView.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
@@ -36,6 +37,15 @@ namespace Xam.Plugin.iOS.Extras
                 decisionHandler(WKNavigationActionPolicy.Allow);
         }
 
+        [Export("webView:didCommitNavigation:")]
+        public override void DidCommitNavigation(WKWebView webView, WKNavigation navigation)
+        {
+            if (webView.Url.AbsoluteUrl != null)
+                Element.SetValue(FormsWebView.SourceProperty, webView.Url.AbsoluteUrl.ToString());
+
+            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, webView.Url.AbsoluteUrl.ToString(), true));
+        }
+
         [Export("webView:didFinishNavigation:")]
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
@@ -43,10 +53,7 @@ namespace Xam.Plugin.iOS.Extras
             foreach (var key in Element.GetAllCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
-            if (webView.Url.AbsoluteUrl != null)
-                Element.SetValue(FormsWebView.UriProperty, webView.Url.AbsoluteUrl.ToString());
-
-            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, webView.Url.AbsoluteUrl.ToString(), true));
+            Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, webView.Url.AbsoluteUrl.ToString()));
         }
     }
 }

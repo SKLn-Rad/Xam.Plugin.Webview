@@ -1,0 +1,17 @@
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\SampleApp.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\SampleApp.pdb
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\WebView.Plugin.Abstractions.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Core.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Platform.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Xaml.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\WebView.Plugin.Abstractions.pdb
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Core.pdb
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Core.xml
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Platform.pdb
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Xaml.pdb
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\bin\Debug\Xamarin.Forms.Xaml.xml
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\obj\Debug\SampleApp.csprojResolveAssemblyReference.cache
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\obj\Debug\SampleApp.dll
+C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\obj\Debug\SampleApp.pdb

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PriInfo>
+	<ResourceMap name="Xamarin.Forms.Platform.WinRT" version="1.0" primary="true">
+		<Qualifiers/>
+		<ResourceMapSubtree name="Files">
+			<ResourceMapSubtree name="Xamarin.Forms.Platform.WinRT">
+				<NamedResource name="PageControl.xbf" uri="ms-resource://Xamarin.Forms.Platform.WinRT/Files/Xamarin.Forms.Platform.WinRT/PageControl.xbf">
+					<Candidate type="Path">
+						<Value>Xamarin.Forms.Platform.WinRT\PageControl.xbf</Value>
+					</Candidate>
+				</NamedResource>
+				<NamedResource name="StepperControl.xbf" uri="ms-resource://Xamarin.Forms.Platform.WinRT/Files/Xamarin.Forms.Platform.WinRT/StepperControl.xbf">
+					<Candidate type="Path">
+						<Value>Xamarin.Forms.Platform.WinRT\StepperControl.xbf</Value>
+					</Candidate>
+				</NamedResource>
+				<NamedResource name="Xamarin.Forms.Platform.WinRT.xr.xml" uri="ms-resource://Xamarin.Forms.Platform.WinRT/Files/Xamarin.Forms.Platform.WinRT/Xamarin.Forms.Platform.WinRT.xr.xml">
+					<Candidate type="Path">
+						<Value>Xamarin.Forms.Platform.WinRT\Xamarin.Forms.Platform.WinRT.xr.xml</Value>
+					</Candidate>
+				</NamedResource>
+			</ResourceMapSubtree>
+		</ResourceMapSubtree>
+	</ResourceMap>
+</PriInfo>
