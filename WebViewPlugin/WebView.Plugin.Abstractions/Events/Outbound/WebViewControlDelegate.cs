@@ -30,7 +30,7 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
             return sb.ToString();
         }
 
-        public delegate void PerformNavigationDelegate(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "");
+        public delegate void PerformNavigationDelegate(FormsWebView sender, string uri, WebViewContentType contentType);
         public static event PerformNavigationDelegate OnNavigationRequestedFromUser;
 
         public delegate void InjectJavascriptDelegate(FormsWebView sender, string js);
@@ -44,9 +44,9 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
             OnActionAdded?.Invoke(sender, key);
         }
 
-        public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
+        public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType)
         {
-            OnNavigationRequestedFromUser?.Invoke(sender, uri, contentType, baseUri);
+            OnNavigationRequestedFromUser?.Invoke(sender, uri, contentType);
         }
 
         internal void InjectJavascript(FormsWebView sender, string js)

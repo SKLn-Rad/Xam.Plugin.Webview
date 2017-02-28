@@ -3,3 +3,10 @@
 ################################################################################
 
 /packages
+/SampleApp/SampleApp/obj/Debug
+/SampleApp/SampleApp.Droid/obj/Debug/sdks.cache
+/SampleApp/SampleApp.Droid/obj/Debug/__library_projects__
+/SampleApp/SampleApp.Droid/SampleApp.Droid.csproj.user
+/SampleApp/SampleApp.UWP/obj/x86/Debug
+/WebViewPlugin/WebView.Plugin.Droid/obj/Debug/sdks.cache
+/WebViewPlugin/WebView.Plugin.UWP/obj/Debug

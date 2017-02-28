@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="DTO\ActionResponse.cs" />
     <Compile Include="Enumerations\WebViewContentType.cs" />
+    <Compile Include="Events\Inbound\ContentLoadedDelegate.cs" />
     <Compile Include="Events\Inbound\JavascriptResponseDelegate.cs" />
     <Compile Include="Events\Inbound\NavigationCompletedDelegate.cs" />
     <Compile Include="Events\Inbound\NavigationRequestedDelegate.cs" />

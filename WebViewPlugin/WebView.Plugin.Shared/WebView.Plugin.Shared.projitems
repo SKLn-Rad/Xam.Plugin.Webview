@@ -9,7 +9,6 @@
     <Import_RootNamespace>WebView.Plugin.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Enumerations\WebViewResourceScheme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FormsWebViewRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Resolvers\LocalFileStreamResolver.cs" />
   </ItemGroup>
