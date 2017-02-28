@@ -53,11 +53,11 @@ WebView.RemoveCallback("test");
 
 ```c#
 /// <summary>
-/// Initialize the WebView, Navigation will occur when the Uri is changed so make sure to set the BaseUrl and ContentType prior.
+/// Initialize the WebView, Navigation will occur when the Source is changed so make sure to set the BaseUrl and ContentType prior.
 /// </summary>
 FormsWebView WebView = new FormsWebView() {
     ContentType = WebContentType.Internet,
-    Uri = "http://www.somewebsite.com"
+    Source = "http://www.somewebsite.com"
 }
 ```
 
@@ -74,8 +74,8 @@ FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
 /// <summary>
 /// Attach events using a instance of the WebView.
 /// </summary>
-WebView.NavigationStarted += OnNavigationStarted;
-WebView.NavigationCompleted += OnNavigationComplete;
+WebView.OnNavigationStarted += OnNavigationStarted;
+WebView.OnNavigationCompleted += OnNavigationComplete;
 WebView.OnJavascriptResponse += OnJavascriptResponse;
 ```
 
@@ -85,7 +85,7 @@ WebView.OnJavascriptResponse += OnJavascriptResponse;
 /// </summary>
 private NavigationRequestedDelegate OnNavigationStarted(NavigationRequestedDelegate eventObj)
 {
-    if (eventObj.Uri == "www.somebadwebsite.com")
+    if (eventObj.Source == "www.somebadwebsite.com")
         eventObj.Cancel = true;
     return eventObj;
 }
@@ -97,21 +97,21 @@ private NavigationRequestedDelegate OnNavigationStarted(NavigationRequestedDeleg
 /// </summary>
 private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
 {
-    System.Diagnostics.Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Uri));
+    System.Diagnostics.Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Source));
     eventObj.Sender.InjectJavascript("csharp('Testing');");
 }
 ```
 
 
 **Local File Locations**
-*Plans are to eventually allow access from anywhere on the file system, but for now you MUST bundle them*
+To modify the file locations, change the BaseUrl in each platforms renderer
 * **iOS**: Resources Folder as a bundle resource
 * **Android**: Assets folder as an Android Asset
 * **Windows**: Root folder as content
 
 
 ## Feature Requests
-DM me on LinkedIn / Twitter: http://linkedin.radsrc.com || https://twitter.com/SkysRad
+DM me on LinkedIn: http://linkedin.radsrc.com
 
 ### Notes
 **For iOS 9 onwards, if you wish to access unsecure sites you may need to configure or disable ATS**
