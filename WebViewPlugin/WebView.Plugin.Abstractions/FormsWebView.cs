@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Xamarin.Forms;
 using Xam.Plugin.Abstractions.Extensions;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
+using Xamarin.Forms;
 using Xam.Plugin.Abstractions.DTO;
-using WebView.Plugin.Abstractions.Events.Inbound;
+using System.Diagnostics;
 
 namespace Xam.Plugin.Abstractions
 {
@@ -15,7 +15,8 @@ namespace Xam.Plugin.Abstractions
     {
 
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
-        public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty UriProperty = BindableProperty.Create(nameof(Uri), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty BasePathProperty = BindableProperty.Create(nameof(BasePath), typeof(string), typeof(FormsWebView), "");
         public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
         public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<string, Action<string>>), typeof(FormsWebView), new Dictionary<string, Action<string>>());
         
@@ -25,10 +26,16 @@ namespace Xam.Plugin.Abstractions
             set { SetValue(NavigatingProperty, value); }
         }
 
-        public string Source
+        public string Uri
         {
-            get { return (string) GetValue(SourceProperty); }
-            set { SetValue(SourceProperty, value); _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType);}
+            get { return (string) GetValue(UriProperty); }
+            set { SetValue(UriProperty, value); _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType, BasePath);}
+        }
+
+        public string BasePath
+        {
+            get { return (string)GetValue(BasePathProperty); }
+            set { SetValue(BasePathProperty, value); }
         }
 
         public WebViewContentType ContentType
@@ -46,16 +53,13 @@ namespace Xam.Plugin.Abstractions
         private WebViewControlEventAbstraction _controlEventAbstraction;
         
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
-        public event WebViewNavigationStartedEventArgs OnNavigationStarted;
+        public event WebViewNavigationStartedEventArgs NavigationStarted;
 
         public delegate void WebViewNavigationCompletedEventArgs(NavigationCompletedDelegate eventObj);
-        public event WebViewNavigationCompletedEventArgs OnNavigationCompleted;
+        public event WebViewNavigationCompletedEventArgs NavigationCompleted;
 
         public delegate void JavascriptResponseEventArgs(JavascriptResponseDelegate eventObj);
         public event JavascriptResponseEventArgs OnJavascriptResponse;
-
-        public delegate void ContentLoadedEventArgs(ContentLoadedDelegate eventObj);
-        public event ContentLoadedEventArgs OnContentLoaded;
 
         public FormsWebView()
         {
@@ -103,14 +107,10 @@ namespace Xam.Plugin.Abstractions
             switch (type)
             {
                 case WebViewEventType.NavigationRequested:
-                    return OnNavigationStarted == null ? eventObject as NavigationRequestedDelegate : OnNavigationStarted.Invoke(eventObject as NavigationRequestedDelegate);
+                    return NavigationStarted == null ? eventObject as NavigationRequestedDelegate : NavigationStarted.Invoke(eventObject as NavigationRequestedDelegate);
 
                 case WebViewEventType.NavigationComplete:
-                    OnNavigationCompleted?.Invoke(eventObject as NavigationCompletedDelegate);
-                    break;
-
-                case WebViewEventType.ContentLoaded:
-                    OnContentLoaded?.Invoke(eventObject as ContentLoadedDelegate);
+                    NavigationCompleted?.Invoke(eventObject as NavigationCompletedDelegate);
                     break;
 
                 case WebViewEventType.JavascriptCallback:

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using Xam.Plugin.Abstractions;
-using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xamarin.Forms;
 
@@ -19,31 +18,8 @@ namespace SampleApp
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                ContentType = WebViewContentType.Internet,
-                Source = "https://www.xamarin.com"
+                Uri = "https://www.xamarin.com"
             };
-
-            /*
-             * Uncomment to use HTML data
-            WebView = new FormsWebView()
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                ContentType = WebViewContentType.StringData,
-                Source = "<html><body><h1>Hello World!</h1></body></html>"
-            };
-            */
-
-            /*
-             * Uncomment to use local file
-            WebView = new FormsWebView()
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                ContentType = WebViewContentType.LocalFile,
-                Source = "Sample.html"
-            };
-            */
 
             WebView.RegisterCallback("test", (str) =>
             {
@@ -65,20 +41,12 @@ namespace SampleApp
                 }
             };
 
-            WebView.OnNavigationStarted += OnNavigationStarted;
-            WebView.OnNavigationCompleted += OnNavigationComplete;
-            WebView.OnContentLoaded += OnContentLoaded;
+            WebView.NavigationStarted += OnNavigationStarted;
+            WebView.NavigationCompleted += OnNavigationComplete;
             WebView.OnJavascriptResponse += OnJavascriptResponse;
 
             content.Appearing += Content_Appearing;
             MainPage = new NavigationPage(content);
-        }
-
-        private void OnContentLoaded(WebView.Plugin.Abstractions.Events.Inbound.ContentLoadedDelegate eventObj)
-        {
-            Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Source));
-            eventObj.Sender.InjectJavascript("csharp('Testing');");
-            eventObj.Sender.InjectJavascript("alert('Demonstration Alert');");
         }
 
         private void OnJavascriptResponse(JavascriptResponseDelegate eventObj)
@@ -91,7 +59,9 @@ namespace SampleApp
         /// </summary>
         private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
         {
-            Debug.WriteLine(string.Format("Navigation has been commited: {0}", eventObj.Uri));
+            Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Uri));
+            eventObj.Sender.InjectJavascript("csharp('Testing');");
+            eventObj.Sender.InjectJavascript("alert('Demonstration Alert');");
         }
 
         /// <summary>

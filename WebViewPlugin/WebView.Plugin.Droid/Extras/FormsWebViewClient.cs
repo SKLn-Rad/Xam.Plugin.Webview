@@ -2,8 +2,6 @@ using Android.Webkit;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Outbound;
-using WebView.Plugin.Abstractions.Events.Inbound;
-using Android.Graphics;
 
 namespace Xam.Plugin.Droid.Extras
 {
@@ -39,22 +37,17 @@ namespace Xam.Plugin.Droid.Extras
             return base.ShouldInterceptRequest(view, request);
         }
 
-        public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
-        {
-            Element.SetValue(FormsWebView.SourceProperty, url);
-
-            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
-            base.OnPageStarted(view, url, favicon);
-        }
-
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
             foreach (var key in Element.GetAllCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
-            Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, url));
+            Element.SetValue(FormsWebView.UriProperty, url);
+
+            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
             base.OnPageFinished(view, url);
         }
+
     }
 }

@@ -1,6 +1,0 @@
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp.Windows\SampleApp.Windows.csproj;x64
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\SampleApp\SampleApp\SampleApp.csproj;neutral
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.Abstractions\WebView.Plugin.Abstractions.csproj;neutral
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.Abstractions\WebView.Plugin.Abstractions.csproj;neutral
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.Abstractions\WebView.Plugin.Abstractions.csproj;neutral
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\WebViewPlugin\WebView.Plugin.WindowsStore\WebView.Plugin.WindowsStore.csproj;x64

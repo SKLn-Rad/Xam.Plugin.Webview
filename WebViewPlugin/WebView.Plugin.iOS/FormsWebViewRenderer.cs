@@ -21,11 +21,11 @@ namespace Xam.Plugin.iOS
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
 
-        private WKUserContentController UserController;
-        private WKWebViewConfiguration WebViewConfiguration;
+        public WKUserContentController UserController;
+        public WKWebViewConfiguration WebViewConfiguration;
         private FormsWKNavigationDelegate NavigationDelegate;
 
-        public string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
+        public string UriBase { get; set; }
 
         public new static void Init()
         {
@@ -61,6 +61,8 @@ namespace Xam.Plugin.iOS
             var webView = new WKWebView(Frame, WebViewConfiguration);
             webView.UIDelegate = this;
             webView.NavigationDelegate = NavigationDelegate;
+            
+            UriBase = NSBundle.MainBundle.ResourcePath;
 
             OnControlChanging?.Invoke(this, Element, Control);
             SetNativeControl(webView);
@@ -84,8 +86,8 @@ namespace Xam.Plugin.iOS
 
         private void SetupElement(FormsWebView element)
         {
-            if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         internal void InjectJS(string js)
@@ -94,7 +96,7 @@ namespace Xam.Plugin.iOS
                 InvokeOnMainThread(async () => await Control.EvaluateJavaScriptAsync(new NSString(js)));
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType)
+        private void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType, string baseUri)
         {
             if (Element == sender)
             {
@@ -104,22 +106,13 @@ namespace Xam.Plugin.iOS
                         Control.LoadRequest(new NSUrlRequest(new NSUrl(uri)));
                         break;
                     case Abstractions.Enumerations.WebViewContentType.LocalFile:
-                        LoadLocalContent(uri);
+                        Control.LoadFileUrl(new NSUrl("file://" + Path.Combine(UriBase, uri)), new NSUrl("file://" + UriBase));
                         break;
                     case Abstractions.Enumerations.WebViewContentType.StringData:
-                        Control.LoadHtmlString(new NSString(uri), BaseUrl == null ? null : new NSUrl(BaseUrl));
+                        Control.LoadHtmlString(new NSString(uri), baseUri == null ? null : new NSUrl(baseUri));
                         break;
                 }
             }
-        }
-
-        private void LoadLocalContent(string uri)
-        {
-            if (BaseUrl == null)
-                throw new Exception("Base URL was not set, could not load local content");
-
-            var path = Path.Combine(BaseUrl, uri);
-            Control.LoadFileUrl(new NSUrl(string.Concat("file://", path)), new NSUrl(string.Concat("file://", BaseUrl)));
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)

@@ -18,11 +18,9 @@ namespace Xam.Plugin.Droid
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
 
-        private WebViewStringDataSettings StringDataSettings { get; set; } = new WebViewStringDataSettings();
-        private FormsWebViewClient WebViewClient { get; set; }
-        private FormsWebViewChromeClient ChromeClient { get; set; }
-
-        public string BaseUrl { get; set; } = "file:///android_asset/";
+        public WebViewStringDataSettings StringDataSettings { get; set; } = new WebViewStringDataSettings();
+        public FormsWebViewClient WebViewClient { get; set; }
+        public FormsWebViewChromeClient ChromeClient { get; set; }
 
         public static void Init()
         {
@@ -76,8 +74,8 @@ namespace Xam.Plugin.Droid
         {
             Control.AddJavascriptInterface(new FormsWebViewJSBridge(this), "bridge");
 
-            if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         private void DestroyElement(FormsWebView element)
@@ -86,7 +84,7 @@ namespace Xam.Plugin.Droid
                 Control.RemoveJavascriptInterface("bridge");
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
         {
             if (sender == Element)
             {
@@ -96,21 +94,13 @@ namespace Xam.Plugin.Droid
                         Control.LoadUrl(uri);
                         break;
                     case WebViewContentType.StringData:
-                        Control.LoadDataWithBaseURL(BaseUrl, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
+                        Control.LoadDataWithBaseURL(baseUri, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
                         break;
                     case WebViewContentType.LocalFile:
-                        LoadLocalFile(uri);
+                        Control.LoadUrl(Path.Combine("file:///android_asset/", uri));
                         break;
                 }
             }
-        }
-
-        private void LoadLocalFile(string uri)
-        {
-            if (BaseUrl == null)
-                throw new Exception("Base URL was not set, could not load local content");
-
-            Control.LoadUrl(Path.Combine(BaseUrl, uri));
         }
 
         internal void InjectJS(string script)

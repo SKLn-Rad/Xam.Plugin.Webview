@@ -4,7 +4,6 @@
     {
         NavigationRequested,
         NavigationComplete,
-        JavascriptCallback,
-        ContentLoaded
+        JavascriptCallback
     }
 }

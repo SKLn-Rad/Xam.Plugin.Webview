@@ -2,12 +2,11 @@
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Shared;
+using Xam.Plugin.Shared.Enumerations;
 using Xam.Plugin.Shared.Resolvers;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
-using WebView.Plugin.Abstractions.Events.Inbound;
-using Xamarin.Forms;
 
 #if WINDOWS_UWP
 using Xamarin.Forms.Platform.UWP;
@@ -23,9 +22,9 @@ namespace Xam.Plugin.Shared
 
         public static event WebViewControlChangedDelegate OnControlChanging;
         public static event WebViewControlChangedDelegate OnControlChanged;
-        private LocalFileStreamResolver _resolver;
 
-        public string BaseUrl { get; set; } = "ms-appx:///";
+        private LocalFileStreamResolver _resolver;
+        private WebViewResourceScheme _resourceScheme = WebViewResourceScheme.ApplicationPackage;
 
         public static void Init()
         {
@@ -53,7 +52,7 @@ namespace Xam.Plugin.Shared
             WebViewControlDelegate.OnActionAdded += OnActionAdded;
             var control = new Windows.UI.Xaml.Controls.WebView();
             OnControlChanging?.Invoke(this, Element, control);
-            _resolver = new LocalFileStreamResolver(this);
+            _resolver = new LocalFileStreamResolver();
 
             SetNativeControl(control);
             OnControlChanged?.Invoke(this, Element, control);
@@ -69,11 +68,10 @@ namespace Xam.Plugin.Shared
         {
             Control.NavigationStarting += OnNavigating;
             Control.NavigationCompleted += OnNavigated;
-            Control.DOMContentLoaded += OnContentLoaded;
             Control.ScriptNotify += OnScriptNotify;
 
-            if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+            if (element.Uri != null)
+                OnUserNavigationRequested(element, element.Uri, element.ContentType, element.BasePath);
         }
 
         private void DestroyElement(FormsWebView element)
@@ -82,7 +80,6 @@ namespace Xam.Plugin.Shared
             {
                 Control.NavigationStarting -= OnNavigating;
                 Control.NavigationCompleted -= OnNavigated;
-                Control.DOMContentLoaded -= OnContentLoaded;
                 Control.ScriptNotify -= OnScriptNotify;
             }
         }
@@ -93,12 +90,16 @@ namespace Xam.Plugin.Shared
                 await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
         }
 
-        private void OnNavigated(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationCompletedEventArgs args)
+        private async void OnNavigated(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationCompletedEventArgs args)
         {
+            await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.InjectedFunction });
+            foreach (var key in Element.GetAllCallbacks())
+                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
+
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
-            Element.SetValue(FormsWebView.SourceProperty, uri);
-            
-            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, uri, args.IsSuccess)); 
+            Element.SetValue(FormsWebView.UriProperty, uri);
+
+            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, uri)); 
         }
 
         private void OnNavigating(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationStartingEventArgs args)
@@ -108,21 +109,12 @@ namespace Xam.Plugin.Shared
             args.Cancel = nrd.Cancel;
         }
 
-        private async void OnContentLoaded(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewDOMContentLoadedEventArgs args)
-        {
-            await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.InjectedFunction });
-            foreach (var key in Element.GetAllCallbacks())
-                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
-
-            Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, args.Uri != null ? args.Uri.AbsoluteUri : ""));
-        }
-
         private void OnScriptNotify(object sender, Windows.UI.Xaml.Controls.NotifyEventArgs e)
         {
             Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType, string baseUri = "")
         {
             if (sender == Element)
             {
@@ -143,7 +135,24 @@ namespace Xam.Plugin.Shared
 
         private void LoadLocalFile(string uri)
         {
-            Control.NavigateToLocalStreamUri(Control.BuildLocalStreamUri("/", uri), _resolver);
+            var luri = Control.BuildLocalStreamUri("/", uri);
+            Control.NavigateToLocalStreamUri(luri, _resolver);
+        }
+
+        private string GetUriScheme()
+        {
+            switch (_resourceScheme)
+            {
+                default:
+                case WebViewResourceScheme.ApplicationPackage:
+                    return "ms-appx-web:///";
+                case WebViewResourceScheme.LocalStorage:
+                    return "ms-appdata:///local/";
+                case WebViewResourceScheme.RoamingStorage:
+                    return "ms-appdata:///roaming/";
+                case WebViewResourceScheme.TempStorage:
+                    return "ms-appdata:///temp/";
+            }
         }
     }
 }
