@@ -1,6 +1,15 @@
 # WebView Plugin for Xamarin
 Lightweight cross platform WebView designed to leverage the native WebView components in Android, iOS, and Windows to provide enhanced functionality over the base control.
 
+### New in 1.4.0
+## HttpError Handling
+You can now catch HttpErrorCodes when an error occurs during Navigation. To do this, simple use the OnNavigationError event in the WebView.
+
+## XWP Client (beta)
+This client is a predefined script which is injected into each page as it loads.
+At the moment it supports tap, swipe, and move detection as well as reporting the window size of the WebView.
+In the future this will be updated to allow you to attach directly to elements in the page and trigger events based on gestures from within C#. i.e: OnItemTapped(string id) => DisplayAlert("Item was tapped").
+
 ### Why I made this?
 Hybrid WebViews are common across many applications these days with many different implementations available on the Web.
 Unfortunately for Xamarin, generally the only common HybridWebView is included as part of the XLabs toolset which gives the user the extra bloat of the additional components, as well as the problems associated with setting up this framework.
