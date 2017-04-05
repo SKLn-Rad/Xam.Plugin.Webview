@@ -1,23 +1,23 @@
 # WebView Plugin for Xamarin
 Lightweight cross platform WebView designed to leverage the native WebView components in Android, iOS, and Windows to provide enhanced functionality over the base control.
 
-### New in 1.4.0
-## HttpError Handling
+## New in 1.4.0
+### HttpError Handling
 You can now catch HttpErrorCodes when an error occurs during Navigation. To do this, simple use the OnNavigationError event in the WebView.
 
-## XWP Client (beta)
+### XWP Client (beta)
 This client is a predefined script which is injected into each page as it loads.
 At the moment it supports tap, swipe, and move detection as well as reporting the window size of the WebView.
 In the future this will be updated to allow you to attach directly to elements in the page and trigger events based on gestures from within C#. i.e: OnItemTapped(string id) => DisplayAlert("Item was tapped").
 
-### Why I made this?
+## Why I made this?
 Hybrid WebViews are common across many applications these days with many different implementations available on the Web.
 Unfortunately for Xamarin, generally the only common HybridWebView is included as part of the XLabs toolset which gives the user the extra bloat of the additional components, as well as the problems associated with setting up this framework.
 
 **Forms WebView** is designed to be a lightweight alternative with only minor configuration needed to be performed by the developer before giving them access to a denser API allowing them more flexibility in creating hybrid applications in the Xamarin platform.
 
 
-### Setup
+## Setup
 * NuGET package available here: https://www.nuget.org/packages/Xam.Plugin.WebView
 * Install into both your PCL and Platform projects
 * On Android, include the Android.Mono.Export reference for the Javascript Interface
@@ -32,15 +32,15 @@ Xamarin.Forms.Forms.Init(e);
 ```
 
 
-### If this helps you!
+## If this helps you!
 Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 
 
-### Build Status
+## Build Status
 * Jenkins build history can be found here: TBA
 
 
-### Platform Support
+## Platform Support
 *Please note: I have only put in platforms I have tested myself.*
 * Xamarin.iOS : iOS 9 +
 * Xamarin.Droid : API 17 +
@@ -49,8 +49,8 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 * Xamarin Forms : 2.3.3.180
 
 
-### API Usage
-## New!
+## API Usage
+### New!
 ```c#
 /// <summary>
 /// Bind an action to a Javascript function
@@ -122,7 +122,7 @@ To modify the file locations, change the BaseUrl in each platforms renderer
 ## Feature Requests
 DM me on LinkedIn: http://linkedin.radsrc.com
 
-### Notes
+## Notes
 **For iOS 9 onwards, if you wish to access unsecure sites you may need to configure or disable ATS**
 ```
 <key>NSAppTransportSecurity</key>
