@@ -1,14 +1,17 @@
 # WebView Plugin for Xamarin
 Lightweight cross platform WebView designed to leverage the native WebView components in Android, iOS, and Windows to provide enhanced functionality over the base control.
 
-## New in 1.4.0
+[Xamarin Forums Link](https://forums.xamarin.com/discussion/87935/new-simple-webview-plugin-for-forms)
+
+### This is a work in development
+This WebView is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! PayPal: ryandixon1993@gmail.com
+
+## New in 1.4.*
+### Fixes for Background Colour
+The WebViews will now inherit the background colour supplied by FormsWebView.BackgroundColor.
+
 ### HttpError Handling
 You can now catch HttpErrorCodes when an error occurs during Navigation. To do this, simple use the OnNavigationError event in the WebView.
-
-### XWP Client (beta)
-This client is a predefined script which is injected into each page as it loads.
-At the moment it supports tap, swipe, and move detection as well as reporting the window size of the WebView.
-In the future this will be updated to allow you to attach directly to elements in the page and trigger events based on gestures from within C#. i.e: OnItemTapped(string id) => DisplayAlert("Item was tapped").
 
 ## Why I made this?
 Hybrid WebViews are common across many applications these days with many different implementations available on the Web.
@@ -31,11 +34,6 @@ FormsWebViewRenderer.Init();
 Xamarin.Forms.Forms.Init(e);
 ```
 
-
-## If this helps you!
-Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
-
-
 ## Build Status
 * Jenkins build history can be found here: TBA
 
@@ -48,6 +46,8 @@ Pints are greatly appreciated: PayPal @ ryandixon1993@gmail.com
 * Windows UWP : 10 +
 * Xamarin Forms : 2.3.3.180
 
+### Known Limitations
+* Android API level 22 and below will not be able to report HTTPErrors correctly. This is down to the lack of API support from Google up until this release. If you need a way around this, you can add in a hack using System.Web during the OnNavigationRequest.
 
 ## API Usage
 ### New!
