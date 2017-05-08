@@ -13,7 +13,8 @@ Previous to 1.5, all callbacks were made global, meaning that if you had multipl
 * RegisterCallback has been deprecated for the renamed RegisterGlobalCallback
 * RemoveCallback has been deprecated for the renamed RemoveGlobalCallback
 * RemoveAllCallbacks has been deprecated for the renamed RemoveAllGlobalCallbacks
-* Three new APIs have been added (RegisterLocalCallback, RemoveLocalCallback, RemoveAllLocalCallbacks)
+* GetCallbacks has been deprecated for the renamed GetGlobalCallbacks
+* Four new APIs have been added (RegisterLocalCallback, RemoveLocalCallback, RemoveAllLocalCallbacks, and GetAllLocalCallbacks)
 
 ## New in 1.4.*
 ### Fixes for Background Colour
