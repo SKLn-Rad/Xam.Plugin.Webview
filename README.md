@@ -6,6 +6,15 @@ Lightweight cross platform WebView designed to leverage the native WebView compo
 ### This is a work in development
 This WebView is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! PayPal: ryandixon1993@gmail.com
 
+## New in 1.5.*
+### Local and Global Callbacks
+Previous to 1.5, all callbacks were made global, meaning that if you had multiple WebViews existing in your application, then all of them would inherit the callbacks registered to one-another. In 1.5 you now have the option of setting them as "local" callbacks, meaning they will only effect that local instance of the WebView. This is in tandem with the previous mechanism.
+
+* RegisterCallback has been deprecated for the renamed RegisterGlobalCallback
+* RemoveCallback has been deprecated for the renamed RemoveGlobalCallback
+* RemoveAllCallbacks has been deprecated for the renamed RemoveAllGlobalCallbacks
+* Three new APIs have been added (RegisterLocalCallback, RemoveLocalCallback, RemoveAllLocalCallbacks)
+
 ## New in 1.4.*
 ### Fixes for Background Colour
 The WebViews will now inherit the background colour supplied by FormsWebView.BackgroundColor.
