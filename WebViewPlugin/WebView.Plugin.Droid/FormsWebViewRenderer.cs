@@ -22,7 +22,7 @@ namespace Xam.Plugin.Droid
         private FormsWebViewClient WebViewClient { get; set; }
         private FormsWebViewChromeClient ChromeClient { get; set; }
 
-        public string BaseUrl { get; set; } = "file:///android_asset/";
+        public static string BaseUrl { get; set; } = "file:///android_asset/";
 
         public static void Init()
         {
@@ -31,8 +31,6 @@ namespace Xam.Plugin.Droid
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
         {
-            base.OnElementChanged(e);
-
             if (Control == null)
                 SetupControl(e.NewElement);
 
@@ -41,54 +39,79 @@ namespace Xam.Plugin.Droid
 
             if (e.OldElement != null)
                 DestroyElement(e.OldElement);
+
+            base.OnElementChanged(e);
         }
 
-        private void SetupControl(FormsWebView element)
+        void SetupControl(FormsWebView element)
         {
-            WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
-            WebViewControlDelegate.OnActionAdded += OnActionAdded;
-
             var webView = new Android.Webkit.WebView(Forms.Context);
             webView.SetWebViewClient((WebViewClient = new FormsWebViewClient(element, this)));
             webView.SetWebChromeClient((ChromeClient = new FormsWebViewChromeClient(this)));
 
             // Defaults
             webView.Settings.JavaScriptEnabled = true;
+            webView.Settings.DomStorageEnabled = true;
 
             OnControlChanging?.Invoke(this, element, webView);
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, element, webView);
         }
 
-        private void OnActionAdded(FormsWebView sender, string key)
+        void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
         {
-            InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+            if (isGlobal || (Element != null && Element.Equals(sender)))
+                InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
-        private void OnInjectJavascriptRequest(FormsWebView sender, string js)
+        void OnInjectJavascriptRequest(FormsWebView sender, string js)
         {
-            if (sender == Element)
+            if (Element != null && (sender.Equals(Element)))
                 InjectJS(js);
         }
 
-        private void SetupElement(FormsWebView element)
+        void SetupElement(FormsWebView element)
         {
-            Control.AddJavascriptInterface(new FormsWebViewJSBridge(this), "bridge");
+            Device.BeginInvokeOnMainThread(() => Control.AddJavascriptInterface(new FormsWebViewJSBridge(this), "bridge"));
+            element.PropertyChanged += OnWebViewPropertyChanged;
+
+            WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
+            WebViewControlDelegate.OnActionAdded += OnActionAdded;
+
+            SetWebViewBackgroundColor(element.BackgroundColor);
 
             if (element.Source != null)
                 OnUserNavigationRequested(element, element.Source, element.ContentType);
         }
 
-        private void DestroyElement(FormsWebView element)
+        void DestroyElement(FormsWebView element)
         {
+            element.PropertyChanged -= OnWebViewPropertyChanged;
+
+            WebViewControlDelegate.OnNavigationRequestedFromUser -= OnUserNavigationRequested;
+            WebViewControlDelegate.OnInjectJavascriptRequest -= OnInjectJavascriptRequest;
+            WebViewControlDelegate.OnActionAdded -= OnActionAdded;
+
             if (this != null && Control != null)
-                Control.RemoveJavascriptInterface("bridge");
+                Device.BeginInvokeOnMainThread(() => Control.RemoveJavascriptInterface("bridge"));
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (sender == Element)
+            if (e.PropertyName.Equals(nameof(FormsWebView.BackgroundColor)))
+                SetWebViewBackgroundColor(((FormsWebView)sender).BackgroundColor);
+        }
+
+        void SetWebViewBackgroundColor(Color backgroundColor)
+        {
+            if (Control != null)
+                Device.BeginInvokeOnMainThread(() => Control.SetBackgroundColor(backgroundColor.ToAndroid()));
+        }
+
+        void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        {
+            if (Element != null && sender.Equals(Element))
             {
                 switch (contentType)
                 {
@@ -96,27 +119,27 @@ namespace Xam.Plugin.Droid
                         Control.LoadUrl(uri);
                         break;
                     case WebViewContentType.StringData:
-                        Control.LoadDataWithBaseURL(BaseUrl, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
+                        Control.LoadDataWithBaseURL(GetCorrectBaseUrl(sender), uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
                         break;
                     case WebViewContentType.LocalFile:
-                        LoadLocalFile(uri);
+                        Control.LoadUrl(Path.Combine(GetCorrectBaseUrl(sender), uri));
                         break;
                 }
             }
         }
 
-        private void LoadLocalFile(string uri)
+        string GetCorrectBaseUrl(FormsWebView sender)
         {
-            if (BaseUrl == null)
-                throw new Exception("Base URL was not set, could not load local content");
+            if (sender != null)
+                return sender.BaseUrl != null ? sender.BaseUrl : BaseUrl;
 
-            Control.LoadUrl(Path.Combine(BaseUrl, uri));
+            return BaseUrl;
         }
 
         internal void InjectJS(string script)
         {
             if (Control != null)
-                Control.LoadUrl(string.Format("javascript: {0}", script));
+                Device.BeginInvokeOnMainThread(() => Control.LoadUrl(string.Format("javascript: {0}", script)));
         }
 
         internal void OnScriptNotify(string script)

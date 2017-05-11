@@ -25,7 +25,7 @@ namespace Xam.Plugin.iOS
         private WKWebViewConfiguration WebViewConfiguration;
         private FormsWKNavigationDelegate NavigationDelegate;
 
-        public string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
+        public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
 
         public new static void Init()
         {
@@ -46,7 +46,7 @@ namespace Xam.Plugin.iOS
                 DestroyElement(e.OldElement);
         }
 
-        private void SetupControl(FormsWebView element)
+        void SetupControl(FormsWebView element)
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
@@ -59,6 +59,7 @@ namespace Xam.Plugin.iOS
             WebViewConfiguration = new WKWebViewConfiguration { UserContentController = UserController };
             
             var webView = new WKWebView(Frame, WebViewConfiguration);
+            webView.Opaque = false;
             webView.UIDelegate = this;
             webView.NavigationDelegate = NavigationDelegate;
 
@@ -67,25 +68,49 @@ namespace Xam.Plugin.iOS
             OnControlChanged?.Invoke(this, Element, Control);
         }
 
-        private void OnActionAdded(FormsWebView sender, string key)
+        void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
         {
-            InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+            if (isGlobal || sender.Equals(Element))
+                InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
-        private void OnInjectJavascriptRequested(FormsWebView sender, string js)
+        void OnInjectJavascriptRequested(FormsWebView sender, string js)
         {
             if (Element == sender)
                 InjectJS(js);
         }
 
-        private void DestroyElement(FormsWebView element)
+        void DestroyElement(FormsWebView element)
         {
+            element.PropertyChanged -= OnWebViewPropertyChanged;
         }
 
-        private void SetupElement(FormsWebView element)
+        void SetupElement(FormsWebView element)
         {
+            element.PropertyChanged += OnWebViewPropertyChanged;
+
             if (element.Source != null)
                 OnUserNavigationRequested(element, element.Source, element.ContentType);
+
+            SetWebViewBackgroundColor(element.BackgroundColor);
+        }
+
+        void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(FormsWebView.BackgroundColor)))
+                SetWebViewBackgroundColor(((FormsWebView)sender).BackgroundColor);
+        }
+
+        void SetWebViewBackgroundColor(Color backgroundColor)
+        {
+            if (Control != null)
+            {
+                InvokeOnMainThread(() =>
+                {
+                    Control.BackgroundColor = backgroundColor.ToUIColor();
+                    Element.BackgroundColor = backgroundColor;
+                });
+            }
         }
 
         internal void InjectJS(string js)
@@ -94,7 +119,7 @@ namespace Xam.Plugin.iOS
                 InvokeOnMainThread(async () => await Control.EvaluateJavaScriptAsync(new NSString(js)));
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType)
+        void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType)
         {
             if (Element == sender)
             {
@@ -107,24 +132,32 @@ namespace Xam.Plugin.iOS
                         LoadLocalContent(uri);
                         break;
                     case Abstractions.Enumerations.WebViewContentType.StringData:
-                        Control.LoadHtmlString(new NSString(uri), BaseUrl == null ? null : new NSUrl(BaseUrl));
+                        Control.LoadHtmlString(uri, new NSUrl(string.Concat("file://", GetCorrectBaseUrl(), "/")));
                         break;
                 }
             }
         }
 
-        private void LoadLocalContent(string uri)
+        void LoadLocalContent(string uri)
         {
-            if (BaseUrl == null)
+            if (GetCorrectBaseUrl() == null)
                 throw new Exception("Base URL was not set, could not load local content");
 
-            var path = Path.Combine(BaseUrl, uri);
-            Control.LoadFileUrl(new NSUrl(string.Concat("file://", path)), new NSUrl(string.Concat("file://", BaseUrl)));
+            var path = Path.Combine(GetCorrectBaseUrl(), uri);
+            Control.LoadFileUrl(new NSUrl(string.Concat("file://", path)), new NSUrl(string.Concat("file://", GetCorrectBaseUrl())));
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
             Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+        }
+
+        string GetCorrectBaseUrl()
+        {
+            if (Element != null)
+                return Element.BaseUrl != null ? Element.BaseUrl : BaseUrl;
+
+            return BaseUrl;
         }
 
         /**

@@ -31,10 +31,10 @@ namespace Xam.Plugin.Shared.Resolvers
         {
             try
             {
-                if (Renderer.BaseUrl == null)
+                if (Renderer.GetCorrectBaseUrl() == null)
                     throw new Exception("Base URL was not set, could not load local content");
                 
-                StorageFile f = await StorageFile.GetFileFromApplicationUriAsync(new Uri(string.Concat(Renderer.BaseUrl, path)));
+                StorageFile f = await StorageFile.GetFileFromApplicationUriAsync(new Uri(string.Concat(Renderer.GetCorrectBaseUrl(), path)));
                 IRandomAccessStream stream = await f.OpenAsync(FileAccessMode.Read);
 
                 return stream;

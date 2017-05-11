@@ -20,6 +20,7 @@
       </m2:VisualElements>
       <ApplicationContentUriRules>
         <Rule Match="https://www.xamarin.com" Type="include" />
+        <Rule Match="https://www.google.co.uk" Type="include" />
       </ApplicationContentUriRules>
     </Application>
   </Applications>

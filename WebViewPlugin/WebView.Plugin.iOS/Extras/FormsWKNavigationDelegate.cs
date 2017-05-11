@@ -1,10 +1,10 @@
 ﻿using Foundation;
 using System;
 using WebKit;
-using WebView.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
+using ObjCRuntime;
 
 namespace Xam.Plugin.iOS.Extras
 {
@@ -20,12 +20,6 @@ namespace Xam.Plugin.iOS.Extras
             Element = element;
         }
 
-        [Export("webView:didStartProvisionalNavigation:")]
-        public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
-        {
-
-        }
-
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
@@ -35,6 +29,17 @@ namespace Xam.Plugin.iOS.Extras
                 decisionHandler(WKNavigationActionPolicy.Cancel);
             else
                 decisionHandler(WKNavigationActionPolicy.Allow);
+        }
+
+        [Export("webView:decidePolicyForNavigationResponse:decisionHandler:")]
+        public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
+        {
+            if (navigationResponse.Response is NSHttpUrlResponse)
+            {
+                var sta = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
+                if (sta >= 400)
+                    Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, (int) sta));
+            }
         }
 
         [Export("webView:didCommitNavigation:")]
@@ -50,7 +55,11 @@ namespace Xam.Plugin.iOS.Extras
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
             Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
-            foreach (var key in Element.GetAllCallbacks())
+
+            foreach (var key in Element.GetLocalCallbacks())
+                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+
+            foreach (var key in Element.GetGlobalCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, webView.Url.AbsoluteUrl.ToString()));

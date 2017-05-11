@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xam.Plugin.Droid;
 
 namespace SampleApp.Droid
 {
@@ -18,6 +19,15 @@ namespace SampleApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            FormsWebViewRenderer.Init();
+            FormsWebViewRenderer.OnControlChanging += (sender, element, control) =>
+            {
+                var webView = control as Android.Webkit.WebView;
+                webView.SetLayerType(LayerType.Software, null);
+                webView.Settings.LoadWithOverviewMode = true;
+                webView.Settings.UseWideViewPort = true;
+            };
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

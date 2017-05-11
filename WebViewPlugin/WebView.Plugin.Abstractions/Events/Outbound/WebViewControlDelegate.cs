@@ -6,7 +6,6 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
 {
     public class WebViewControlDelegate
     {
-        
         public static string InjectedFunction
         {
             get
@@ -26,7 +25,7 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         public static string GenerateFunctionScript(string name)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(string.Concat("function ", name, "(str){csharp( \"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
+            sb.Append(string.Concat("function ", name, "(str){csharp(\"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
             return sb.ToString();
         }
 
@@ -36,12 +35,12 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         public delegate void InjectJavascriptDelegate(FormsWebView sender, string js);
         public static event InjectJavascriptDelegate OnInjectJavascriptRequest;
 
-        public delegate void RegisterActionsAddedDelegate(FormsWebView sender, string key);
+        public delegate void RegisterActionsAddedDelegate(FormsWebView sender, string key, bool isGlobal);
         public static event RegisterActionsAddedDelegate OnActionAdded;
 
-        public void NotifyCallbacksChanged(FormsWebView sender, string key)
+        public void NotifyCallbacksChanged(FormsWebView sender, string key, bool isGlobal)
         {
-            OnActionAdded?.Invoke(sender, key);
+            OnActionAdded?.Invoke(sender, key, isGlobal);
         }
 
         public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType)

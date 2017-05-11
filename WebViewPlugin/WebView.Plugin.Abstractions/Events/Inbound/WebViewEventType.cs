@@ -3,6 +3,7 @@
     public enum WebViewEventType
     {
         NavigationRequested,
+        NavigationError,
         NavigationComplete,
         JavascriptCallback,
         ContentLoaded

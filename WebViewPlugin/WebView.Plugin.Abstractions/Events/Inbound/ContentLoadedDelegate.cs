@@ -1,7 +1,7 @@
 ﻿using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
 
-namespace WebView.Plugin.Abstractions.Events.Inbound
+namespace Xam.Plugin.Abstractions.Events.Inbound
 {
     public class ContentLoadedDelegate : WebViewDelegate
     {

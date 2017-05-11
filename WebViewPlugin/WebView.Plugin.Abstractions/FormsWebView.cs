@@ -7,7 +7,6 @@ using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.DTO;
-using WebView.Plugin.Abstractions.Events.Inbound;
 
 namespace Xam.Plugin.Abstractions
 {
@@ -17,8 +16,15 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView), null);
         public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
-        public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<string, Action<string>>), typeof(FormsWebView), new Dictionary<string, Action<string>>());
-        
+        public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<object, Dictionary<string, Action<string>>>), typeof(FormsWebView), new Dictionary<object, Dictionary<string, Action<string>>>());
+        public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView), null);
+
+        public string BaseUrl
+        {
+            get { return (string)GetValue(BaseUrlProperty); }
+            set { SetValue(BaseUrlProperty, value); }
+        }
+
         public bool Navigating
         {
             get { return (bool) GetValue(NavigatingProperty); }
@@ -37,19 +43,24 @@ namespace Xam.Plugin.Abstractions
             set { SetValue(ContentTypeProperty, value); }
         }
 
-        private Dictionary<string, Action<string>> RegisteredActions
+        Dictionary<object, Dictionary<string, Action<string>>> RegisteredActions
         {
-            get { return (Dictionary<string, Action<string>>) GetValue(RegisteredActionsProperty); }
+            get { return (Dictionary<object, Dictionary<string, Action<string>>>) GetValue(RegisteredActionsProperty); }
             set { SetValue(RegisteredActionsProperty, value); }
         }
 
-        private WebViewControlEventAbstraction _controlEventAbstraction;
-        
+        // This is used as the object key for global callbacks, it is not perfectly unique but should be unique enough to not match any existing FWV objects.
+        static object _globalKey = -1;
+
+        internal WebViewControlEventAbstraction _controlEventAbstraction;
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
         public event WebViewNavigationStartedEventArgs OnNavigationStarted;
 
         public delegate void WebViewNavigationCompletedEventArgs(NavigationCompletedDelegate eventObj);
         public event WebViewNavigationCompletedEventArgs OnNavigationCompleted;
+
+        public delegate void WebViewNavigationErrorEventArgs(NavigationErrorDelegate eventObj);
+        public event WebViewNavigationErrorEventArgs OnNavigationError;
 
         public delegate void JavascriptResponseEventArgs(JavascriptResponseDelegate eventObj);
         public event JavascriptResponseEventArgs OnJavascriptResponse;
@@ -60,6 +71,14 @@ namespace Xam.Plugin.Abstractions
         public FormsWebView()
         {
             _controlEventAbstraction = new WebViewControlEventAbstraction() { Source = new WebViewControlEventStub() };
+
+            // Register Global
+            if (!RegisteredActions.ContainsKey(_globalKey))
+                RegisteredActions.Add(_globalKey, new Dictionary<string, Action<string>>());
+
+            // Register Local
+            if (!RegisteredActions.ContainsKey(this))
+                RegisteredActions.Add(this, new Dictionary<string, Action<string>>());
         }
 
         public void InjectJavascript(string js)
@@ -67,29 +86,66 @@ namespace Xam.Plugin.Abstractions
             _controlEventAbstraction.Target.InjectJavascript(this, js);
         }
 
-        public void RegisterCallback(string name, Action<string> callback)
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use RegisterGlobalCallback instead.")]
+        public void RegisterCallback(string name, Action<string> callback) => RegisterGlobalCallback(name, callback);
+
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use RemoveGlobalCallback instead.")]
+        public void RemoveCallback(string name) => RemoveGlobalCallback(name);
+
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use GetGlobalCallbacks instead.")]
+        public string[] GetAllCallbacks() => GetGlobalCallbacks();
+
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use RemoveAllGlobalCallbacks instead.")]
+        public void RemoveAllCallbacks() => RemoveAllGlobalCallbacks();
+
+        public void RegisterGlobalCallback(string name, Action<string> callback)
         {
-            if (!RegisteredActions.ContainsKey(name))
+            if (!RegisteredActions[_globalKey].ContainsKey(name))
             {
-                RegisteredActions.Add(name, callback);
-                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name);
+                RegisteredActions[_globalKey].Add(name, callback);
+                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, true);
             }
         }
 
-        public void RemoveCallback(string name)
+        public void RemoveGlobalCallback(string name)
         {
-            if (RegisteredActions.ContainsKey(name))
-                RegisteredActions.Remove(name);
+            if (RegisteredActions[_globalKey].ContainsKey(name))
+                RegisteredActions[_globalKey].Remove(name);
         }
 
-        public string[] GetAllCallbacks()
+        public string[] GetGlobalCallbacks()
         {
-            return RegisteredActions.Keys.ToArray();
+            return RegisteredActions[_globalKey].Keys.ToArray();
         }
 
-        public void RemoveAllCallbacks()
+        public void RemoveAllGlobalCallbacks()
         {
-            RegisteredActions.Clear();
+            RegisteredActions[_globalKey].Clear();
+        }
+
+        public void RegisterLocalCallback(string name, Action<string> callback)
+        {
+            if (!RegisteredActions[this].ContainsKey(name))
+            {
+                RegisteredActions[this].Add(name, callback);
+                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, false);
+            }
+        }
+
+        public void RemoveLocalCallback(string name)
+        {
+            if (RegisteredActions[this].ContainsKey(name))
+                RegisteredActions[this].Remove(name);
+        }
+
+        public string[] GetLocalCallbacks()
+        {
+            return RegisteredActions[this].Keys.ToArray();
+        }
+
+        public void RemoveAllLocalCallbacks()
+        {
+            RegisteredActions[this].Clear();
         }
 
         /// <summary>
@@ -109,6 +165,10 @@ namespace Xam.Plugin.Abstractions
                     OnNavigationCompleted?.Invoke(eventObject as NavigationCompletedDelegate);
                     break;
 
+                case WebViewEventType.NavigationError:
+                    OnNavigationError?.Invoke(eventObject as NavigationErrorDelegate);
+                    break;
+
                 case WebViewEventType.ContentLoaded:
                     OnContentLoaded?.Invoke(eventObject as ContentLoadedDelegate);
                     break;
@@ -116,18 +176,25 @@ namespace Xam.Plugin.Abstractions
                 case WebViewEventType.JavascriptCallback:
                     var data = (eventObject as JavascriptResponseDelegate).Data;
                     ActionResponse ar;
+
                     if (data.ValidateJSON() && (ar = data.AttemptParseActionResponse()) != null)
                     {
-                        if (RegisteredActions.ContainsKey(ar.Action))
-                            RegisteredActions[ar.Action]?.Invoke(ar.Data);
+                        // Attempt Locals
+                        if (RegisteredActions[this].ContainsKey(ar.Action))
+                            RegisteredActions[this][ar.Action]?.Invoke(ar.Data);
+
+                        // Attempt Globals
+                        if (RegisteredActions[_globalKey].ContainsKey(ar.Action))
+                            RegisteredActions[_globalKey][ar.Action]?.Invoke(ar.Data);
                     }
                     else
                     {
                         OnJavascriptResponse?.Invoke(eventObject as JavascriptResponseDelegate);
                     }
+
                     break;
             }
-
+            
             return eventObject;
         }
     }

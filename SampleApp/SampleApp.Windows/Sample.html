@@ -6,6 +6,28 @@
     <title>Testing</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <h1>Enter a URL</h1>
+
+    <input id="url" type="url" name="url" value="https://www.xamarin.com" />
+    <button onclick="performSubmit()">Submit!</button>
+    <hr />
+
+    <input id="debug" type="text" name="debug" value="Hello from Internet WebView!" />
+    <button onclick="performInjection()">Inject!</button>
+
+    <script>
+        function performSubmit() {
+            var url = document.getElementById("url").value;
+            csDebug("Submitting form data.");
+            csLoad(url);
+            return false;
+        }
+
+        function performInjection() {
+            var debug = document.getElementById("debug").value;
+            csDebug("Injecting from Local to Internet");
+            csInject(debug);
+        }
+    </script>
 </body>
 </html>

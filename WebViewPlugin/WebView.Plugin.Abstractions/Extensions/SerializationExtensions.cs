@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using Xam.Plugin.Abstractions.DTO;
 
 namespace Xam.Plugin.Abstractions.Extensions
@@ -11,7 +12,7 @@ namespace Xam.Plugin.Abstractions.Extensions
         {
             try
             {
-                JToken.Parse(s);
+                return s.StartsWith("{") && s.EndsWith("}");
                 return true;
             }
             catch (JsonReaderException ex)
