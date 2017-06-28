@@ -95,6 +95,7 @@ FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
 /// </summary>
 WebView.OnNavigationStarted += OnNavigationStarted;
 WebView.OnNavigationCompleted += OnNavigationComplete;
+WebView.OnContentLoaded += OnContentLoaded;
 WebView.OnJavascriptResponse += OnJavascriptResponse;
 ```
 
@@ -117,6 +118,14 @@ private NavigationRequestedDelegate OnNavigationStarted(NavigationRequestedDeleg
 private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
 {
     System.Diagnostics.Debug.WriteLine(string.Format("Load Complete: {0}", eventObj.Sender.Source));
+}
+
+/// <summary>
+/// RUN ALL JAVASCRIPT HERE
+/// </summary>
+private void OnContentLoaded(ContentLoadedDelegate eventObj)
+{
+    System.Diagnostics.Debug.WriteLine(string.Format("DOM Ready: {0}", eventObj.Sender.Source));
     eventObj.Sender.InjectJavascript("csharp('Testing');");
 }
 ```
