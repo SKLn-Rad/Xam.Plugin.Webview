@@ -6,6 +6,17 @@ Lightweight cross platform WebView designed to leverage the native WebView compo
 ### This is a work in development
 This WebView is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! PayPal: ryandixon1993@gmail.com
 
+## New in 1.6.*
+### Navigation Stack
+Like the default Xamarin WebView. You now have access to the navigation stack.
+
++ 2 Bindable Properties: CanGoBack + CanGoFoward
++ 2 Methods: GoBack() + GoForward()
+
+### Javascript Bug Fix
+The application will no longer crash if the page is disposed of halfway through a Javascript event.
+see issue 25.
+
 ## New in 1.5.*
 ### Local and Global Callbacks
 Previous to 1.5, all callbacks were made global, meaning that if you had multiple WebViews existing in your application, then all of them would inherit the callbacks registered to one-another. In 1.5 you now have the option of setting them as "local" callbacks, meaning they will only effect that local instance of the WebView. This is in tandem with the previous mechanism.
