@@ -2,15 +2,15 @@
 <package>
   <metadata>
     <id>Xam.Plugin.WebView</id>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <title>WebView Plugin for Xamarin Forms</title>
     <authors>Ryan Dixon</authors>
     <owners>Ryan Dixon</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A simple lightweight HybridWebView designed to work with Xamarin Forms</description>
-    <releaseNotes>Fixed two bugs in Android which could result in incorrect results when using multiple webviews.</releaseNotes>
+    <releaseNotes>Access to the navigation stack and minor bug fixes.</releaseNotes>
 	<iconUrl>https://s18.postimg.org/wjfexgtnt/FWV.png</iconUrl>
-    <tags>Plugins, Xamarin, WebView, Web, HTML</tags>
+    <tags>Plugins, Xamarin, WebView, Web, HTML, Forms, Android, iOS, UWP, WinRT</tags>
     <dependencies>
       <dependency id="Xamarin.Forms" version="2.3.3.180" />
 	  <dependency id="Newtonsoft.Json" version="9.0.1" />

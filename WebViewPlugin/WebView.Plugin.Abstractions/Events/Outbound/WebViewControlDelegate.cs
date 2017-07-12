@@ -38,6 +38,9 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         public delegate void RegisterActionsAddedDelegate(FormsWebView sender, string key, bool isGlobal);
         public static event RegisterActionsAddedDelegate OnActionAdded;
 
+        public delegate void NavigateThroughStackDelegate(FormsWebView sender, bool forward);
+        public static event NavigateThroughStackDelegate OnStackNavigationRequested;
+
         public void NotifyCallbacksChanged(FormsWebView sender, string key, bool isGlobal)
         {
             OnActionAdded?.Invoke(sender, key, isGlobal);
@@ -51,6 +54,11 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         internal void InjectJavascript(FormsWebView sender, string js)
         {
             OnInjectJavascriptRequest?.Invoke(sender, js);
+        }
+
+        internal void NavigateThroughStack(FormsWebView sender, bool forward)
+        {
+            OnStackNavigationRequested?.Invoke(sender, forward);
         }
     }
 }

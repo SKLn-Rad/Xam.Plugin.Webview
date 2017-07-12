@@ -42,6 +42,7 @@
     <Compile Include="Events\Inbound\NavigationCompletedDelegate.cs" />
     <Compile Include="Events\Inbound\NavigationErrorDelegate.cs" />
     <Compile Include="Events\Inbound\NavigationRequestedDelegate.cs" />
+    <Compile Include="Events\Inbound\NavigationStackUpdateDelegate.cs" />
     <Compile Include="Events\Inbound\WebViewDelegate.cs" />
     <Compile Include="Events\Inbound\WebViewEventType.cs" />
     <Compile Include="Events\Outbound\WebViewControlDelegate.cs" />

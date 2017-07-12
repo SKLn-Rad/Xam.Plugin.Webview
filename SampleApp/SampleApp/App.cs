@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Xam.Plugin.Abstractions;
-using Xam.Plugin.Abstractions.Enumerations;
-using Xam.Plugin.Abstractions.Events.Inbound;
+﻿using SampleApp.Samples;
 using Xamarin.Forms;
 
 namespace SampleApp
@@ -12,7 +8,7 @@ namespace SampleApp
 
         public App()
         {
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new NavigationStack());
         }
 
         protected override void OnStart()

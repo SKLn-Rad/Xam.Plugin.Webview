@@ -50,6 +50,7 @@ namespace Xam.Plugin.iOS
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
+            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
             WebViewControlDelegate.OnActionAdded += OnActionAdded;
 
             UserController = new WKUserContentController();
@@ -78,6 +79,17 @@ namespace Xam.Plugin.iOS
         {
             if (Element == sender)
                 InjectJS(js);
+        }
+
+        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        {
+            if (Element != null && (sender.Equals(Element)))
+            {
+                if (forward)
+                    Control.GoForward();
+                else
+                    Control.GoBack();
+            }
         }
 
         void DestroyElement(FormsWebView element)
@@ -149,7 +161,8 @@ namespace Xam.Plugin.iOS
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+            if (Element != null)
+                Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
         }
 
         string GetCorrectBaseUrl()

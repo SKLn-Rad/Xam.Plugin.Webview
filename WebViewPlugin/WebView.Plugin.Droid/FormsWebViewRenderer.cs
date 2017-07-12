@@ -70,6 +70,17 @@ namespace Xam.Plugin.Droid
                 InjectJS(js);
         }
 
+        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        {
+            if (Element != null && (sender.Equals(Element)))
+            {
+                if (forward)
+                    Control.GoForward();
+                else
+                    Control.GoBack();
+            }
+        }
+
         void SetupElement(FormsWebView element)
         {
             Device.BeginInvokeOnMainThread(() => Control.AddJavascriptInterface(new FormsWebViewJSBridge(this), "bridge"));
@@ -77,6 +88,7 @@ namespace Xam.Plugin.Droid
 
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
+            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
             WebViewControlDelegate.OnActionAdded += OnActionAdded;
 
             SetWebViewBackgroundColor(element.BackgroundColor);
@@ -91,6 +103,7 @@ namespace Xam.Plugin.Droid
 
             WebViewControlDelegate.OnNavigationRequestedFromUser -= OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest -= OnInjectJavascriptRequest;
+            WebViewControlDelegate.OnStackNavigationRequested -= OnStackNavigationRequested;
             WebViewControlDelegate.OnActionAdded -= OnActionAdded;
 
             if (this != null && Control != null)
@@ -138,13 +151,17 @@ namespace Xam.Plugin.Droid
 
         internal void InjectJS(string script)
         {
-            if (Control != null)
-                Device.BeginInvokeOnMainThread(() => Control.LoadUrl(string.Format("javascript: {0}", script)));
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (Control != null)
+                    Control.LoadUrl(string.Format("javascript: {0}", script));
+            });
         }
 
         internal void OnScriptNotify(string script)
         {
-            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, script));
+            if (Element != null)
+                Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, script));
         }
     }
 }

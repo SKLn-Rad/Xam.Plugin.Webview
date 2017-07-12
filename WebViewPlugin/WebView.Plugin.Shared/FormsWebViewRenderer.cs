@@ -10,6 +10,7 @@ using Windows.Web;
 using Windows.UI;
 using Xamarin.Forms;
 using System.Diagnostics;
+using WebView.Plugin.Abstractions.Events.Inbound;
 
 #if WINDOWS_UWP
 using Xamarin.Forms.Platform.UWP;
@@ -52,6 +53,7 @@ namespace Xam.Plugin.Shared
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += InjectJavascript;
+            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
             WebViewControlDelegate.OnActionAdded += OnActionAdded;
 
             var control = new Windows.UI.Xaml.Controls.WebView();
@@ -59,7 +61,7 @@ namespace Xam.Plugin.Shared
 
             _resolver = new LocalFileStreamResolver(this);
             SetNativeControl(control);
-            
+
             OnControlChanged?.Invoke(this, Element, control);
         }
 
@@ -69,10 +71,21 @@ namespace Xam.Plugin.Shared
                 await Control.InvokeScriptAsync("eval", new[] { js });
         }
 
+        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        {
+            if (Element != null && (sender.Equals(Element)))
+            {
+                if (forward)
+                    Control.GoForward();
+                else
+                    Control.GoBack();
+            }
+        }
+
         void SetupElement(FormsWebView element)
         {
             element.PropertyChanged += OnWebViewElementPropertyChanged;
-            
+
             Control.NavigationFailed += OnNavigationFailed;
             Control.NavigationStarting += OnNavigating;
             Control.NavigationCompleted += OnNavigated;
@@ -158,12 +171,14 @@ namespace Xam.Plugin.Shared
             foreach (var key in Element.GetGlobalCallbacks())
                 await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
 
+            Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Control.CanGoBack, Control.CanGoForward));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, args.Uri != null ? args.Uri.AbsoluteUri : ""));
         }
 
         void OnScriptNotify(object sender, Windows.UI.Xaml.Controls.NotifyEventArgs e)
         {
-            Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
+            if (Element != null)
+                Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
         }
 
         void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)

@@ -5,6 +5,7 @@
         NavigationRequested,
         NavigationError,
         NavigationComplete,
+        NavigationStackUpdate,
         JavascriptCallback,
         ContentLoaded
     }

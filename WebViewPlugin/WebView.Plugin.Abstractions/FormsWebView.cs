@@ -7,6 +7,7 @@ using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.DTO;
+using WebView.Plugin.Abstractions.Events.Inbound;
 
 namespace Xam.Plugin.Abstractions
 {
@@ -18,6 +19,8 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
         public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<object, Dictionary<string, Action<string>>>), typeof(FormsWebView), new Dictionary<object, Dictionary<string, Action<string>>>());
         public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty CanGoBackProperty = BindableProperty.Create(nameof(CanGoBack), typeof(bool), typeof(FormsWebView), false);
+        public static readonly BindableProperty CanGoForwardProperty = BindableProperty.Create(nameof(CanGoForward), typeof(bool), typeof(FormsWebView), false);
 
         public string BaseUrl
         {
@@ -35,6 +38,18 @@ namespace Xam.Plugin.Abstractions
         {
             get { return (string) GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType);}
+        }
+
+        public bool CanGoBack
+        {
+            get { return (bool) GetValue(CanGoBackProperty); }
+            private set { SetValue(CanGoBackProperty, value); }
+        }
+
+        public bool CanGoForward
+        {
+            get { return (bool) GetValue(CanGoForwardProperty); }
+            private set { SetValue(CanGoForwardProperty, value); }
         }
 
         public WebViewContentType ContentType
@@ -79,6 +94,18 @@ namespace Xam.Plugin.Abstractions
             // Register Local
             if (!RegisteredActions.ContainsKey(this))
                 RegisteredActions.Add(this, new Dictionary<string, Action<string>>());
+        }
+
+        public void GoBack()
+        {
+            if (CanGoBack)
+                _controlEventAbstraction.Target.NavigateThroughStack(this, false);
+        }
+
+        public void GoForward()
+        {
+            if (CanGoForward)
+                _controlEventAbstraction.Target.NavigateThroughStack(this, true);
         }
 
         public void InjectJavascript(string js)
@@ -171,6 +198,11 @@ namespace Xam.Plugin.Abstractions
 
                 case WebViewEventType.ContentLoaded:
                     OnContentLoaded?.Invoke(eventObject as ContentLoadedDelegate);
+                    break;
+
+                case WebViewEventType.NavigationStackUpdate:
+                    CanGoBack = (eventObject as NavigationStackUpdateDelegate).CanGoBack;
+                    CanGoForward = (eventObject as NavigationStackUpdateDelegate).CanGoForward;
                     break;
 
                 case WebViewEventType.JavascriptCallback:

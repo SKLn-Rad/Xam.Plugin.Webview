@@ -5,6 +5,7 @@ using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using ObjCRuntime;
+using WebView.Plugin.Abstractions.Events.Inbound;
 
 namespace Xam.Plugin.iOS.Extras
 {
@@ -62,6 +63,7 @@ namespace Xam.Plugin.iOS.Extras
             foreach (var key in Element.GetGlobalCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
+            Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack, Renderer.Control.CanGoForward));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, webView.Url.AbsoluteUrl.ToString()));
         }
     }
