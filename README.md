@@ -17,22 +17,13 @@ Like the default Xamarin WebView. You now have access to the navigation stack.
 The application will no longer crash if the page is disposed of halfway through a Javascript event.
 see issue 25.
 
-## New in 1.5.*
-### Local and Global Callbacks
-Previous to 1.5, all callbacks were made global, meaning that if you had multiple WebViews existing in your application, then all of them would inherit the callbacks registered to one-another. In 1.5 you now have the option of setting them as "local" callbacks, meaning they will only effect that local instance of the WebView. This is in tandem with the previous mechanism.
-
-* RegisterCallback has been deprecated for the renamed RegisterGlobalCallback
-* RemoveCallback has been deprecated for the renamed RemoveGlobalCallback
-* RemoveAllCallbacks has been deprecated for the renamed RemoveAllGlobalCallbacks
-* GetCallbacks has been deprecated for the renamed GetGlobalCallbacks
-* Four new APIs have been added (RegisterLocalCallback, RemoveLocalCallback, RemoveAllLocalCallbacks, and GetAllLocalCallbacks)
-
-## New in 1.4.*
-### Fixes for Background Colour
-The WebViews will now inherit the background colour supplied by FormsWebView.BackgroundColor.
-
-### HttpError Handling
-You can now catch HttpErrorCodes when an error occurs during Navigation. To do this, simple use the OnNavigationError event in the WebView.
+## New in 1.7.*
+### Request Headers
+Headers can now be sent up as part of the HTTP request. To add a header, simple add them to the RequestHeaders dictionary property on the FormsWebView object.
+```c#
+var fwv = new FormsWebView();
+fwv.RequestHeaders.Add("Key", "Value");
+```
 
 ## Why I made this?
 Hybrid WebViews are common across many applications these days with many different implementations available on the Web.
