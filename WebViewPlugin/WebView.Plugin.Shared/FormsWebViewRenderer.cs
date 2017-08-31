@@ -72,13 +72,12 @@ namespace Xam.Plugin.Shared
 
         void OnStackNavigationRequested(FormsWebView sender, bool forward)
         {
-            if (sender != null && Control != null && Element != null && (sender.Equals(Element)))
-            {
-                if (forward)
-                    Control.GoForward();
-                else
-                    Control.GoBack();
-            }
+            if (sender == null || Control == null || Element == null || !sender.Equals(Element)) return;
+
+            if (forward)
+                Control.GoForward();
+            else
+                Control.GoBack();
         }
 
         void SetupElement(FormsWebView element)
@@ -101,14 +100,13 @@ namespace Xam.Plugin.Shared
         {
             element.PropertyChanged -= OnWebViewElementPropertyChanged;
 
-            if (this != null && Control != null)
-            {
-                Control.NavigationFailed -= OnNavigationFailed;
-                Control.NavigationStarting -= OnNavigating;
-                Control.NavigationCompleted -= OnNavigated;
-                Control.DOMContentLoaded -= OnContentLoaded;
-                Control.ScriptNotify -= OnScriptNotify;
-            }
+            if (Control == null) return;
+
+            Control.NavigationFailed -= OnNavigationFailed;
+            Control.NavigationStarting -= OnNavigating;
+            Control.NavigationCompleted -= OnNavigated;
+            Control.DOMContentLoaded -= OnContentLoaded;
+            Control.ScriptNotify -= OnScriptNotify;
         }
 
         void OnWebViewElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -125,7 +123,7 @@ namespace Xam.Plugin.Shared
                 Control.DefaultBackgroundColor = ToWindowsColor(backgroundColor);
         }
 
-        public Windows.UI.Color ToWindowsColor(Xamarin.Forms.Color color)
+        private Windows.UI.Color ToWindowsColor(Xamarin.Forms.Color color)
         {
             // Make colour safe for Windows
             if (color.A == -1 || color.R == -1 || color.G == -1 || color.B == -1)
@@ -156,7 +154,7 @@ namespace Xam.Plugin.Shared
         void OnNavigating(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewNavigationStartingEventArgs args)
         {
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
-            NavigationRequestedDelegate nrd = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, uri));
+            var nrd = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, uri));
             args.Cancel = nrd.Cancel;
         }
 
@@ -176,26 +174,23 @@ namespace Xam.Plugin.Shared
 
         void OnScriptNotify(object sender, Windows.UI.Xaml.Controls.NotifyEventArgs e)
         {
-            if (Element != null)
-                Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
+            Element?.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
         }
 
         void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
         {
-            if (sender == Element)
+            if (sender != Element) return;
+            switch (contentType)
             {
-                switch (contentType)
-                {
-                    case WebViewContentType.Internet:
-                        Control.Navigate(new Uri(uri));
-                        break;
-                    case WebViewContentType.StringData:
-                        LoadStringData(uri);
-                        break;
-                    case WebViewContentType.LocalFile:
-                        LoadLocalFile(uri);
-                        break;
-                }
+                case WebViewContentType.Internet:
+                    Control.Navigate(new Uri(uri));
+                    break;
+                case WebViewContentType.StringData:
+                    LoadStringData(uri);
+                    break;
+                case WebViewContentType.LocalFile:
+                    LoadLocalFile(uri);
+                    break;
             }
         }
 
@@ -212,7 +207,7 @@ namespace Xam.Plugin.Shared
         internal string GetCorrectBaseUrl()
         {
             if (Element != null)
-                return Element.BaseUrl != null ? Element.BaseUrl : BaseUrl;
+                return Element.BaseUrl ?? BaseUrl;
             return BaseUrl;
         }
     }

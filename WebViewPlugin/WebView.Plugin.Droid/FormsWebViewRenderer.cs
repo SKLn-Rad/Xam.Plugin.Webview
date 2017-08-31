@@ -19,13 +19,17 @@ namespace Xam.Plugin.Droid
     {
 
         public static event WebViewControlChangedDelegate OnControlChanging;
+
         public static event WebViewControlChangedDelegate OnControlChanged;
 
         private WebViewStringDataSettings StringDataSettings { get; set; } = new WebViewStringDataSettings();
+
         private FormsWebViewClient WebViewClient { get; set; }
+
         private FormsWebViewChromeClient ChromeClient { get; set; }
 
         public static string BaseUrl { get; set; } = "file:///android_asset/";
+
         public static bool IgnoreSslGlobally { get; set; } = false;
 
         public static void Init()

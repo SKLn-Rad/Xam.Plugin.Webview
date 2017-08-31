@@ -13,9 +13,8 @@ namespace Xam.Plugin.Abstractions.Extensions
             try
             {
                 return s.StartsWith("{") && s.EndsWith("}");
-                return true;
             }
-            catch (JsonReaderException ex)
+            catch (JsonReaderException)
             {
                 return false;
             }
@@ -23,7 +22,7 @@ namespace Xam.Plugin.Abstractions.Extensions
 
         public static ActionResponse AttemptParseActionResponse(this string json)
         {
-            ActionResponse ar = JsonConvert.DeserializeObject<ActionResponse>(json);
+            var ar = JsonConvert.DeserializeObject<ActionResponse>(json);
             return ar.Action != null ? ar : null;
         }
 

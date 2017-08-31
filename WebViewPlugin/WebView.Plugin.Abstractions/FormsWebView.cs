@@ -65,7 +65,7 @@ namespace Xam.Plugin.Abstractions
         }
 
         // This is used as the object key for global callbacks, it is not perfectly unique but should be unique enough to not match any existing FWV objects.
-        private static readonly object _globalKey = -1;
+        private static readonly object GlobalKey = -1;
 
         private readonly WebViewControlEventAbstraction _controlEventAbstraction;
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
@@ -88,8 +88,8 @@ namespace Xam.Plugin.Abstractions
             _controlEventAbstraction = new WebViewControlEventAbstraction() { Source = new WebViewControlEventStub() };
 
             // Register Global
-            if (!RegisteredActions.ContainsKey(_globalKey))
-                RegisteredActions.Add(_globalKey, new Dictionary<string, Action<string>>());
+            if (!RegisteredActions.ContainsKey(GlobalKey))
+                RegisteredActions.Add(GlobalKey, new Dictionary<string, Action<string>>());
 
             // Register Local
             if (!RegisteredActions.ContainsKey(this))
@@ -127,25 +127,25 @@ namespace Xam.Plugin.Abstractions
 
         public void RegisterGlobalCallback(string name, Action<string> callback)
         {
-            if (RegisteredActions[_globalKey].ContainsKey(name)) return;
-            RegisteredActions[_globalKey].Add(name, callback);
+            if (RegisteredActions[GlobalKey].ContainsKey(name)) return;
+            RegisteredActions[GlobalKey].Add(name, callback);
             _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, true);
         }
 
         public void RemoveGlobalCallback(string name)
         {
-            if (RegisteredActions[_globalKey].ContainsKey(name))
-                RegisteredActions[_globalKey].Remove(name);
+            if (RegisteredActions[GlobalKey].ContainsKey(name))
+                RegisteredActions[GlobalKey].Remove(name);
         }
 
         public string[] GetGlobalCallbacks()
         {
-            return RegisteredActions[_globalKey].Keys.ToArray();
+            return RegisteredActions[GlobalKey].Keys.ToArray();
         }
 
         public void RemoveAllGlobalCallbacks()
         {
-            RegisteredActions[_globalKey].Clear();
+            RegisteredActions[GlobalKey].Clear();
         }
 
         public void RegisterLocalCallback(string name, Action<string> callback)
@@ -220,8 +220,8 @@ namespace Xam.Plugin.Abstractions
                                 RegisteredActions[this][ar.Action]?.Invoke(ar.Data);
 
                             // Attempt Globals
-                            if (RegisteredActions[_globalKey].ContainsKey(ar.Action))
-                                RegisteredActions[_globalKey][ar.Action]?.Invoke(ar.Data);
+                            if (RegisteredActions[GlobalKey].ContainsKey(ar.Action))
+                                RegisteredActions[GlobalKey][ar.Action]?.Invoke(ar.Data);
                         }
                         else
                         {

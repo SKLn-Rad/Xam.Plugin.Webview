@@ -10,11 +10,11 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         {
             get
             {
-                switch (Device.OS)
+                switch (Device.RuntimePlatform)
                 {
-                    case TargetPlatform.Android:
+                    case Device.Android:
                         return "function csharp(data){bridge.invokeAction(data);}";
-                    case TargetPlatform.iOS:
+                    case Device.iOS:
                         return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
                     default:
                         return "function csharp(data){window.external.notify(data);}";
@@ -24,7 +24,7 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
 
         public static string GenerateFunctionScript(string name)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(string.Concat("function ", name, "(str){csharp(\"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
             return sb.ToString();
         }

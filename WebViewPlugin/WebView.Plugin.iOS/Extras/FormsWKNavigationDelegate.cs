@@ -12,8 +12,8 @@ namespace Xam.Plugin.iOS.Extras
     public class FormsWKNavigationDelegate : WKNavigationDelegate
     {
 
-        private FormsWebViewRenderer Renderer;
-        private FormsWebView Element;
+        private readonly FormsWebViewRenderer Renderer;
+        private readonly FormsWebView Element;
 
         public FormsWKNavigationDelegate(FormsWebViewRenderer renderer, FormsWebView element)
         {
@@ -24,23 +24,21 @@ namespace Xam.Plugin.iOS.Extras
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
-            NavigationRequestedDelegate res = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, navigationAction.Request.Url.ToString()));
-
-            if (res.Cancel)
-                decisionHandler(WKNavigationActionPolicy.Cancel);
-            else
-                decisionHandler(WKNavigationActionPolicy.Allow);
+            var res = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, navigationAction.Request.Url.ToString()));
+            decisionHandler(res.Cancel ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow);
         }
 
         [Export("webView:decidePolicyForNavigationResponse:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {
-            if (navigationResponse.Response is NSHttpUrlResponse)
-            {
-                var sta = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
-                if (sta >= 400)
-                    Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, (int) sta));
-            }
+            if (!(navigationResponse.Response is NSHttpUrlResponse)) return;
+
+            var sta = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
+
+            if (sta >= 400)
+                Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, (int) sta));
+            else
+                decisionHandler(WKNavigationResponsePolicy.Allow);
         }
 
         [Export("webView:didCommitNavigation:")]
@@ -49,7 +47,9 @@ namespace Xam.Plugin.iOS.Extras
             if (webView.Url.AbsoluteUrl != null)
                 Element.SetValue(FormsWebView.SourceProperty, webView.Url.AbsoluteUrl.ToString());
 
-            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, webView.Url.AbsoluteUrl.ToString(), true));
+            if (webView.Url.AbsoluteUrl != null)
+                Element.InvokeEvent(WebViewEventType.NavigationComplete,
+                    new NavigationCompletedDelegate(Element, webView.Url.AbsoluteUrl.ToString()));
         }
 
         [Export("webView:didFinishNavigation:")]

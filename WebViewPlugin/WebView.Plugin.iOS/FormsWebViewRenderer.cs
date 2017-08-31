@@ -58,11 +58,13 @@ namespace Xam.Plugin.iOS
 
             NavigationDelegate = new FormsWKNavigationDelegate(this, element);
             WebViewConfiguration = new WKWebViewConfiguration { UserContentController = UserController };
-            
-            var webView = new WKWebView(Frame, WebViewConfiguration);
-            webView.Opaque = false;
-            webView.UIDelegate = this;
-            webView.NavigationDelegate = NavigationDelegate;
+
+            var webView = new WKWebView(Frame, WebViewConfiguration)
+            {
+                Opaque = false,
+                UIDelegate = this,
+                NavigationDelegate = NavigationDelegate
+            };
 
             OnControlChanging?.Invoke(this, Element, Control);
             SetNativeControl(webView);
@@ -83,13 +85,12 @@ namespace Xam.Plugin.iOS
 
         void OnStackNavigationRequested(FormsWebView sender, bool forward)
         {
-            if (Element != null && (sender.Equals(Element)))
-            {
-                if (forward)
-                    Control.GoForward();
-                else
-                    Control.GoBack();
-            }
+            if (Element == null || (!sender.Equals(Element))) return;
+
+            if (forward)
+                Control.GoForward();
+            else
+                Control.GoBack();
         }
 
         void DestroyElement(FormsWebView element)
@@ -161,15 +162,13 @@ namespace Xam.Plugin.iOS
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            if (Element != null)
-                Element.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+            Element?.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
         }
 
         string GetCorrectBaseUrl()
         {
             if (Element != null)
-                return Element.BaseUrl != null ? Element.BaseUrl : BaseUrl;
-
+                return Element.BaseUrl ?? BaseUrl;
             return BaseUrl;
         }
 
@@ -195,6 +194,7 @@ namespace Xam.Plugin.iOS
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
                 completionHandler(true);
             }));
+
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
                 completionHandler(false);
             }));
@@ -208,7 +208,7 @@ namespace Xam.Plugin.iOS
             var alertController = UIAlertController.Create(null, prompt, UIAlertControllerStyle.Alert);
 
             UITextField alertTextField = null;
-            alertController.AddTextField((textField) => {
+            alertController.AddTextField(textField => {
                 textField.Placeholder = defaultText;
                 alertTextField = textField;
             });
