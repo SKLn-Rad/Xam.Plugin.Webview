@@ -135,20 +135,19 @@ namespace Xam.Plugin.iOS
 
         void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType)
         {
-            if (Element == sender)
+            if (Element != sender) return;
+
+            switch (contentType)
             {
-                switch (contentType)
-                {
-                    case Abstractions.Enumerations.WebViewContentType.Internet:
-                        CommitNsUrlRequest(new NSUrl(uri));
-                        break;
-                    case Abstractions.Enumerations.WebViewContentType.LocalFile:
-                        LoadLocalContent(uri);
-                        break;
-                    case Abstractions.Enumerations.WebViewContentType.StringData:
-                        Control.LoadHtmlString(uri, new NSUrl(string.Concat("file://", GetCorrectBaseUrl(), "/")));
-                        break;
-                }
+                case Abstractions.Enumerations.WebViewContentType.Internet:
+                    CommitNsUrlRequest(new NSUrl(uri));
+                    break;
+                case Abstractions.Enumerations.WebViewContentType.LocalFile:
+                    LoadLocalContent(uri);
+                    break;
+                case Abstractions.Enumerations.WebViewContentType.StringData:
+                    Control.LoadHtmlString(uri, new NSUrl(string.Concat("file://", GetCorrectBaseUrl(), "/")));
+                    break;
             }
         }
 
