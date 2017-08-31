@@ -32,3 +32,7 @@
 /WebViewPlugin/WebView.Plugin.WinPhone/obj
 
 /UpgradeLog.htm
+/WebViewPlugin/WebView.Plugin.WindowsPhone/bin/Release
+/WebViewPlugin/WebView.Plugin.WindowsPhone/obj
+/WebViewPlugin/WebView.Plugin.WindowsStore/bin
+/WebViewPlugin/WebView.Plugin.WindowsStore/obj
