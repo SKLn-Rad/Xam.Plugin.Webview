@@ -8,7 +8,7 @@ namespace SampleApp
 
         public App()
         {
-            MainPage = new MainPage();
+            MainPage = new HeadersSample();
         }
 
         protected override void OnStart()

@@ -156,7 +156,8 @@ namespace Xam.Plugin.Shared
         {
             var uri = args.Uri != null ? args.Uri.AbsoluteUri : "";
             var nrd = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, uri));
-            args.Cancel = nrd.Cancel;
+
+            args.Cancel = nrd?.Cancel ?? false;
         }
 
         async void OnContentLoaded(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewDOMContentLoadedEventArgs args)

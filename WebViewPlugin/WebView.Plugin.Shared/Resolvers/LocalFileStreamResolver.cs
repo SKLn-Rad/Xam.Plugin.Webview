@@ -11,7 +11,7 @@ namespace Xam.Plugin.Shared.Resolvers
 {
     public class LocalFileStreamResolver : IUriToStreamResolver
     {
-        private FormsWebViewRenderer Renderer;
+        private readonly FormsWebViewRenderer Renderer;
 
         public LocalFileStreamResolver(FormsWebViewRenderer renderer)
         {
@@ -23,7 +23,7 @@ namespace Xam.Plugin.Shared.Resolvers
             if (uri == null)
                 throw new Exception("Uri supplied is null.");
 
-            string path = uri.AbsolutePath;
+            var path = uri.AbsolutePath;
             return GetContent(path).AsAsyncOperation();
         }
 
@@ -34,8 +34,8 @@ namespace Xam.Plugin.Shared.Resolvers
                 if (Renderer.GetCorrectBaseUrl() == null)
                     throw new Exception("Base URL was not set, could not load local content");
                 
-                StorageFile f = await StorageFile.GetFileFromApplicationUriAsync(new Uri(string.Concat(Renderer.GetCorrectBaseUrl(), path)));
-                IRandomAccessStream stream = await f.OpenAsync(FileAccessMode.Read);
+                var f = await StorageFile.GetFileFromApplicationUriAsync(new Uri(string.Concat(Renderer.GetCorrectBaseUrl(), path)));
+                var stream = await f.OpenAsync(FileAccessMode.Read);
 
                 return stream;
             }

@@ -34,7 +34,6 @@ namespace Xam.Plugin.Abstractions
         public bool Navigating
         {
             get { return (bool) GetValue(NavigatingProperty); }
-            set { SetValue(NavigatingProperty, value); }
         }
 
         public string Source
@@ -51,13 +50,11 @@ namespace Xam.Plugin.Abstractions
         public bool CanGoBack
         {
             get { return (bool) GetValue(CanGoBackProperty); }
-            private set { SetValue(CanGoBackProperty, value); }
         }
 
         public bool CanGoForward
         {
             get { return (bool) GetValue(CanGoForwardProperty); }
-            private set { SetValue(CanGoForwardProperty, value); }
         }
 
         public WebViewContentType ContentType
@@ -200,17 +197,21 @@ namespace Xam.Plugin.Abstractions
             switch (type)
             {
                 case WebViewEventType.NavigationRequested:
-                    return OnNavigationStarted == null ? eventObject as NavigationRequestedDelegate : OnNavigationStarted.Invoke(eventObject as NavigationRequestedDelegate);
+                    SetValue(NavigatingProperty, true);
+                    return OnNavigationStarted?.Invoke(eventObject as NavigationRequestedDelegate);
 
                 case WebViewEventType.NavigationComplete:
+                    SetValue(NavigatingProperty, false);
                     OnNavigationCompleted?.Invoke(eventObject as NavigationCompletedDelegate);
                     break;
 
                 case WebViewEventType.NavigationError:
+                    SetValue(NavigatingProperty, false);
                     OnNavigationError?.Invoke(eventObject as NavigationErrorDelegate);
                     break;
 
                 case WebViewEventType.ContentLoaded:
+                    SetValue(NavigatingProperty, false);
                     OnContentLoaded?.Invoke(eventObject as ContentLoadedDelegate);
                     break;
 
@@ -219,10 +220,10 @@ namespace Xam.Plugin.Abstractions
                     var navigationStackUpdateDelegate = eventObject as NavigationStackUpdateDelegate;
 
                     if (stackUpdateDelegate != null)
-                        CanGoBack = stackUpdateDelegate.CanGoBack;
+                        SetValue(CanGoBackProperty, stackUpdateDelegate.CanGoBack);
 
                     if (navigationStackUpdateDelegate != null)
-                        CanGoForward = navigationStackUpdateDelegate.CanGoForward;
+                        SetValue(CanGoForwardProperty, navigationStackUpdateDelegate.CanGoForward);
                     break;
 
                 case WebViewEventType.JavascriptCallback:

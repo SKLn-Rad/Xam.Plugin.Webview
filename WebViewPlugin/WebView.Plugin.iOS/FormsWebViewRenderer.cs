@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;
 using System.IO;
+using System.Linq;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.iOS.Extras;
 using Xam.Plugin.Abstractions.Events.Outbound;
@@ -139,7 +140,7 @@ namespace Xam.Plugin.iOS
                 switch (contentType)
                 {
                     case Abstractions.Enumerations.WebViewContentType.Internet:
-                        Control.LoadRequest(new NSUrlRequest(new NSUrl(uri)));
+                        CommitNsUrlRequest(new NSUrl(uri));
                         break;
                     case Abstractions.Enumerations.WebViewContentType.LocalFile:
                         LoadLocalContent(uri);
@@ -149,6 +150,17 @@ namespace Xam.Plugin.iOS
                         break;
                 }
             }
+        }
+
+        void CommitNsUrlRequest(NSUrl nSUrl)
+        {
+            var headers = new NSMutableDictionary();
+            foreach (var header in Element.RequestHeaders)
+                headers.Add(new NSString(header.Key), new NSString(header.Value));
+
+            var request = new NSMutableUrlRequest(nSUrl) { Headers = headers };
+
+            Control.LoadRequest(request);
         }
 
         void LoadLocalContent(string uri)

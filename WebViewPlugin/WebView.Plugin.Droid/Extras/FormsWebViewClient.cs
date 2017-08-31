@@ -27,7 +27,10 @@ namespace Xam.Plugin.Droid.Extras
 
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
-            if (((NavigationRequestedDelegate)Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, url))).Cancel)
+            var request = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested,
+                new NavigationRequestedDelegate(Element, url));
+
+            if (request?.Cancel ?? false)
                 view.StopLoading();
             else
                 Element.SetValue(FormsWebView.SourceProperty, url);
