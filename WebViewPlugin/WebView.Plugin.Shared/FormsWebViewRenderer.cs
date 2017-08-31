@@ -9,7 +9,6 @@ using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Windows.Web;
 using Windows.UI;
 using Xamarin.Forms;
-using System.Diagnostics;
 using WebView.Plugin.Abstractions.Events.Inbound;
 
 #if WINDOWS_UWP
@@ -67,13 +66,13 @@ namespace Xam.Plugin.Shared
 
         async void InjectJavascript(FormsWebView sender, string js)
         {
-            if (Element == sender && Control != null)
+            if (Element != null && sender != null && Control != null && Element == sender)
                 await Control.InvokeScriptAsync("eval", new[] { js });
         }
 
         void OnStackNavigationRequested(FormsWebView sender, bool forward)
         {
-            if (Element != null && (sender.Equals(Element)))
+            if (sender != null && Control != null && Element != null && (sender.Equals(Element)))
             {
                 if (forward)
                     Control.GoForward();

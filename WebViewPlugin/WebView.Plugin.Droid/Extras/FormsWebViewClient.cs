@@ -4,6 +4,7 @@ using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using Android.Graphics;
 using WebView.Plugin.Abstractions.Events.Inbound;
+using Android.Net.Http;
 
 namespace Xam.Plugin.Droid.Extras
 {
@@ -32,16 +33,24 @@ namespace Xam.Plugin.Droid.Extras
                 Element.SetValue(FormsWebView.SourceProperty, url);
         }
 
+        public override void OnReceivedSslError(Android.Webkit.WebView view, SslErrorHandler handler, SslError error)
+        {
+            if (FormsWebViewRenderer.IgnoreSslGlobally)
+                handler.Proceed();
+            else
+                handler.Cancel();
+        }
+
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
-            Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
+            Renderer.InjectJavascript(WebViewControlDelegate.InjectedFunction);
 
             foreach (var key in Element.GetGlobalCallbacks())
-                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
 
             foreach (var key in Element.GetLocalCallbacks())
-                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack(), Renderer.Control.CanGoForward()));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, url));

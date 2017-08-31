@@ -8,7 +8,7 @@ namespace SampleApp
 
         public App()
         {
-            MainPage = new NavigationPage(new NavigationStack());
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()

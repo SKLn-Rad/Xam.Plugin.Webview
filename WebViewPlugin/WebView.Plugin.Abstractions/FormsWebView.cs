@@ -65,9 +65,9 @@ namespace Xam.Plugin.Abstractions
         }
 
         // This is used as the object key for global callbacks, it is not perfectly unique but should be unique enough to not match any existing FWV objects.
-        static object _globalKey = -1;
+        private static readonly object _globalKey = -1;
 
-        internal WebViewControlEventAbstraction _controlEventAbstraction;
+        private readonly WebViewControlEventAbstraction _controlEventAbstraction;
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
         public event WebViewNavigationStartedEventArgs OnNavigationStarted;
 
@@ -127,11 +127,9 @@ namespace Xam.Plugin.Abstractions
 
         public void RegisterGlobalCallback(string name, Action<string> callback)
         {
-            if (!RegisteredActions[_globalKey].ContainsKey(name))
-            {
-                RegisteredActions[_globalKey].Add(name, callback);
-                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, true);
-            }
+            if (RegisteredActions[_globalKey].ContainsKey(name)) return;
+            RegisteredActions[_globalKey].Add(name, callback);
+            _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, true);
         }
 
         public void RemoveGlobalCallback(string name)
@@ -152,11 +150,9 @@ namespace Xam.Plugin.Abstractions
 
         public void RegisterLocalCallback(string name, Action<string> callback)
         {
-            if (!RegisteredActions[this].ContainsKey(name))
-            {
-                RegisteredActions[this].Add(name, callback);
-                _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, false);
-            }
+            if (RegisteredActions[this].ContainsKey(name)) return;
+            RegisteredActions[this].Add(name, callback);
+            _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, false);
         }
 
         public void RemoveLocalCallback(string name)
@@ -201,30 +197,41 @@ namespace Xam.Plugin.Abstractions
                     break;
 
                 case WebViewEventType.NavigationStackUpdate:
-                    CanGoBack = (eventObject as NavigationStackUpdateDelegate).CanGoBack;
-                    CanGoForward = (eventObject as NavigationStackUpdateDelegate).CanGoForward;
+                    var stackUpdateDelegate = eventObject as NavigationStackUpdateDelegate;
+                    var navigationStackUpdateDelegate = eventObject as NavigationStackUpdateDelegate;
+
+                    if (stackUpdateDelegate != null)
+                        CanGoBack = stackUpdateDelegate.CanGoBack;
+
+                    if (navigationStackUpdateDelegate != null)
+                        CanGoForward = navigationStackUpdateDelegate.CanGoForward;
                     break;
 
                 case WebViewEventType.JavascriptCallback:
-                    var data = (eventObject as JavascriptResponseDelegate).Data;
-                    ActionResponse ar;
-
-                    if (data.ValidateJSON() && (ar = data.AttemptParseActionResponse()) != null)
+                    var javascriptResponseDelegate = eventObject as JavascriptResponseDelegate;
+                    if (javascriptResponseDelegate != null)
                     {
-                        // Attempt Locals
-                        if (RegisteredActions[this].ContainsKey(ar.Action))
-                            RegisteredActions[this][ar.Action]?.Invoke(ar.Data);
+                        var data = javascriptResponseDelegate.Data;
+                        ActionResponse ar;
+                        if (data.ValidateJSON() && (ar = data.AttemptParseActionResponse()) != null)
+                        {
+                            // Attempt Locals
+                            if (RegisteredActions[this].ContainsKey(ar.Action))
+                                RegisteredActions[this][ar.Action]?.Invoke(ar.Data);
 
-                        // Attempt Globals
-                        if (RegisteredActions[_globalKey].ContainsKey(ar.Action))
-                            RegisteredActions[_globalKey][ar.Action]?.Invoke(ar.Data);
+                            // Attempt Globals
+                            if (RegisteredActions[_globalKey].ContainsKey(ar.Action))
+                                RegisteredActions[_globalKey][ar.Action]?.Invoke(ar.Data);
+                        }
+                        else
+                        {
+                            OnJavascriptResponse?.Invoke((JavascriptResponseDelegate) eventObject);
+                        }
                     }
-                    else
-                    {
-                        OnJavascriptResponse?.Invoke(eventObject as JavascriptResponseDelegate);
-                    }
-
                     break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
             
             return eventObject;

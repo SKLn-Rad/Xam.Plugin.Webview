@@ -4,11 +4,11 @@ using Android.Webkit;
 
 namespace Xam.Plugin.Droid.Extras
 {
-    public class FormsWebViewJSBridge : Java.Lang.Object
+    public class FormsWebViewJsBridge : Java.Lang.Object
     {
         readonly WeakReference<FormsWebViewRenderer> Renderer;
 
-        public FormsWebViewJSBridge(FormsWebViewRenderer renderer)
+        public FormsWebViewJsBridge(FormsWebViewRenderer renderer)
         {
             Renderer = new WeakReference<FormsWebViewRenderer>(renderer);
         }
