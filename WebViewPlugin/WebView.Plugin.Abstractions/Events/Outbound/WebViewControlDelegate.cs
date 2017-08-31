@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Specialized;
+using System.Text;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xamarin.Forms;
 

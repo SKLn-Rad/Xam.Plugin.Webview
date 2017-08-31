@@ -22,11 +22,11 @@ namespace Xam.Plugin.Droid
 
         public static event WebViewControlChangedDelegate OnControlChanged;
 
-        private WebViewStringDataSettings StringDataSettings { get; set; } = new WebViewStringDataSettings();
+        WebViewStringDataSettings StringDataSettings { get; set; } = new WebViewStringDataSettings();
 
-        private FormsWebViewClient WebViewClient { get; set; }
+        FormsWebViewClient WebViewClient { get; set; }
 
-        private FormsWebViewChromeClient ChromeClient { get; set; }
+        FormsWebViewChromeClient ChromeClient { get; set; }
 
         public static string BaseUrl { get; set; } = "file:///android_asset/";
 
@@ -51,11 +51,11 @@ namespace Xam.Plugin.Droid
             base.OnElementChanged(e);
         }
 
-        private void SetupControl(FormsWebView element)
+        void SetupControl(FormsWebView element)
         {
             var webView = new Android.Webkit.WebView(Forms.Context);
-            webView.SetWebViewClient((WebViewClient = new FormsWebViewClient(element, this)));
-            webView.SetWebChromeClient((ChromeClient = new FormsWebViewChromeClient(this)));
+            webView.SetWebViewClient(WebViewClient = new FormsWebViewClient(element, this));
+            webView.SetWebChromeClient(ChromeClient = new FormsWebViewChromeClient(this));
 
             // https://github.com/SKLn-Rad/Xam.Plugin.Webview/issues/11
             webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
@@ -69,19 +69,19 @@ namespace Xam.Plugin.Droid
             OnControlChanged?.Invoke(this, element, webView);
         }
 
-        private void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
+        void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
         {
             if (isGlobal || (Element != null && Element.Equals(sender)))
                 InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
-        private void OnInjectJavascriptRequest(FormsWebView sender, string js)
+        void OnInjectJavascriptRequest(FormsWebView sender, string js)
         {
             if (Element != null && (sender.Equals(Element)))
                 InjectJavascript(js);
         }
 
-        private void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        void OnStackNavigationRequested(FormsWebView sender, bool forward)
         {
             if (Element == null || (!sender.Equals(Element))) return;
 
@@ -91,7 +91,7 @@ namespace Xam.Plugin.Droid
                 Control.GoBack();
         }
 
-        private void SetupElement(FormsWebView element)
+        void SetupElement(FormsWebView element)
         {
             Device.BeginInvokeOnMainThread(() => Control.AddJavascriptInterface(new FormsWebViewJsBridge(this), "bridge"));
             element.PropertyChanged += OnWebViewPropertyChanged;
@@ -107,7 +107,7 @@ namespace Xam.Plugin.Droid
                 OnUserNavigationRequested(element, element.Source, element.ContentType);
         }
 
-        private void DestroyElement(FormsWebView element)
+        void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnWebViewPropertyChanged;
 
@@ -116,30 +116,30 @@ namespace Xam.Plugin.Droid
             WebViewControlDelegate.OnStackNavigationRequested -= OnStackNavigationRequested;
             WebViewControlDelegate.OnActionAdded -= OnActionAdded;
 
-            if (this != null && Control != null)
+            if (Control != null)
                 Device.BeginInvokeOnMainThread(() => Control.RemoveJavascriptInterface("bridge"));
         }
 
-        private void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(FormsWebView.BackgroundColor)))
                 SetWebViewBackgroundColor(((FormsWebView)sender).BackgroundColor);
         }
 
-        private void SetWebViewBackgroundColor(Color backgroundColor)
+        void SetWebViewBackgroundColor(Color backgroundColor)
         {
             if (Control != null)
                 Device.BeginInvokeOnMainThread(() => Control.SetBackgroundColor(backgroundColor.ToAndroid()));
         }
 
-        private void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
         {
             if (Element == null || !sender.Equals(Element)) return;
 
             switch (contentType)
             {
                 case WebViewContentType.Internet:
-                    Control.LoadUrl(uri);
+                    Control.LoadUrl(uri, Element.RequestHeaders);
                     break;
                 case WebViewContentType.StringData:
                     Control.LoadDataWithBaseURL(GetCorrectBaseUrl(sender), uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
@@ -152,7 +152,7 @@ namespace Xam.Plugin.Droid
             }
         }
 
-        private string GetCorrectBaseUrl(FormsWebView sender)
+        string GetCorrectBaseUrl(FormsWebView sender)
         {
             if (sender != null)
                 return sender.BaseUrl ?? BaseUrl;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Xamarin.Forms;
 using Xam.Plugin.Abstractions.Extensions;
 using Xam.Plugin.Abstractions.Enumerations;
@@ -15,12 +17,13 @@ namespace Xam.Plugin.Abstractions
     {
 
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
-        public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView));
         public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
         public static readonly BindableProperty RegisteredActionsProperty = BindableProperty.Create(nameof(RegisteredActions), typeof(Dictionary<object, Dictionary<string, Action<string>>>), typeof(FormsWebView), new Dictionary<object, Dictionary<string, Action<string>>>());
-        public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView), null);
+        public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView));
         public static readonly BindableProperty CanGoBackProperty = BindableProperty.Create(nameof(CanGoBack), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty CanGoForwardProperty = BindableProperty.Create(nameof(CanGoForward), typeof(bool), typeof(FormsWebView), false);
+        public static readonly BindableProperty RequestHeadersProperty = BindableProperty.Create(nameof(RequestHeaders), typeof(IDictionary<string, string>), typeof(FormsWebView), new Dictionary<string, string>());
 
         public string BaseUrl
         {
@@ -37,7 +40,12 @@ namespace Xam.Plugin.Abstractions
         public string Source
         {
             get { return (string) GetValue(SourceProperty); }
-            set { SetValue(SourceProperty, value); _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType);}
+            set
+            {
+                if (value == null) return;
+                SetValue(SourceProperty, value);
+                _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType);
+            }
         }
 
         public bool CanGoBack
@@ -56,6 +64,16 @@ namespace Xam.Plugin.Abstractions
         {
             get { return (WebViewContentType) GetValue(ContentTypeProperty); }
             set { SetValue(ContentTypeProperty, value); }
+        }
+
+        public IDictionary<string, string> RequestHeaders
+        {
+            get { return (IDictionary<string, string>) GetValue(RequestHeadersProperty); }
+            set
+            {
+                if (value != null)
+                    SetValue(RequestHeadersProperty, value);
+            }
         }
 
         Dictionary<object, Dictionary<string, Action<string>>> RegisteredActions
@@ -85,7 +103,7 @@ namespace Xam.Plugin.Abstractions
 
         public FormsWebView()
         {
-            _controlEventAbstraction = new WebViewControlEventAbstraction() { Source = new WebViewControlEventStub() };
+            _controlEventAbstraction = new WebViewControlEventAbstraction { Source = new WebViewControlEventStub() };
 
             // Register Global
             if (!RegisteredActions.ContainsKey(GlobalKey))

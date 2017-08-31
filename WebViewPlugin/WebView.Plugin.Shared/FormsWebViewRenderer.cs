@@ -8,6 +8,7 @@ using Xam.Plugin.Abstractions.Events.Outbound;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Windows.Web;
 using Windows.UI;
+using Windows.Web.Http;
 using Xamarin.Forms;
 using WebView.Plugin.Abstractions.Events.Inbound;
 
@@ -180,10 +181,11 @@ namespace Xam.Plugin.Shared
         void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
         {
             if (sender != Element) return;
+
             switch (contentType)
             {
                 case WebViewContentType.Internet:
-                    Control.Navigate(new Uri(uri));
+                    NavigateWithHttpRequest(new Uri(uri));
                     break;
                 case WebViewContentType.StringData:
                     LoadStringData(uri);
@@ -192,6 +194,17 @@ namespace Xam.Plugin.Shared
                     LoadLocalFile(uri);
                     break;
             }
+        }
+
+        void NavigateWithHttpRequest(Uri uri)
+        {
+            if (Element == null || Control == null) return;
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
+            foreach (var header in Element.RequestHeaders)
+                requestMsg.Headers.Add(header.Key, header.Value);
+
+            Control.NavigateWithHttpRequestMessage(requestMsg);
         }
 
         void LoadStringData(string uri)

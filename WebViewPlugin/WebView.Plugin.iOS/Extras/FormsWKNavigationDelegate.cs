@@ -24,6 +24,9 @@ namespace Xam.Plugin.iOS.Extras
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
+            foreach (var header in Element.RequestHeaders)
+                navigationAction.Request.Headers.SetValueForKey(new NSString(header.Value), new NSString(header.Key));
+
             var res = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, navigationAction.Request.Url.ToString()));
             decisionHandler(res.Cancel ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow);
         }
