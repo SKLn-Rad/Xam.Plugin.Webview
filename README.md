@@ -6,17 +6,6 @@ Lightweight cross platform WebView designed to leverage the native WebView compo
 ### This is a work in development
 This WebView is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! PayPal: ryandixon1993@gmail.com
 
-## New in 1.6.*
-### Navigation Stack
-Like the default Xamarin WebView. You now have access to the navigation stack.
-
-+ 2 Bindable Properties: CanGoBack + CanGoFoward
-+ 2 Methods: GoBack() + GoForward()
-
-### Javascript Bug Fix
-The application will no longer crash if the page is disposed of halfway through a Javascript event.
-see issue 25.
-
 ## New in 1.7.*
 ### Request Headers
 Headers can now be sent up as part of the HTTP request. To add a header, simple add them to the RequestHeaders dictionary property on the FormsWebView object.
