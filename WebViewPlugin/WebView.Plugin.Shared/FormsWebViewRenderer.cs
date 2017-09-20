@@ -32,7 +32,7 @@ namespace Xam.Plugin.Shared
 
         public static void Init()
         {
-            var dt = DateTime.Now;
+            //var dt = DateTime.Now;
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
@@ -167,7 +167,7 @@ namespace Xam.Plugin.Shared
             foreach (var key in Element.GetLocalCallbacks())
                 await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
 
-            foreach (var key in Element.GetGlobalCallbacks())
+            foreach (var key in FormsWebView.GetGlobalCallbacks())
                 await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Control.CanGoBack, Control.CanGoForward));

@@ -60,7 +60,7 @@ namespace Xam.Plugin.iOS.Extras
             foreach (var key in Element.GetLocalCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
-            foreach (var key in Element.GetGlobalCallbacks())
+            foreach (var key in FormsWebView.GetGlobalCallbacks())
                 Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack, Renderer.Control.CanGoForward));
