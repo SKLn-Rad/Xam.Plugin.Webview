@@ -46,7 +46,7 @@ namespace Xam.Plugin.Abstractions
             {
                 if (value == null) return;
                 SetValue(SourceProperty, value);
-                _controlEventAbstraction.Target.PerformNavigation(this, value, ContentType);
+                WebViewControlDelegate.PerformNavigation(this, value, ContentType);
             }
         }
 
@@ -81,7 +81,6 @@ namespace Xam.Plugin.Abstractions
             get { return _localRegisteredActions; }
         }
 
-        private readonly WebViewControlEventAbstraction _controlEventAbstraction;
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
         public event WebViewNavigationStartedEventArgs OnNavigationStarted;
 
@@ -99,44 +98,42 @@ namespace Xam.Plugin.Abstractions
 
         public FormsWebView()
         {
-            _controlEventAbstraction = new WebViewControlEventAbstraction { Source = new WebViewControlEventStub() };
-
         }
 
         public void GoBack()
         {
             if (CanGoBack)
-                _controlEventAbstraction.Target.NavigateThroughStack(this, false);
+                WebViewControlDelegate.NavigateThroughStack(this, false);
         }
 
         public void GoForward()
         {
             if (CanGoForward)
-                _controlEventAbstraction.Target.NavigateThroughStack(this, true);
+                WebViewControlDelegate.NavigateThroughStack(this, true);
         }
 
         public void InjectJavascript(string js)
         {
-            _controlEventAbstraction.Target.InjectJavascript(this, js);
+            WebViewControlDelegate.InjectJavascript(this, js);
         }
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RegisterGlobalCallback instead.")]
+        [Obsolete("This method's name has been updated to better reflect its use case. Please use the static method RegisterGlobalCallback instead.")]
         public void RegisterCallback(string name, Action<string> callback) => RegisterGlobalCallback(name, callback);
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RemoveGlobalCallback instead.")]
+        [Obsolete("This method's name has been updated to better reflect its use case. Please use the static method RemoveGlobalCallback instead.")]
         public void RemoveCallback(string name) => RemoveGlobalCallback(name);
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method GetGlobalCallbacks instead.")]
+        [Obsolete("This method's name has been updated to better reflect its use case. Please use the static method GetGlobalCallbacks instead.")]
         public string[] GetAllCallbacks() => GetGlobalCallbacks();
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RemoveAllGlobalCallbacks instead.")]
+        [Obsolete("This method's name has been updated to better reflect its use case. Please use the static method RemoveAllGlobalCallbacks instead.")]
         public void RemoveAllCallbacks() => RemoveAllGlobalCallbacks();
 
-        public void RegisterGlobalCallback(string name, Action<string> callback)
+        public static void RegisterGlobalCallback(string name, Action<string> callback)
         {
             if (GlobalRegisteredActions.ContainsKey(name)) return;
             GlobalRegisteredActions.Add(name, callback);
-            _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, true);
+            WebViewControlDelegate.NotifyCallbacksChanged(null, name, true);
         }
 
         public static void RemoveGlobalCallback(string name)
@@ -159,7 +156,7 @@ namespace Xam.Plugin.Abstractions
         {
             if (LocalRegisteredActions.ContainsKey(name)) return;
             LocalRegisteredActions.Add(name, callback);
-            _controlEventAbstraction.Target.NotifyCallbacksChanged(this, name, false);
+            WebViewControlDelegate.NotifyCallbacksChanged(this, name, false);
         }
 
         public void RemoveLocalCallback(string name)

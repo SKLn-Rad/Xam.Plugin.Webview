@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace Xam.Plugin.Abstractions.Events.Outbound
 {
-    public class WebViewControlDelegate
+    public static class WebViewControlDelegate
     {
         public static string InjectedFunction
         {
@@ -43,22 +43,22 @@ namespace Xam.Plugin.Abstractions.Events.Outbound
         public delegate void NavigateThroughStackDelegate(FormsWebView sender, bool forward);
         public static event NavigateThroughStackDelegate OnStackNavigationRequested;
 
-        public void NotifyCallbacksChanged(FormsWebView sender, string key, bool isGlobal)
+        public static void NotifyCallbacksChanged(FormsWebView sender, string key, bool isGlobal)
         {
             OnActionAdded?.Invoke(sender, key, isGlobal);
         }
 
-        public void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType)
+        public static void PerformNavigation(FormsWebView sender, string uri, WebViewContentType contentType)
         {
             OnNavigationRequestedFromUser?.Invoke(sender, uri, contentType);
         }
 
-        internal void InjectJavascript(FormsWebView sender, string js)
+        internal static void InjectJavascript(FormsWebView sender, string js)
         {
             OnInjectJavascriptRequest?.Invoke(sender, js);
         }
 
-        internal void NavigateThroughStack(FormsWebView sender, bool forward)
+        internal static void NavigateThroughStack(FormsWebView sender, bool forward)
         {
             OnStackNavigationRequested?.Invoke(sender, forward);
         }

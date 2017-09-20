@@ -32,7 +32,7 @@ namespace Xam.Plugin.Shared
 
         public static void Init()
         {
-            var dt = DateTime.Now;
+            //var dt = DateTime.Now;
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
