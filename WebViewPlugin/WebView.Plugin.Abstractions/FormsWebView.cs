@@ -19,13 +19,14 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView));
         public static readonly BindableProperty ContentTypeProperty = BindableProperty.Create(nameof(ContentType), typeof(WebViewContentType), typeof(FormsWebView), WebViewContentType.Internet);
-        public static readonly BindableProperty LocalRegisteredActionsProperty = BindableProperty.Create(nameof(LocalRegisteredActions), typeof(Dictionary<string, Action<string>>), typeof(FormsWebView), new Dictionary<string, Action<string>>());
+        //public static readonly BindableProperty LocalRegisteredActionsProperty = BindableProperty.Create(nameof(LocalRegisteredActions), typeof(Dictionary<string, Action<string>>), typeof(FormsWebView), new Dictionary<string, Action<string>>());
         public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView));
         public static readonly BindableProperty CanGoBackProperty = BindableProperty.Create(nameof(CanGoBack), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty CanGoForwardProperty = BindableProperty.Create(nameof(CanGoForward), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty RequestHeadersProperty = BindableProperty.Create(nameof(RequestHeaders), typeof(IDictionary<string, string>), typeof(FormsWebView), new Dictionary<string, string>());
 
         private static Dictionary<string, Action<string>> GlobalRegisteredActions = new Dictionary<string, Action<string>>();
+        private Dictionary<string, Action<string>> _localRegisteredActions = new Dictionary<string, Action<string>>();
 
         public string BaseUrl
         {
@@ -77,8 +78,7 @@ namespace Xam.Plugin.Abstractions
 
         Dictionary<string, Action<string>> LocalRegisteredActions
         {
-            get { return (Dictionary<string, Action<string>>) GetValue(LocalRegisteredActionsProperty); }
-            set { SetValue(LocalRegisteredActionsProperty, value); }
+            get { return _localRegisteredActions; }
         }
 
         private readonly WebViewControlEventAbstraction _controlEventAbstraction;
@@ -120,16 +120,16 @@ namespace Xam.Plugin.Abstractions
             _controlEventAbstraction.Target.InjectJavascript(this, js);
         }
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use RegisterGlobalCallback instead.")]
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RegisterGlobalCallback instead.")]
         public void RegisterCallback(string name, Action<string> callback) => RegisterGlobalCallback(name, callback);
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use RemoveGlobalCallback instead.")]
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RemoveGlobalCallback instead.")]
         public void RemoveCallback(string name) => RemoveGlobalCallback(name);
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use GetGlobalCallbacks instead.")]
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method GetGlobalCallbacks instead.")]
         public string[] GetAllCallbacks() => GetGlobalCallbacks();
 
-        [Obsolete("This methods name has been updated to better reflect its use case. Please use RemoveAllGlobalCallbacks instead.")]
+        [Obsolete("This methods name has been updated to better reflect its use case. Please use the static method RemoveAllGlobalCallbacks instead.")]
         public void RemoveAllCallbacks() => RemoveAllGlobalCallbacks();
 
         public void RegisterGlobalCallback(string name, Action<string> callback)
