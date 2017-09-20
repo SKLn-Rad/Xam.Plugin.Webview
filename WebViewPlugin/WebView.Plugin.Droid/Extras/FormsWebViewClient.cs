@@ -49,7 +49,7 @@ namespace Xam.Plugin.Droid.Extras
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
             Renderer.InjectJavascript(WebViewControlDelegate.InjectedFunction);
 
-            foreach (var key in Element.GetGlobalCallbacks())
+            foreach (var key in FormsWebView.GetGlobalCallbacks())
                 Renderer.InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
 
             foreach (var key in Element.GetLocalCallbacks())
