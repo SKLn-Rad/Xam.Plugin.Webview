@@ -7,9 +7,9 @@ using Xamarin.Forms;
 using Xam.Plugin.Abstractions.Extensions;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.DTO;
 using WebView.Plugin.Abstractions.Events.Inbound;
+using System.Text;
 
 namespace Xam.Plugin.Abstractions
 {
@@ -25,8 +25,72 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty CanGoForwardProperty = BindableProperty.Create(nameof(CanGoForward), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty RequestHeadersProperty = BindableProperty.Create(nameof(RequestHeaders), typeof(IDictionary<string, string>), typeof(FormsWebView), new Dictionary<string, string>());
 
+        public bool EnableGlobalCallbacks;
+
         private static Dictionary<string, Action<string>> GlobalRegisteredActions = new Dictionary<string, Action<string>>();
         private Dictionary<string, Action<string>> _localRegisteredActions = new Dictionary<string, Action<string>>();
+
+        public delegate void PerformNavigationDelegate(string uri, WebViewContentType contentType);
+        public event PerformNavigationDelegate OnNavigationRequestedFromUser;
+
+        public delegate void InjectJavascriptDelegate(string js);
+        public event InjectJavascriptDelegate OnInjectJavascriptRequest;
+
+        public delegate void RegisterLocalActionsAddedDelegate(string key);
+        public event RegisterLocalActionsAddedDelegate OnLocalActionAdded;
+
+        public delegate void NavigateThroughStackDelegate(bool forward);
+        public event NavigateThroughStackDelegate OnStackNavigationRequested;
+
+        public delegate void RegisterGlobalActionsAddedDelegate(string key);
+        public static event RegisterGlobalActionsAddedDelegate OnGlobalActionAdded;
+
+        public static string InjectedFunction
+        {
+            get
+            {
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.Android:
+                        return "function csharp(data){bridge.invokeAction(data);}";
+                    case Device.iOS:
+                        return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
+                    default:
+                        return "function csharp(data){window.external.notify(data);}";
+                }
+            }
+        }
+
+        public static string GenerateFunctionScript(string name)
+        {
+            var sb = new StringBuilder();
+            sb.Append(string.Concat("function ", name, "(str){csharp(\"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
+            return sb.ToString();
+        }
+
+        public void PerformNavigation(string uri, WebViewContentType contentType)
+        {
+            OnNavigationRequestedFromUser?.Invoke(uri, contentType);
+        }
+
+        public void InjectJavascript(string js)
+        {
+            OnInjectJavascriptRequest?.Invoke(js);
+        }
+
+        internal void NavigateThroughStack(bool forward)
+        {
+            OnStackNavigationRequested?.Invoke(forward);
+        }
+
+        public void NotifyLocalCallbacksChanged(string key)
+        {
+            OnLocalActionAdded?.Invoke(key);
+        }
+        public static void NotifyGlobalCallbacksChanged(string key)
+        {
+            OnGlobalActionAdded?.Invoke(key);
+        }
 
         public string BaseUrl
         {
@@ -46,7 +110,7 @@ namespace Xam.Plugin.Abstractions
             {
                 if (value == null) return;
                 SetValue(SourceProperty, value);
-                WebViewControlDelegate.PerformNavigation(this, value, ContentType);
+                PerformNavigation(value, ContentType);
             }
         }
 
@@ -96,25 +160,21 @@ namespace Xam.Plugin.Abstractions
         public delegate void ContentLoadedEventArgs(ContentLoadedDelegate eventObj);
         public event ContentLoadedEventArgs OnContentLoaded;
 
-        public FormsWebView()
+        public FormsWebView(bool enableGlobalCallbacks = true)
         {
+            EnableGlobalCallbacks = enableGlobalCallbacks;
         }
 
         public void GoBack()
         {
             if (CanGoBack)
-                WebViewControlDelegate.NavigateThroughStack(this, false);
+                NavigateThroughStack(false);
         }
 
         public void GoForward()
         {
             if (CanGoForward)
-                WebViewControlDelegate.NavigateThroughStack(this, true);
-        }
-
-        public void InjectJavascript(string js)
-        {
-            WebViewControlDelegate.InjectJavascript(this, js);
+                NavigateThroughStack(true);
         }
 
         [Obsolete("This method's name has been updated to better reflect its use case. Please use the static method RegisterGlobalCallback instead.")]
@@ -133,7 +193,7 @@ namespace Xam.Plugin.Abstractions
         {
             if (GlobalRegisteredActions.ContainsKey(name)) return;
             GlobalRegisteredActions.Add(name, callback);
-            WebViewControlDelegate.NotifyCallbacksChanged(null, name, true);
+            NotifyGlobalCallbacksChanged(name);
         }
 
         public static void RemoveGlobalCallback(string name)
@@ -156,7 +216,7 @@ namespace Xam.Plugin.Abstractions
         {
             if (LocalRegisteredActions.ContainsKey(name)) return;
             LocalRegisteredActions.Add(name, callback);
-            WebViewControlDelegate.NotifyCallbacksChanged(this, name, false);
+            NotifyLocalCallbacksChanged(name);
         }
 
         public void RemoveLocalCallback(string name)
@@ -243,6 +303,14 @@ namespace Xam.Plugin.Abstractions
             }
             
             return eventObject;
+        }
+
+        public void Destroy()
+        {
+            OnNavigationRequestedFromUser = null;
+            OnLocalActionAdded = null;
+            OnInjectJavascriptRequest = null;
+            OnStackNavigationRequested = null;
         }
     }
 }

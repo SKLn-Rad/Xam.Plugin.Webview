@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.iOS.Extras;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Xam.Plugin.iOS;
@@ -49,10 +48,12 @@ namespace Xam.Plugin.iOS
 
         void SetupControl(FormsWebView element)
         {
-            WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
-            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
-            WebViewControlDelegate.OnActionAdded += OnActionAdded;
+            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
+            element.OnStackNavigationRequested += OnStackNavigationRequested;
+            element.OnLocalActionAdded += OnActionAdded;
+            if (element.EnableGlobalCallbacks)
+                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
 
             UserController = new WKUserContentController();
             UserController.AddScriptMessageHandler(this, "invokeAction");
@@ -72,22 +73,18 @@ namespace Xam.Plugin.iOS
             OnControlChanged?.Invoke(this, Element, Control);
         }
 
-        void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
+        void OnActionAdded(string key)
         {
-            if (isGlobal || sender.Equals(Element))
-                InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+            InjectJS(FormsWebView.GenerateFunctionScript(key));
         }
 
-        void OnInjectJavascriptRequested(FormsWebView sender, string js)
+        void OnInjectJavascriptRequested(string js)
         {
-            if (Element == sender)
-                InjectJS(js);
+            InjectJS(js);
         }
 
-        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        void OnStackNavigationRequested(bool forward)
         {
-            if (Element == null || (!sender.Equals(Element))) return;
-
             if (forward)
                 Control.GoForward();
             else
@@ -96,6 +93,7 @@ namespace Xam.Plugin.iOS
 
         void DestroyElement(FormsWebView element)
         {
+            element.Destroy();
             element.PropertyChanged -= OnWebViewPropertyChanged;
         }
 
@@ -104,7 +102,7 @@ namespace Xam.Plugin.iOS
             element.PropertyChanged += OnWebViewPropertyChanged;
 
             if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+                OnUserNavigationRequested(element.Source, element.ContentType);
 
             SetWebViewBackgroundColor(element.BackgroundColor);
         }
@@ -133,10 +131,8 @@ namespace Xam.Plugin.iOS
                 InvokeOnMainThread(async () => await Control.EvaluateJavaScriptAsync(new NSString(js)));
         }
 
-        void OnUserNavigationRequested(FormsWebView sender, string uri, Abstractions.Enumerations.WebViewContentType contentType)
+        void OnUserNavigationRequested(string uri, Abstractions.Enumerations.WebViewContentType contentType)
         {
-            if (Element != sender) return;
-
             switch (contentType)
             {
                 case Abstractions.Enumerations.WebViewContentType.Internet:
