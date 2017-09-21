@@ -74,7 +74,7 @@ namespace Xam.Plugin.iOS
 
         void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
         {
-            if (isGlobal || sender.Equals(Element))
+            if (isGlobal || (Element != null && Element.Equals(sender)))
                 InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
         }
 
