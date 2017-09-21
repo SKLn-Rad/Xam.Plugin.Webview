@@ -213,5 +213,12 @@ namespace Xam.Plugin.Shared
         {
             Control.NavigateToLocalStreamUri(Control.BuildLocalStreamUri("/", uri), _resolver);
         }
+
+        internal string GetCorrectBaseUrl()
+        {
+            if (Element != null)
+                return Element.BaseUrl ?? BaseUrl;
+            return BaseUrl;
+        }
     }
 }

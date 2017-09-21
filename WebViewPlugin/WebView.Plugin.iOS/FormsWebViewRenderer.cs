@@ -142,7 +142,7 @@ namespace Xam.Plugin.iOS
                     LoadLocalContent(uri);
                     break;
                 case Abstractions.Enumerations.WebViewContentType.StringData:
-                    Control.LoadHtmlString(uri, new NSUrl(string.Concat("file://", Element.BaseUrl ?? BaseUrl, "/")));
+                    Control.LoadHtmlString(uri, new NSUrl(string.Concat("file://", GetCorrectBaseUrl(), "/")));
                     break;
             }
         }
@@ -160,13 +160,23 @@ namespace Xam.Plugin.iOS
 
         void LoadLocalContent(string uri)
         {
-            var path = Path.Combine(Element.BaseUrl ?? BaseUrl, uri);
-            Control.LoadFileUrl(new NSUrl(string.Concat("file://", path)), new NSUrl(string.Concat("file://", Element.BaseUrl ?? BaseUrl)));
+            if (GetCorrectBaseUrl() == null)
+                throw new Exception("Base URL was not set, could not load local content");
+
+            var path = Path.Combine(GetCorrectBaseUrl(), uri);
+            Control.LoadFileUrl(new NSUrl(string.Concat("file://", path)), new NSUrl(string.Concat("file://", GetCorrectBaseUrl())));
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
             Element?.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, message.Body.ToString()));
+        }
+
+        string GetCorrectBaseUrl()
+        {
+            if (Element != null)
+                return Element.BaseUrl ?? BaseUrl;
+            return BaseUrl;
         }
 
         /**
