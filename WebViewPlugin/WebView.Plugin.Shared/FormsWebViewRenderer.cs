@@ -135,7 +135,7 @@ namespace Xam.Plugin.Shared
 
         async void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
         {
-            if (isGlobal || Element.Equals(sender))
+            if (isGlobal || (Element != null && Element.Equals(sender)))
                 await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
         }
 
