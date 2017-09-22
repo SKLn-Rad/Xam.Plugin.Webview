@@ -10,6 +10,12 @@ using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions.DTO;
 using WebView.Plugin.Abstractions.Events.Inbound;
 using System.Text;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Webview.Plugin.WindowsStore")]
+[assembly: InternalsVisibleTo("Webview.Plugin.UWP")]
+[assembly: InternalsVisibleTo("Webview.Plugin.iOS")]
+[assembly: InternalsVisibleTo("Webview.Plugin.Droid")]
 
 namespace Xam.Plugin.Abstractions
 {
@@ -31,19 +37,19 @@ namespace Xam.Plugin.Abstractions
         private Dictionary<string, Action<string>> _localRegisteredActions = new Dictionary<string, Action<string>>();
 
         public delegate void PerformNavigationDelegate(string uri, WebViewContentType contentType);
-        public event PerformNavigationDelegate OnNavigationRequestedFromUser;
+        internal event PerformNavigationDelegate OnNavigationRequestedFromUser;
 
         public delegate void InjectJavascriptDelegate(string js);
-        public event InjectJavascriptDelegate OnInjectJavascriptRequest;
+        internal event InjectJavascriptDelegate OnInjectJavascriptRequest;
 
         public delegate void RegisterLocalActionsAddedDelegate(string key);
-        public event RegisterLocalActionsAddedDelegate OnLocalActionAdded;
+        internal event RegisterLocalActionsAddedDelegate OnLocalActionAdded;
 
         public delegate void NavigateThroughStackDelegate(bool forward);
-        public event NavigateThroughStackDelegate OnStackNavigationRequested;
+        internal event NavigateThroughStackDelegate OnStackNavigationRequested;
 
         public delegate void RegisterGlobalActionsAddedDelegate(string key);
-        public static event RegisterGlobalActionsAddedDelegate OnGlobalActionAdded;
+        internal static event RegisterGlobalActionsAddedDelegate OnGlobalActionAdded;
 
         public static string InjectedFunction
         {
