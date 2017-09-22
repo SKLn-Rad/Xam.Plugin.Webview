@@ -4,6 +4,7 @@
              xmlns:abstractions="clr-namespace:Xam.Plugin.Abstractions;assembly=WebView.Plugin.Abstractions"
              x:Class="SampleApp.Samples.HeadersSample"
              Title="HeadersSample">
+    
     <abstractions:FormsWebView x:Name="FoWebView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                ContentType="Internet" Source="https://httpbin.org/headers" BackgroundColor="Aquamarine" />
 </ContentPage>

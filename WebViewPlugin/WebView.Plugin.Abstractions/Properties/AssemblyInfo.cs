@@ -16,6 +16,13 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
+[assembly: InternalsVisibleTo("WebView.Plugin.Shared")]
+[assembly: InternalsVisibleTo("WebView.Plugin.UWP")]
+[assembly: InternalsVisibleTo("WebView.Plugin.WindowsPhone")]
+[assembly: InternalsVisibleTo("WebView.Plugin.WindowsStore")]
+[assembly: InternalsVisibleTo("WebView.Plugin.iOS")]
+[assembly: InternalsVisibleTo("WebView.Plugin.Droid")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
