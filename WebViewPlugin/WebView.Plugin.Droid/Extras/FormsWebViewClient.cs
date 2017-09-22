@@ -1,7 +1,6 @@
 using Android.Webkit;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xam.Plugin.Abstractions;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using Android.Graphics;
 using WebView.Plugin.Abstractions.Events.Inbound;
 using Android.Net.Http;
@@ -47,13 +46,13 @@ namespace Xam.Plugin.Droid.Extras
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
-            Renderer.InjectJavascript(WebViewControlDelegate.InjectedFunction);
+            Renderer.InjectJavascript(FormsWebView.InjectedFunction);
 
             foreach (var key in FormsWebView.GetGlobalCallbacks())
-                Renderer.InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJavascript(FormsWebView.GenerateFunctionScript(key));
 
             foreach (var key in Element.GetLocalCallbacks())
-                Renderer.InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJavascript(FormsWebView.GenerateFunctionScript(key));
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack(), Renderer.Control.CanGoForward()));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, url));

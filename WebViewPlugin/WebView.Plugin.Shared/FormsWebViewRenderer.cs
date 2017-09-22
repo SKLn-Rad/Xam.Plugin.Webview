@@ -4,7 +4,6 @@ using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Shared;
 using Xam.Plugin.Shared.Resolvers;
 using Xam.Plugin.Abstractions.Events.Inbound;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Windows.Web;
 using Windows.UI;
@@ -51,10 +50,12 @@ namespace Xam.Plugin.Shared
 
         void SetupControl(FormsWebView element)
         {
-            WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.OnInjectJavascriptRequest += InjectJavascript;
-            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
-            WebViewControlDelegate.OnActionAdded += OnActionAdded;
+            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest += InjectJavascript;
+            element.OnStackNavigationRequested += OnStackNavigationRequested;
+            element.OnLocalActionAdded += OnActionAdded;
+            if (element.EnableGlobalCallbacks)
+                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
 
             var control = new Windows.UI.Xaml.Controls.WebView();
             OnControlChanging?.Invoke(this, Element, control);
@@ -65,16 +66,13 @@ namespace Xam.Plugin.Shared
             OnControlChanged?.Invoke(this, Element, control);
         }
 
-        async void InjectJavascript(FormsWebView sender, string js)
+        async void InjectJavascript(string js)
         {
-            if (Element != null && sender != null && Control != null && Element == sender)
-                await Control.InvokeScriptAsync("eval", new[] { js });
+            await Control.InvokeScriptAsync("eval", new[] { js });
         }
 
-        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        void OnStackNavigationRequested(bool forward)
         {
-            if (sender == null || Control == null || Element == null || !sender.Equals(Element)) return;
-
             if (forward)
                 Control.GoForward();
             else
@@ -92,13 +90,14 @@ namespace Xam.Plugin.Shared
             Control.ScriptNotify += OnScriptNotify;
 
             if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+                OnUserNavigationRequested(element.Source, element.ContentType);
 
             SetWebViewBackgroundColor(element.BackgroundColor);
         }
 
         void DestroyElement(FormsWebView element)
         {
+            element.Destroy();
             element.PropertyChanged -= OnWebViewElementPropertyChanged;
 
             if (Control == null) return;
@@ -133,10 +132,9 @@ namespace Xam.Plugin.Shared
             return Windows.UI.Color.FromArgb(Convert.ToByte(color.A * 255), Convert.ToByte(color.R * 255), Convert.ToByte(color.G * 255), Convert.ToByte(color.B * 255));
         }
 
-        async void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
+        async void OnActionAdded(string key)
         {
-            if (isGlobal || Element.Equals(sender))
-                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
+            await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(key) });
         }
 
         void OnNavigationFailed(object sender, Windows.UI.Xaml.Controls.WebViewNavigationFailedEventArgs e)
@@ -162,13 +160,13 @@ namespace Xam.Plugin.Shared
 
         async void OnContentLoaded(Windows.UI.Xaml.Controls.WebView sender, Windows.UI.Xaml.Controls.WebViewDOMContentLoadedEventArgs args)
         {
-            await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.InjectedFunction });
+            await Control.InvokeScriptAsync("eval", new[] { FormsWebView.InjectedFunction });
 
             foreach (var key in Element.GetLocalCallbacks())
-                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
+                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(key) });
 
             foreach (var key in FormsWebView.GetGlobalCallbacks())
-                await Control.InvokeScriptAsync("eval", new[] { WebViewControlDelegate.GenerateFunctionScript(key) });
+                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(key) });
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Control.CanGoBack, Control.CanGoForward));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, args.Uri != null ? args.Uri.AbsoluteUri : ""));
@@ -179,10 +177,8 @@ namespace Xam.Plugin.Shared
             Element?.InvokeEvent(WebViewEventType.JavascriptCallback, new JavascriptResponseDelegate(Element, e.Value));
         }
 
-        void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        void OnUserNavigationRequested(string uri, WebViewContentType contentType)
         {
-            if (sender != Element) return;
-
             switch (contentType)
             {
                 case WebViewContentType.Internet:

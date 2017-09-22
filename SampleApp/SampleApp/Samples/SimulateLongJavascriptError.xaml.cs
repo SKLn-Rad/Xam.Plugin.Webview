@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xam.Plugin.Abstractions;
 
 namespace SampleApp.Samples
 {
@@ -20,7 +21,7 @@ namespace SampleApp.Samples
         {
             InitializeComponent();
             BindingContext = ViewModel;
-            XamWebview.RegisterGlobalCallback("xamJSCallback", HandleJSCallback);
+            FormsWebView.RegisterGlobalCallback("xamJSCallback", HandleJSCallback);
         }
         
         void StartLongJS(object sender, EventArgs e)

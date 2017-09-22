@@ -45,7 +45,6 @@
     <Compile Include="Events\Inbound\NavigationStackUpdateDelegate.cs" />
     <Compile Include="Events\Inbound\WebViewDelegate.cs" />
     <Compile Include="Events\Inbound\WebViewEventType.cs" />
-    <Compile Include="Events\Outbound\WebViewControlDelegate.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
     <Compile Include="FormsWebView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

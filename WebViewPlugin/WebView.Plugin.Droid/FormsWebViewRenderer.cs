@@ -5,7 +5,6 @@ using System.IO;
 using Xam.Plugin.Abstractions;
 using static Xam.Plugin.Abstractions.Events.Inbound.WebViewDelegate;
 using Xam.Plugin.Droid.Extras;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
 using Android.OS;
@@ -69,22 +68,23 @@ namespace Xam.Plugin.Droid
             OnControlChanged?.Invoke(this, element, webView);
         }
 
-        void OnActionAdded(FormsWebView sender, string key, bool isGlobal)
+        void OnActionAdded(string key)
         {
-            if (isGlobal || (Element != null && Element.Equals(sender)))
-                InjectJavascript(WebViewControlDelegate.GenerateFunctionScript(key));
+            InjectJavascript(FormsWebView.GenerateFunctionScript(key));
         }
 
-        void OnInjectJavascriptRequest(FormsWebView sender, string js)
+        void OnGlobalActionAdded(string key)
         {
-            if (Element != null && (sender.Equals(Element)))
-                InjectJavascript(js);
+            InjectJavascript(FormsWebView.GenerateFunctionScript(key));
         }
 
-        void OnStackNavigationRequested(FormsWebView sender, bool forward)
+        void OnInjectJavascriptRequest(string js)
         {
-            if (Element == null || (!sender.Equals(Element))) return;
+            InjectJavascript(js);
+        }
 
+        void OnStackNavigationRequested(bool forward)
+        {
             if (forward)
                 Control.GoForward();
             else
@@ -96,26 +96,23 @@ namespace Xam.Plugin.Droid
             Device.BeginInvokeOnMainThread(() => Control.AddJavascriptInterface(new FormsWebViewJsBridge(this), "bridge"));
             element.PropertyChanged += OnWebViewPropertyChanged;
 
-            WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
-            WebViewControlDelegate.OnStackNavigationRequested += OnStackNavigationRequested;
-            WebViewControlDelegate.OnActionAdded += OnActionAdded;
+            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
+            element.OnStackNavigationRequested += OnStackNavigationRequested;
+            element.OnLocalActionAdded += OnActionAdded;
+            if (element.EnableGlobalCallbacks)
+                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
 
             SetWebViewBackgroundColor(element.BackgroundColor);
 
             if (element.Source != null)
-                OnUserNavigationRequested(element, element.Source, element.ContentType);
+                element.PerformNavigation(element.Source, element.ContentType);
         }
 
         void DestroyElement(FormsWebView element)
         {
+            element.Destroy();
             element.PropertyChanged -= OnWebViewPropertyChanged;
-
-            WebViewControlDelegate.OnNavigationRequestedFromUser -= OnUserNavigationRequested;
-            WebViewControlDelegate.OnInjectJavascriptRequest -= OnInjectJavascriptRequest;
-            WebViewControlDelegate.OnStackNavigationRequested -= OnStackNavigationRequested;
-            WebViewControlDelegate.OnActionAdded -= OnActionAdded;
-
             if (Control != null)
                 Device.BeginInvokeOnMainThread(() => Control.RemoveJavascriptInterface("bridge"));
         }
@@ -132,9 +129,9 @@ namespace Xam.Plugin.Droid
                 Device.BeginInvokeOnMainThread(() => Control.SetBackgroundColor(backgroundColor.ToAndroid()));
         }
 
-        void OnUserNavigationRequested(FormsWebView sender, string uri, WebViewContentType contentType)
+        void OnUserNavigationRequested(string uri, WebViewContentType contentType)
         {
-            if (Element == null || !sender.Equals(Element)) return;
+            if (Element == null) return;
 
             switch (contentType)
             {
@@ -142,22 +139,14 @@ namespace Xam.Plugin.Droid
                     Control.LoadUrl(uri, Element.RequestHeaders);
                     break;
                 case WebViewContentType.StringData:
-                    Control.LoadDataWithBaseURL(GetCorrectBaseUrl(sender), uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
+                    Control.LoadDataWithBaseURL(Element.BaseUrl ?? BaseUrl, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
                     break;
                 case WebViewContentType.LocalFile:
-                    Control.LoadUrl(Path.Combine(GetCorrectBaseUrl(sender), uri));
+                    Control.LoadUrl(Path.Combine(Element.BaseUrl ?? BaseUrl, uri));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(contentType), contentType, null);
             }
-        }
-
-        string GetCorrectBaseUrl(FormsWebView sender)
-        {
-            if (sender != null)
-                return sender.BaseUrl ?? BaseUrl;
-
-            return BaseUrl;
         }
 
         internal void InjectJavascript(string script)
