@@ -3,7 +3,6 @@ using System;
 using WebKit;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Events.Inbound;
-using Xam.Plugin.Abstractions.Events.Outbound;
 using ObjCRuntime;
 using WebView.Plugin.Abstractions.Events.Inbound;
 
@@ -55,13 +54,13 @@ namespace Xam.Plugin.iOS.Extras
         [Export("webView:didFinishNavigation:")]
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
-            Renderer.InjectJS(WebViewControlDelegate.InjectedFunction);
+            Renderer.InjectJS(FormsWebView.InjectedFunction);
 
             foreach (var key in Element.GetLocalCallbacks())
-                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJS(FormsWebView.GenerateFunctionScript(key));
 
             foreach (var key in FormsWebView.GetGlobalCallbacks())
-                Renderer.InjectJS(WebViewControlDelegate.GenerateFunctionScript(key));
+                Renderer.InjectJS(FormsWebView.GenerateFunctionScript(key));
 
             Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack, Renderer.Control.CanGoForward));
             Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, webView.Url.AbsoluteUrl.ToString()));

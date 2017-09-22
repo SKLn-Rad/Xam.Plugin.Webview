@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Webview.Plugin.WindowsStore")]
 [assembly: InternalsVisibleTo("Webview.Plugin.UWP")]
+[assembly: InternalsVisibleTo("Webview.Plugin.WindowsPhone")]
 [assembly: InternalsVisibleTo("Webview.Plugin.iOS")]
 [assembly: InternalsVisibleTo("Webview.Plugin.Droid")]
 
@@ -31,10 +32,10 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty CanGoForwardProperty = BindableProperty.Create(nameof(CanGoForward), typeof(bool), typeof(FormsWebView), false);
         public static readonly BindableProperty RequestHeadersProperty = BindableProperty.Create(nameof(RequestHeaders), typeof(IDictionary<string, string>), typeof(FormsWebView), new Dictionary<string, string>());
 
-        public bool EnableGlobalCallbacks;
+        internal bool EnableGlobalCallbacks;
 
         private static Dictionary<string, Action<string>> GlobalRegisteredActions = new Dictionary<string, Action<string>>();
-        private Dictionary<string, Action<string>> _localRegisteredActions = new Dictionary<string, Action<string>>();
+        private Dictionary<string, Action<string>> LocalRegisteredActions = new Dictionary<string, Action<string>>();
 
         public delegate void PerformNavigationDelegate(string uri, WebViewContentType contentType);
         internal event PerformNavigationDelegate OnNavigationRequestedFromUser;
@@ -51,7 +52,7 @@ namespace Xam.Plugin.Abstractions
         public delegate void RegisterGlobalActionsAddedDelegate(string key);
         internal static event RegisterGlobalActionsAddedDelegate OnGlobalActionAdded;
 
-        public static string InjectedFunction
+        internal static string InjectedFunction
         {
             get
             {
@@ -67,14 +68,14 @@ namespace Xam.Plugin.Abstractions
             }
         }
 
-        public static string GenerateFunctionScript(string name)
+        internal static string GenerateFunctionScript(string name)
         {
             var sb = new StringBuilder();
             sb.Append(string.Concat("function ", name, "(str){csharp(\"{'action':'" + name + "','data':'\"+str+\"'}\");}"));
             return sb.ToString();
         }
 
-        public void PerformNavigation(string uri, WebViewContentType contentType)
+        internal void PerformNavigation(string uri, WebViewContentType contentType)
         {
             OnNavigationRequestedFromUser?.Invoke(uri, contentType);
         }
@@ -89,11 +90,11 @@ namespace Xam.Plugin.Abstractions
             OnStackNavigationRequested?.Invoke(forward);
         }
 
-        public void NotifyLocalCallbacksChanged(string key)
+        internal void NotifyLocalCallbacksChanged(string key)
         {
             OnLocalActionAdded?.Invoke(key);
         }
-        public static void NotifyGlobalCallbacksChanged(string key)
+        internal static void NotifyGlobalCallbacksChanged(string key)
         {
             OnGlobalActionAdded?.Invoke(key);
         }
@@ -146,11 +147,6 @@ namespace Xam.Plugin.Abstractions
             }
         }
 
-        Dictionary<string, Action<string>> LocalRegisteredActions
-        {
-            get { return _localRegisteredActions; }
-        }
-
         public delegate NavigationRequestedDelegate WebViewNavigationStartedEventArgs(NavigationRequestedDelegate eventObj);
         public event WebViewNavigationStartedEventArgs OnNavigationStarted;
 
@@ -166,7 +162,12 @@ namespace Xam.Plugin.Abstractions
         public delegate void ContentLoadedEventArgs(ContentLoadedDelegate eventObj);
         public event ContentLoadedEventArgs OnContentLoaded;
 
-        public FormsWebView(bool enableGlobalCallbacks = true)
+        public FormsWebView()
+        {
+            EnableGlobalCallbacks = true;
+        }
+
+        public FormsWebView(bool enableGlobalCallbacks)
         {
             EnableGlobalCallbacks = enableGlobalCallbacks;
         }
@@ -241,13 +242,10 @@ namespace Xam.Plugin.Abstractions
             LocalRegisteredActions.Clear();
         }
 
-        /// <summary>
-        /// Internal Use Only.
-        /// </summary>
         /// <param name="type">The type of event</param>
         /// <param name="eventObject">The WVE object to pass</param>
         /// <returns></returns>
-        public object InvokeEvent(WebViewEventType type, WebViewDelegate eventObject)
+        internal object InvokeEvent(WebViewEventType type, WebViewDelegate eventObject)
         {
             switch (type)
             {
@@ -311,7 +309,7 @@ namespace Xam.Plugin.Abstractions
             return eventObject;
         }
 
-        public void Destroy()
+        internal void Destroy()
         {
             OnNavigationRequestedFromUser = null;
             OnLocalActionAdded = null;
