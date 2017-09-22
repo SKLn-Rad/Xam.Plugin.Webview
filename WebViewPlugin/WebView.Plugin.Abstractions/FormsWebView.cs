@@ -106,8 +106,8 @@ namespace Xam.Plugin.Abstractions
 
         public bool EnableGlobalCallbacks
         {
-            get => (bool) GetValue(EnableGlobalCallbacksProperty);
-            set => SetValue(EnableGlobalCallbacksProperty, value);
+            get { return (bool)GetValue(EnableGlobalCallbacksProperty); }
+            set { SetValue(EnableGlobalCallbacksProperty, value); }
         }
 
         public string BaseUrl
