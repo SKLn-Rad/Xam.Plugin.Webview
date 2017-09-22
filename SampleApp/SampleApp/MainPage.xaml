@@ -3,8 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=WebView.Plugin.Abstractions"
              xmlns:local="clr-namespace:webview"
+             Title="WebView Plugin"
              x:Class="SampleApp.MainPage">
 
-    <fwv:FormsWebView x:Name="internetContent" ContentType="Internet"
-                      Source="https://www.google.co.uk" BackgroundColor="BlueViolet" />
+
+    <StackLayout x:Name="ContainerLayout" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#2f2f2f" Padding="25, 25, 25, 25">
+        <Label Text="Welcome to Xam.Plugin.Webview" FontAttributes="Bold" FontSize="30" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" TextColor="#f2f2f2" />
+        <Label Text="Click an item to try it" FontSize="12" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" TextColor="#f2f2f2" />
+
+        <ListView x:Name="ItemList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemSelected="OnItemSelected" BackgroundColor="Transparent">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Title}" TextColor="#f2f2f2" Detail="{Binding Detail}" DetailColor="#a2a2a2" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
 </ContentPage>

@@ -52,8 +52,9 @@ namespace Xam.Plugin.iOS
             element.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
             element.OnStackNavigationRequested += OnStackNavigationRequested;
             element.OnLocalActionAdded += OnActionAdded;
+
             if (element.EnableGlobalCallbacks)
-                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
+                FormsWebView.OnGlobalActionAdded += OnActionAdded;
 
             UserController = new WKUserContentController();
             UserController.AddScriptMessageHandler(this, "invokeAction");

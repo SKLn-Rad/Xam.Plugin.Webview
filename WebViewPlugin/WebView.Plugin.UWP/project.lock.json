@@ -22352,12 +22352,12 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\WebView.Plugin.UWP.csproj",
+      "projectUniqueName": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\WebView.Plugin.UWP.csproj",
       "projectName": "WebView.Plugin.UWP",
-      "projectPath": "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\WebView.Plugin.UWP.csproj",
-      "projectJsonPath": "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\project.json",
+      "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\WebView.Plugin.UWP.csproj",
+      "projectJsonPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\project.json",
       "packagesPath": "C:\\Users\\ryan.dixon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\obj\\",
+      "outputPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.UWP\\obj\\",
       "projectStyle": "ProjectJson",
       "configFilePaths": [
         "C:\\Users\\ryan.dixon\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22372,8 +22372,8 @@
       "frameworks": {
         "uap10.0.10240": {
           "projectReferences": {
-            "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.Abstractions\\WebView.Plugin.Abstractions.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Documents\\GitHub\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.Abstractions\\WebView.Plugin.Abstractions.csproj"
+            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.Abstractions\\WebView.Plugin.Abstractions.csproj": {
+              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\WebViewPlugin\\WebView.Plugin.Abstractions\\WebView.Plugin.Abstractions.csproj"
             }
           }
         }

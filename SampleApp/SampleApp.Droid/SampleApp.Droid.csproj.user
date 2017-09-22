@@ -2,6 +2,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SelectedDevice>HUAWEI MHA-L09</SelectedDevice>
-    <DefaultDevice>Tablet_Android_Accelerated_x86</DefaultDevice>
+    <DefaultDevice>Nexus_7_Emulator</DefaultDevice>
   </PropertyGroup>
 </Project>

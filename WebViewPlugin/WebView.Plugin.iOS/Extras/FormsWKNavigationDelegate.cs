@@ -30,14 +30,18 @@ namespace Xam.Plugin.iOS.Extras
         [Export("webView:decidePolicyForNavigationResponse:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {
-            if (!(navigationResponse.Response is NSHttpUrlResponse)) return;
+            if (navigationResponse.Response is NSHttpUrlResponse)
+            {
+                var sta = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
+                if (sta >= 400)
+                {
+                    Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, (int)sta));
+                    decisionHandler(WKNavigationResponsePolicy.Cancel);
+                    return;
+                }
+            }
 
-            var sta = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
-
-            if (sta >= 400)
-                Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, (int) sta));
-            else
-                decisionHandler(WKNavigationResponsePolicy.Allow);
+            decisionHandler(WKNavigationResponsePolicy.Allow);
         }
 
         [Export("webView:didCommitNavigation:")]
