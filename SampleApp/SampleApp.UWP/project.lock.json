@@ -22457,7 +22457,7 @@
     },
     "WebView.Plugin.UWP/1.0.0": {
       "type": "project",
-      "path": "../../WebViewPlugin/WebView.Plugin.UWP/project.json",
+      "path": "../../WebViewPlugin/WebView.Plugin.UWP/WebView.Plugin.UWP.csproj",
       "msbuildProject": "../../WebViewPlugin/WebView.Plugin.UWP/WebView.Plugin.UWP.csproj"
     }
   },
