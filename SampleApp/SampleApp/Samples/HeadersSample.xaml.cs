@@ -15,7 +15,8 @@ namespace SampleApp.Samples
         public HeadersSample()
         {
             InitializeComponent();
-            FoWebView.RequestHeaders.Add("Testing", "Hello World!");
+
+            FoWebView.LocalRegisteredHeaders.Add("Testing", "Hello World!");
         }
     }
 }

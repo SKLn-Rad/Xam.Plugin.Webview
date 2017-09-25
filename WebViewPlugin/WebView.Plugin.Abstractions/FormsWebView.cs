@@ -29,7 +29,7 @@ namespace Xam.Plugin.Abstractions
         public delegate void PerformNavigationDelegate(string uri, WebViewContentType contentType);
         internal event PerformNavigationDelegate OnNavigationRequestedFromUser;
 
-        public delegate void InjectJavascriptDelegate(string js);
+        public delegate void InjectJavascriptDelegate(string js, bool evaluateInstantly);
         internal event InjectJavascriptDelegate OnInjectJavascriptRequest;
 
         public delegate void RegisterLocalActionsAddedDelegate(string key);
@@ -86,7 +86,12 @@ namespace Xam.Plugin.Abstractions
 
         public void InjectJavascript(string js)
         {
-            OnInjectJavascriptRequest?.Invoke(js);
+            OnInjectJavascriptRequest?.Invoke(js, false);
+        }
+
+        public string EvaluateJavascript(string js)
+        {
+            return null;
         }
 
         internal void NavigateThroughStack(bool forward)

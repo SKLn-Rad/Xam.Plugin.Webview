@@ -129,13 +129,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WebViewPlugin\WebView.Plugin.Abstractions\WebView.Plugin.Abstractions.csproj">
-      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
-      <Name>WebView.Plugin.Abstractions</Name>
+    <ProjectReference Include="..\..\Xam.Plugin.Abstractions\Xam.Plugin.Abstractions.csproj">
+      <Project>{f690dd01-f04c-498b-b574-b870c8a7702c}</Project>
+      <Name>Xam.Plugin.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\WebViewPlugin\WebView.Plugin.UWP\WebView.Plugin.UWP.csproj">
-      <Project>{c939b2d9-94a6-4f5f-8f90-5555484713c6}</Project>
-      <Name>WebView.Plugin.UWP</Name>
+    <ProjectReference Include="..\..\Xam.Plugin.UWP\Xam.Plugin.UWP.csproj">
+      <Project>{a15600a1-4072-4c87-8862-f7b981f3a4f3}</Project>
+      <Name>Xam.Plugin.UWP</Name>
     </ProjectReference>
     <ProjectReference Include="..\SampleApp\SampleApp.csproj">
       <Project>{740d15ef-4c44-4ead-8929-6060185742a2}</Project>

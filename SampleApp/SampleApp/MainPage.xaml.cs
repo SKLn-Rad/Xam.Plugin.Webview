@@ -45,6 +45,13 @@ namespace SampleApp
                 Title = "String Data",
                 Detail = "Load a WebView using string data as the source"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 3,
+                Title = "Bindable Source",
+                Detail = "Load a WebView with a bound string as its source"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -63,6 +70,10 @@ namespace SampleApp
 
                 case 2:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new StringDataSample());
+                    break;
+
+                case 3:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new SourceSwapSample());
                     break;
 
                 default:

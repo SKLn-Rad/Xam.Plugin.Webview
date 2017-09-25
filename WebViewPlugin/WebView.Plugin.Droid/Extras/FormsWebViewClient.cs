@@ -10,29 +10,30 @@ namespace Xam.Plugin.Droid.Extras
     public class FormsWebViewClient : WebViewClient
     {
 
-        private FormsWebView Element { get; set; }
-        private FormsWebViewRenderer Renderer { get; set; }
+        FormsWebViewRenderer Renderer { get; set; }
 
         public FormsWebViewClient(FormsWebView element, FormsWebViewRenderer renderer)
         {
-            Element = element;
             Renderer = renderer;
         }
 
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
-            Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Element, errorResponse.StatusCode));
+            if (Renderer.Element == null) return;
+            Renderer.Element.InvokeEvent(WebViewEventType.NavigationError, new NavigationErrorDelegate(Renderer.Element, errorResponse.StatusCode));
         }
 
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
-            var request = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested,
-                new NavigationRequestedDelegate(Element, url));
+            if (Renderer.Element == null) return;
+
+            var request = (NavigationRequestedDelegate) Renderer.Element.InvokeEvent(WebViewEventType.NavigationRequested,
+                new NavigationRequestedDelegate(Renderer.Element, url));
 
             if (request?.Cancel ?? false)
                 view.StopLoading();
             else
-                Element.SetValue(FormsWebView.SourceProperty, url);
+                Renderer.Element.SetValue(FormsWebView.SourceProperty, url);
         }
 
         public override void OnReceivedSslError(Android.Webkit.WebView view, SslErrorHandler handler, SslError error)
@@ -45,17 +46,19 @@ namespace Xam.Plugin.Droid.Extras
 
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
-            Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Element, url, true));
+            if (Renderer.Element == null) return;
+
+            Renderer.Element.InvokeEvent(WebViewEventType.NavigationComplete, new NavigationCompletedDelegate(Renderer.Element, url, true));
             Renderer.InjectJavascript(FormsWebView.InjectedFunction);
 
             foreach (var key in FormsWebView.GetGlobalCallbacks())
                 Renderer.InjectJavascript(FormsWebView.GenerateFunctionScript(key));
 
-            foreach (var key in Element.GetLocalCallbacks())
+            foreach (var key in Renderer.Element.GetLocalCallbacks())
                 Renderer.InjectJavascript(FormsWebView.GenerateFunctionScript(key));
 
-            Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Element, Renderer.Control.CanGoBack(), Renderer.Control.CanGoForward()));
-            Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Element, url));
+            Renderer.Element.InvokeEvent(WebViewEventType.NavigationStackUpdate, new NavigationStackUpdateDelegate(Renderer.Element, Renderer.Control.CanGoBack(), Renderer.Control.CanGoForward()));
+            Renderer.Element.InvokeEvent(WebViewEventType.ContentLoaded, new ContentLoadedDelegate(Renderer.Element, url));
             base.OnPageFinished(view, url);
         }
     }

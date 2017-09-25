@@ -50,18 +50,18 @@ namespace Xam.Plugin.Shared
 
         void SetupControl(FormsWebView element)
         {
-            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            element.OnInjectJavascriptRequest += InjectJavascript;
-            element.OnStackNavigationRequested += OnStackNavigationRequested;
-            element.OnLocalActionAdded += OnActionAdded;
-            if (element.EnableGlobalCallbacks)
-                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
-
             var control = new Windows.UI.Xaml.Controls.WebView();
+            
             OnControlChanging?.Invoke(this, Element, control);
 
             _resolver = new LocalFileStreamResolver(this);
             SetNativeControl(control);
+
+            Control.NavigationFailed += OnNavigationFailed;
+            Control.NavigationStarting += OnNavigating;
+            Control.NavigationCompleted += OnNavigated;
+            Control.DOMContentLoaded += OnContentLoaded;
+            Control.ScriptNotify += OnScriptNotify;
 
             OnControlChanged?.Invoke(this, Element, control);
         }
@@ -81,14 +81,15 @@ namespace Xam.Plugin.Shared
 
         void SetupElement(FormsWebView element)
         {
+            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest += InjectJavascript;
+            element.OnStackNavigationRequested += OnStackNavigationRequested;
+            element.OnLocalActionAdded += OnActionAdded;
             element.PropertyChanged += OnWebViewElementPropertyChanged;
 
-            Control.NavigationFailed += OnNavigationFailed;
-            Control.NavigationStarting += OnNavigating;
-            Control.NavigationCompleted += OnNavigated;
-            Control.DOMContentLoaded += OnContentLoaded;
-            Control.ScriptNotify += OnScriptNotify;
-
+            if (element.EnableGlobalCallbacks)
+                { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
+            
             if (element.Source != null)
                 OnUserNavigationRequested(element.Source, element.ContentType);
 
@@ -97,16 +98,10 @@ namespace Xam.Plugin.Shared
 
         void DestroyElement(FormsWebView element)
         {
+            if (element == null) return;
+
             element.Destroy();
             element.PropertyChanged -= OnWebViewElementPropertyChanged;
-
-            if (Control == null) return;
-
-            Control.NavigationFailed -= OnNavigationFailed;
-            Control.NavigationStarting -= OnNavigating;
-            Control.NavigationCompleted -= OnNavigated;
-            Control.DOMContentLoaded -= OnContentLoaded;
-            Control.ScriptNotify -= OnScriptNotify;
         }
 
         void OnWebViewElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

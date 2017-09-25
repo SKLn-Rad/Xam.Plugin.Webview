@@ -48,11 +48,6 @@ namespace Xam.Plugin.iOS
 
         void SetupControl(FormsWebView element)
         {
-            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
-            element.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
-            element.OnStackNavigationRequested += OnStackNavigationRequested;
-            element.OnLocalActionAdded += OnActionAdded;
-
             if (element.EnableGlobalCallbacks)
                 FormsWebView.OnGlobalActionAdded += OnActionAdded;
 
@@ -95,17 +90,26 @@ namespace Xam.Plugin.iOS
         void DestroyElement(FormsWebView element)
         {
             element.Destroy();
+
             element.PropertyChanged -= OnWebViewPropertyChanged;
+            element.OnNavigationRequestedFromUser -= OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest -= OnInjectJavascriptRequested;
+            element.OnStackNavigationRequested -= OnStackNavigationRequested;
+            element.OnLocalActionAdded -= OnActionAdded;
         }
 
         void SetupElement(FormsWebView element)
         {
             element.PropertyChanged += OnWebViewPropertyChanged;
+            element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest += OnInjectJavascriptRequested;
+            element.OnStackNavigationRequested += OnStackNavigationRequested;
+            element.OnLocalActionAdded += OnActionAdded;
+
+            SetWebViewBackgroundColor(element.BackgroundColor);
 
             if (element.Source != null)
                 OnUserNavigationRequested(element.Source, element.ContentType);
-
-            SetWebViewBackgroundColor(element.BackgroundColor);
         }
 
         void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

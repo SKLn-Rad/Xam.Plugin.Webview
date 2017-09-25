@@ -64,7 +64,10 @@ namespace Xam.Plugin.Droid
             webView.Settings.DomStorageEnabled = true;
 
             OnControlChanging?.Invoke(this, element, webView);
+
             SetNativeControl(webView);
+            Control.AddJavascriptInterface(new FormsWebViewJsBridge(this), "bridge");
+
             OnControlChanged?.Invoke(this, element, webView);
         }
 
@@ -93,13 +96,13 @@ namespace Xam.Plugin.Droid
 
         void SetupElement(FormsWebView element)
         {
-            Device.BeginInvokeOnMainThread(() => Control.AddJavascriptInterface(new FormsWebViewJsBridge(this), "bridge"));
             element.PropertyChanged += OnWebViewPropertyChanged;
 
             element.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             element.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
             element.OnStackNavigationRequested += OnStackNavigationRequested;
             element.OnLocalActionAdded += OnActionAdded;
+
             if (element.EnableGlobalCallbacks)
                 { FormsWebView.OnGlobalActionAdded += OnActionAdded; }
 
@@ -113,8 +116,11 @@ namespace Xam.Plugin.Droid
         {
             element.Destroy();
             element.PropertyChanged -= OnWebViewPropertyChanged;
-            if (Control != null)
-                Device.BeginInvokeOnMainThread(() => Control.RemoveJavascriptInterface("bridge"));
+
+            element.OnNavigationRequestedFromUser -= OnUserNavigationRequested;
+            element.OnInjectJavascriptRequest -= OnInjectJavascriptRequest;
+            element.OnStackNavigationRequested -= OnStackNavigationRequested;
+            element.OnLocalActionAdded -= OnActionAdded;
         }
 
         void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -125,8 +131,7 @@ namespace Xam.Plugin.Droid
 
         void SetWebViewBackgroundColor(Color backgroundColor)
         {
-            if (Control != null)
-                Device.BeginInvokeOnMainThread(() => Control.SetBackgroundColor(backgroundColor.ToAndroid()));
+            Device.BeginInvokeOnMainThread(() => Control?.SetBackgroundColor(backgroundColor.ToAndroid()));
         }
 
         void OnUserNavigationRequested(string uri, WebViewContentType contentType)
@@ -139,7 +144,7 @@ namespace Xam.Plugin.Droid
                     Control.LoadUrl(uri, Element.RequestHeaders);
                     break;
                 case WebViewContentType.StringData:
-                    Control.LoadDataWithBaseURL(Element.BaseUrl ?? BaseUrl, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
+                    HandleStringDataRequest(uri);
                     break;
                 case WebViewContentType.LocalFile:
                     Control.LoadUrl(Path.Combine(Element.BaseUrl ?? BaseUrl, uri));
@@ -147,6 +152,18 @@ namespace Xam.Plugin.Droid
                 default:
                     throw new ArgumentOutOfRangeException(nameof(contentType), contentType, null);
             }
+        }
+
+        void HandleStringDataRequest(string uri)
+        {
+            if (Element == null) return;
+
+            // String data doesn't allow cancellation, this should allow that
+            var combinedUri = Path.Combine(Element.BaseUrl ?? BaseUrl, uri);
+            var request = (NavigationRequestedDelegate) Element.InvokeEvent(WebViewEventType.NavigationRequested, new NavigationRequestedDelegate(Element, combinedUri));
+
+            if (!request.Cancel)
+                Control.LoadDataWithBaseURL(Element.BaseUrl ?? BaseUrl, uri, StringDataSettings.MimeType, StringDataSettings.EncodingType, StringDataSettings.HistoryUri);
         }
 
         internal void InjectJavascript(string script)
