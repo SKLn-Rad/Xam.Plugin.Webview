@@ -12,8 +12,7 @@ namespace Xam.Plugin.UWP
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WebView>
     {
-
-        public static event EventHandler<WebView> OnControlChanging;
+        
         public static event EventHandler<WebView> OnControlChanged;
 
         public static string BaseUrl { get; set; } = "ms-appx:///";
@@ -65,17 +64,15 @@ namespace Xam.Plugin.UWP
             var control = new WebView();
             _resolver = new LocalFileStreamResolver(this);
 
-            OnControlChanging?.Invoke(this, control);
             SetNativeControl(control);
-            
+
+            FormsWebView.CallbackAdded += OnCallbackAdded;
             Control.NavigationStarting += OnNavigationStarting;
             Control.NavigationCompleted += OnNavigationCompleted;
             Control.DOMContentLoaded += OnDOMContentLoaded;
             Control.ScriptNotify += OnScriptNotify;
             Control.DefaultBackgroundColor = Windows.UI.Colors.Transparent;
-
-            FormsWebView.CallbackAdded += OnCallbackAdded;
-
+            
             OnControlChanged?.Invoke(this, control);
         }
 
@@ -202,15 +199,15 @@ namespace Xam.Plugin.UWP
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
 
-            // Add Global Headers
-            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+            // Add Local Headers
+            foreach (var header in Element.LocalRegisteredHeaders)
             {
                 if (!requestMsg.Headers.ContainsKey(header.Key))
                     requestMsg.Headers.Add(header.Key, header.Value);
             }
 
-            // Add Local Headers
-            foreach (var header in Element.LocalRegisteredHeaders)
+            // Add Global Headers
+            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
             {
                 if (!requestMsg.Headers.ContainsKey(header.Key))
                     requestMsg.Headers.Add(header.Key, header.Value);

@@ -90,6 +90,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormsWebViewBridge.cs" />
+    <Compile Include="FormsWebViewChromeClient.cs" />
+    <Compile Include="FormsWebViewClient.cs" />
     <Compile Include="FormsWebViewRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
