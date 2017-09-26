@@ -115,6 +115,20 @@ namespace SampleApp
                 Title = "CanGoForward and CanGoBack",
                 Detail = "Test bindable properties CanGoForward and CanGoBack, as well as the GoBack and GoForward functions"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 13,
+                Title = "Refresh",
+                Detail = "Test the refresh function"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 14,
+                Title = "Headers",
+                Detail = "Test global and local request headers"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -173,6 +187,14 @@ namespace SampleApp
 
                 case 12:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new BackForwardSample());
+                    break;
+
+                case 13:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new RefreshSample());
+                    break;
+
+                case 14:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new HeadersSample());
                     break;
 
                 default:

@@ -36,6 +36,8 @@ namespace Xam.Plugin.Abstractions
 
         void GoForward();
 
+        void Refresh();
+
         Task<string> InjectJavascriptAsync(string js);
 
         void AddLocalCallback(string functionName, Action<string> action);

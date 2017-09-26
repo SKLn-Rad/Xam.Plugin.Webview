@@ -44,6 +44,7 @@ namespace Xam.Plugin.UWP
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
+            element.OnRefreshRequested += OnRefreshRequested;
 
             ReloadElement();
         }
@@ -54,6 +55,7 @@ namespace Xam.Plugin.UWP
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
+            element.OnRefreshRequested -= OnRefreshRequested;
 
             element.Dispose();
         }
@@ -75,6 +77,11 @@ namespace Xam.Plugin.UWP
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
             OnControlChanged?.Invoke(this, control);
+        }
+
+        void OnRefreshRequested(object sender, EventArgs e)
+        {
+            SetSource();
         }
 
         void OnForwardRequested(object sender, EventArgs e)
@@ -197,11 +204,17 @@ namespace Xam.Plugin.UWP
 
             // Add Global Headers
             foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-                requestMsg.Headers.Add(header.Key, header.Value);
+            {
+                if (!requestMsg.Headers.ContainsKey(header.Key))
+                    requestMsg.Headers.Add(header.Key, header.Value);
+            }
 
             // Add Local Headers
             foreach (var header in Element.LocalRegisteredHeaders)
-                requestMsg.Headers.Add(header.Key, header.Value);
+            {
+                if (!requestMsg.Headers.ContainsKey(header.Key))
+                    requestMsg.Headers.Add(header.Key, header.Value);
+            }
 
             // Navigate
             Control.NavigateWithHttpRequestMessage(requestMsg);

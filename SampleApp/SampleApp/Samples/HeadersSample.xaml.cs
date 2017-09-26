@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Xam.Plugin.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,7 +12,37 @@ namespace SampleApp.Samples
         {
             InitializeComponent();
 
-            FoWebView.LocalRegisteredHeaders.Add("Testing", "Hello World!");
+            FormsWebView.GlobalRegisteredHeaders.Add("default-Global", "default");
+            WebView.LocalRegisteredHeaders.Add("default-Local", "default");
+        }
+
+        void OnGlobalAdd(object sender, EventArgs e)
+        {
+            var globalKey = GlobalKey.Text;
+            var globalValue = GlobalValue.Text;
+
+            if (string.IsNullOrWhiteSpace(globalKey) || string.IsNullOrWhiteSpace(globalValue)) return;
+            FormsWebView.GlobalRegisteredHeaders.Add(globalKey, globalValue);
+
+            GlobalKey.Text = "";
+            GlobalValue.Text = "";
+        }
+
+        void OnLocalAdd(object sender, EventArgs e)
+        {
+            var localKey = LocalKey.Text;
+            var localValue = LocalValue.Text;
+
+            if (string.IsNullOrWhiteSpace(localKey) || string.IsNullOrWhiteSpace(localValue)) return;
+            WebView.LocalRegisteredHeaders.Add(localKey, localValue);
+
+            LocalKey.Text = "";
+            LocalValue.Text = "";
+        }
+
+        void OnReloadClicked(object sender, EventArgs e)
+        {
+            WebView.Refresh();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xamarin.Forms;
 
