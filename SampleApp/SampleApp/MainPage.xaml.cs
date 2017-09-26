@@ -87,6 +87,13 @@ namespace SampleApp
                 Title = "Javascript",
                 Detail = "Check javascript injection, callbacks, and evaluation functions"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 9,
+                Title = "Background Color",
+                Detail = "Test sites with a transparent background bleed onto the background set in Xamarin Forms"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -129,6 +136,10 @@ namespace SampleApp
 
                 case 8:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptSample());
+                    break;
+
+                case 9:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new BackgroundColorSample());
                     break;
 
                 default:

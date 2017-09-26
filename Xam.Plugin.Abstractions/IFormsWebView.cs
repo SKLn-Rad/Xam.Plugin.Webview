@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using Xam.Plugin.Abstractions.Delegates;
 using Xam.Plugin.Abstractions.Enumerations;
 
@@ -33,9 +32,7 @@ namespace Xam.Plugin.Abstractions
 
         bool CanGoForward { get; }
 
-        void InjectJavascript(string js);
-
-        string EvaluateJavascriptAsync(string js);
+        Task<string> InjectJavascriptAsync(string js);
 
         void AddLocalCallback(string functionName, Action<string> action);
 

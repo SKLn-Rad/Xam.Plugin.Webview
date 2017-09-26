@@ -8,7 +8,7 @@ namespace Xam.Plugin.Abstractions
     public partial class FormsWebView
     {
 
-        internal static event EventHandler<string> GlobalCallbackAdded;
+        internal static event EventHandler<string> CallbackAdded;
 
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
 
@@ -28,11 +28,13 @@ namespace Xam.Plugin.Abstractions
 
         public static void AddGlobalCallback(string functionName, Action<string> action)
         {
+            if (string.IsNullOrWhiteSpace(functionName)) return;
+
             if (GlobalRegisteredCallbacks.ContainsKey(functionName))
                 GlobalRegisteredCallbacks.Remove(functionName);
 
             GlobalRegisteredCallbacks.Add(functionName, action);
-            GlobalCallbackAdded?.Invoke(null, functionName);
+            CallbackAdded?.Invoke(null, functionName);
         }
 
         public static void RemoveGlobalCallback(string functionName)

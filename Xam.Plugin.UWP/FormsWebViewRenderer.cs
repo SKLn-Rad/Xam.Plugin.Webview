@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
 using Xam.Plugin.Abstractions;
@@ -40,6 +41,7 @@ namespace Xam.Plugin.UWP
         void SetupNewElement(FormsWebView element)
         {
             element.PropertyChanged += OnWebViewPropertyChanged;
+            element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
 
             ReloadElement();
         }
@@ -47,6 +49,8 @@ namespace Xam.Plugin.UWP
         void DestroyOldElement(FormsWebView element)
         {
             element.PropertyChanged -= OnWebViewPropertyChanged;
+            element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
+
             element.Dispose();
         }
 
@@ -57,10 +61,14 @@ namespace Xam.Plugin.UWP
 
             OnControlChanging?.Invoke(this, control);
             SetNativeControl(control);
-
+            
             Control.NavigationStarting += OnNavigationStarting;
             Control.NavigationCompleted += OnNavigationCompleted;
             Control.DOMContentLoaded += OnDOMContentLoaded;
+            Control.ScriptNotify += OnScriptNotify;
+            Control.DefaultBackgroundColor = Windows.UI.Colors.Transparent;
+
+            FormsWebView.CallbackAdded += OnCallbackAdded;
 
             OnControlChanged?.Invoke(this, control);
         }
@@ -98,9 +106,7 @@ namespace Xam.Plugin.UWP
         async void OnDOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
             if (Element == null) return;
-
-            // TODO
-
+            
             // Add Injection Function
             await Control.InvokeScriptAsync("eval", new[] { FormsWebView.InjectedFunction });
 
@@ -115,12 +121,31 @@ namespace Xam.Plugin.UWP
             Element.HandleContentLoaded();
         }
 
+        async void OnCallbackAdded(object sender, string e)
+        {
+            if (Element == null) return;
+
+            if (sender == null || sender.Equals(Element))
+                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(e) });
+        }
+
+        void OnScriptNotify(object sender, NotifyEventArgs e)
+        {
+            if (Element == null) return;
+            Element.HandleScriptReceived(e.Value);
+        }
+
+        async Task<string> OnJavascriptInjectionRequestAsync(string js)
+        {
+            if (Control == null) return string.Empty;
+            return await Control.InvokeScriptAsync("eval", new[] { js });
+        }
+
         void ReloadElement()
         {
             if (Element == null) return;
 
             SetSource();
-            SetBackgroundColor();
         }
 
         void SetSource()
@@ -172,12 +197,6 @@ namespace Xam.Plugin.UWP
         internal string GetBaseUrl()
         {
             return Element?.BaseUrl ?? BaseUrl;
-        }
-
-        void SetBackgroundColor()
-        {
-            if (Element == null || Control == null || Element.BackgroundColor == null) return;
-            Control.DefaultBackgroundColor = ToWindowsColor(Element.BackgroundColor);
         }
 
         Windows.UI.Color ToWindowsColor(Xamarin.Forms.Color color)

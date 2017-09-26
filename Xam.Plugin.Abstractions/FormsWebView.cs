@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Xam.Plugin.Abstractions.Delegates;
 using Xam.Plugin.Abstractions.Enumerations;
+using Xam.Plugin.Abstractions.Models;
 using Xamarin.Forms;
 
 [assembly:InternalsVisibleTo("Xam.Plugin.UWP")]
@@ -11,9 +14,8 @@ namespace Xam.Plugin.Abstractions
     public partial class FormsWebView : View, IFormsWebView, IDisposable
     {
 
-        internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
-        public readonly Dictionary<string, string> LocalRegisteredHeaders = new Dictionary<string, string>();
-
+        public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
+        
         public event EventHandler<DecisionHandlerDelegate> OnNavigationStarted;
 
         public event EventHandler OnNavigationCompleted;
@@ -21,6 +23,12 @@ namespace Xam.Plugin.Abstractions
         public event EventHandler<int> OnNavigationError;
 
         public event EventHandler OnContentLoaded;
+
+        internal event JavascriptInjectionRequestDelegate OnJavascriptInjectionRequest;
+
+        internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
+
+        public readonly Dictionary<string, string> LocalRegisteredHeaders = new Dictionary<string, string>();
 
         public WebViewContentType ContentType
         {
@@ -75,29 +83,36 @@ namespace Xam.Plugin.Abstractions
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
         }
 
-        public void InjectJavascript(string js)
+        public async Task<string> InjectJavascriptAsync(string js)
         {
+            if (string.IsNullOrWhiteSpace(js)) return string.Empty;
 
-        }
+            if (OnJavascriptInjectionRequest != null)
+                return await OnJavascriptInjectionRequest.Invoke(js);
 
-        public string EvaluateJavascriptAsync(string js)
-        {
-            return null;
+            return string.Empty;
         }
 
         public void AddLocalCallback(string functionName, Action<string> action)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(functionName)) return;
+
+            if (LocalRegisteredCallbacks.ContainsKey(functionName))
+                LocalRegisteredCallbacks.Remove(functionName);
+
+            LocalRegisteredCallbacks.Add(functionName, action);
+            CallbackAdded?.Invoke(this, functionName);
         }
 
         public void RemoveLocalCallback(string functionName)
         {
-            throw new NotImplementedException();
+            if (LocalRegisteredCallbacks.ContainsKey(functionName))
+                LocalRegisteredCallbacks.Remove(functionName);
         }
 
         public void RemoveAllLocalCallbacks()
         {
-            throw new NotImplementedException();
+            LocalRegisteredCallbacks.Clear();
         }
 
         public void Dispose()
@@ -129,6 +144,21 @@ namespace Xam.Plugin.Abstractions
         internal void HandleContentLoaded()
         {
             OnContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void HandleScriptReceived(string data)
+        {
+            if (string.IsNullOrWhiteSpace(data)) return;
+            
+            var action = JsonConvert.DeserializeObject<ActionEvent>(data);
+
+            // Local takes priority
+            if (LocalRegisteredCallbacks.ContainsKey(action.Action))
+                LocalRegisteredCallbacks[action.Action]?.Invoke(action.Data);
+
+            // Global is checked if local fails
+            else if (GlobalRegisteredCallbacks.ContainsKey(action.Action))
+                GlobalRegisteredCallbacks[action.Action]?.Invoke(action.Data);
         }
 
         #endregion

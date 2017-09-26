@@ -11,7 +11,6 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -21,15 +20,13 @@
 
         <fwv:FormsWebView x:Name="WebView" ContentType="LocalFile" Source="Sample2.html" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
-        <Entry Text="Test" Grid.Row="1" Grid.Column="0" />
-        <Entry Text="Test" Grid.Row="2" Grid.Column="0" />
-        <Entry Text="Test" Grid.Row="3" Grid.Column="0" />
-        <Entry Text="Test" Grid.Row="4" Grid.Column="0" />
+        <Entry x:Name="InjectionText" Grid.Row="1" Grid.Column="0" />
+        <Entry x:Name="GlobalText" Grid.Row="2" Grid.Column="0" />
+        <Entry x:Name="LocalText" Grid.Row="3" Grid.Column="0" />
 
-        <Button Text="Inject" Grid.Row="1" Grid.Column="1" />
-        <Button Text="Global Callback" Grid.Row="2" Grid.Column="1" />
-        <Button Text="Local Callback" Grid.Row="3" Grid.Column="1" />
-        <Button Text="Evaluate" Grid.Row="4" Grid.Column="1" />
+        <Button Text="Inject" Grid.Row="1" Grid.Column="1" Clicked="OnInjectionClicked" />
+        <Button Text="Global Callback" Grid.Row="2" Grid.Column="1" Clicked="GlobalCallbackClicked" />
+        <Button Text="Local Callback" Grid.Row="3" Grid.Column="1" Clicked="LocalCallbackClicked" />
     </Grid>
     
 </ContentPage>
