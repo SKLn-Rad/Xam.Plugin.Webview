@@ -52,6 +52,41 @@ namespace SampleApp
                 Title = "Bindable Source",
                 Detail = "Load a WebView with a bound string as its source"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 4,
+                Title = "Navigation Events (Internet)",
+                Detail = "Watch and control events on the webview using internet based content"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 5,
+                Title = "Navigation Events (Local)",
+                Detail = "Watch and control events on the webview using file based content"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 6,
+                Title = "Navigation Events (String)",
+                Detail = "Watch and control events on the webview using string based content"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 7,
+                Title = "Navigating Property",
+                Detail = "Monitor when the webview is in a navigating state using the bindable property"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 8,
+                Title = "Javascript",
+                Detail = "Check javascript injection, callbacks, and evaluation functions"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -74,6 +109,26 @@ namespace SampleApp
 
                 case 3:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new SourceSwapSample());
+                    break;
+
+                case 4:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationEventsSample());
+                    break;
+
+                case 5:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationLocalSample());
+                    break;
+
+                case 6:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationStringSample());
+                    break;
+
+                case 7:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigatingEvent());
+                    break;
+
+                case 8:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptSample());
                     break;
 
                 default:

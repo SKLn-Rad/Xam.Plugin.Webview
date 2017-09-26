@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Xam.Plugin.Abstractions.Delegates;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xamarin.Forms;
 
+[assembly:InternalsVisibleTo("Xam.Plugin.UWP")]
 namespace Xam.Plugin.Abstractions
 {
     public partial class FormsWebView : View, IFormsWebView, IDisposable
     {
 
-        public readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
+        internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
         public readonly Dictionary<string, string> LocalRegisteredHeaders = new Dictionary<string, string>();
 
         public event EventHandler<DecisionHandlerDelegate> OnNavigationStarted;
@@ -83,15 +85,51 @@ namespace Xam.Plugin.Abstractions
             return null;
         }
 
+        public void AddLocalCallback(string functionName, Action<string> action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveLocalCallback(string functionName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAllLocalCallbacks()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
-            // TODO
+            LocalRegisteredCallbacks.Clear();
+            LocalRegisteredHeaders.Clear();
         }
 
         // All code which should be hidden from the end user goes here
         #region Internals
 
+        internal DecisionHandlerDelegate HandleNavigationStartRequest(string uri)
+        {
+            var handler = new DecisionHandlerDelegate() { Uri = uri };
+            OnNavigationStarted?.Invoke(this, handler);
+            return handler;
+        }
 
+        internal void HandleNavigationCompleted()
+        {
+            OnNavigationCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void HandleNavigationError(int errorCode)
+        {
+            OnNavigationError?.Invoke(this, errorCode);
+        }
+
+        internal void HandleContentLoaded()
+        {
+            OnContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
 
         #endregion
     }

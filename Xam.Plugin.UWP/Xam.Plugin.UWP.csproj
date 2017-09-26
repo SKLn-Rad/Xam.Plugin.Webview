@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FormsWebViewRenderer.cs" />
+    <Compile Include="LocalFileStreamResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Xam.Plugin.UWP.rd.xml" />
   </ItemGroup>

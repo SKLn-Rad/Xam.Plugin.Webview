@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Navigating Event"
+             x:Class="SampleApp.Samples.NavigatingEvent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <fwv:FormsWebView x:Name="WebView" Grid.Row="0" Grid.Column="0" Source="{Binding Uri}" />
+        <Button HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Text="Reload" Grid.Row="1" Grid.Column="0" Command="{Binding ReloadCommand}" />
+
+        <BoxView x:Name="Box" IsVisible="{Binding Source={x:Reference WebView}, Path=Navigating}" BackgroundColor="#2f2f2f"
+                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
+        
+        <ActivityIndicator x:Name="Spinner" IsRunning="True" IsVisible="{Binding Source={x:Reference WebView}, Path=Navigating}" IsEnabled="True"
+                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
+    </Grid>
+
+</ContentPage>

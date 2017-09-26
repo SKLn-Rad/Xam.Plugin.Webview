@@ -16,6 +16,7 @@ namespace Xam.Plugin.UWP
         public static event EventHandler<WebView> OnControlChanged;
 
         public static string BaseUrl { get; set; } = "ms-appx:///";
+        LocalFileStreamResolver _resolver;
 
         public static void Init()
         {
@@ -52,10 +53,14 @@ namespace Xam.Plugin.UWP
         void SetupControl()
         {
             var control = new WebView();
+            _resolver = new LocalFileStreamResolver(this);
+
             OnControlChanging?.Invoke(this, control);
             SetNativeControl(control);
 
             Control.NavigationStarting += OnNavigationStarting;
+            Control.NavigationCompleted += OnNavigationCompleted;
+            Control.DOMContentLoaded += OnDOMContentLoaded;
 
             OnControlChanged?.Invoke(this, control);
         }
@@ -72,7 +77,42 @@ namespace Xam.Plugin.UWP
 
         void OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
+            if (Element == null) return;
 
+            Element.Navigating = true;
+            var handler = Element.HandleNavigationStartRequest(args.Uri != null ? args.Uri.AbsoluteUri : Element.Source);
+            args.Cancel = handler.Cancel;
+        }
+
+        void OnNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            if (Element == null) return;
+
+            if (!args.IsSuccess)
+                Element.HandleNavigationError((int) args.WebErrorStatus);
+
+            Element.Navigating = false;
+            Element.HandleNavigationCompleted();
+        }
+
+        async void OnDOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
+        {
+            if (Element == null) return;
+
+            // TODO
+
+            // Add Injection Function
+            await Control.InvokeScriptAsync("eval", new[] { FormsWebView.InjectedFunction });
+
+            // Add Global Callbacks
+            foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(callback.Key) });
+
+            // Add Local Callbacks
+            foreach (var callback in Element.LocalRegisteredCallbacks)
+                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(callback.Key) });
+
+            Element.HandleContentLoaded();
         }
 
         void ReloadElement()
@@ -121,12 +161,17 @@ namespace Xam.Plugin.UWP
 
         void LoadLocalFile(string source)
         {
-            throw new NotImplementedException();
+            Control.NavigateToLocalStreamUri(Control.BuildLocalStreamUri("/", source), _resolver);
         }
 
         void LoadStringData(string source)
         {
-            throw new NotImplementedException();
+            Control.NavigateToString(source);
+        }
+
+        internal string GetBaseUrl()
+        {
+            return Element?.BaseUrl ?? BaseUrl;
         }
 
         void SetBackgroundColor()

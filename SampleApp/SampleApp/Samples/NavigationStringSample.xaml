@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Navigation Events (String)"
+             x:Class="SampleApp.Samples.NavigationStringSample">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <fwv:FormsWebView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Source="{Binding Uri}" ContentType="StringData"
+                          OnNavigationStarted="FormsWebView_OnNavigationStarted" OnNavigationCompleted="FormsWebView_OnNavigationCompleted"
+                          OnContentLoaded="FormsWebView_OnContentLoaded" OnNavigationError="FormsWebView_OnNavigationError" />
+
+        <Label Text="Cancel Navigation:" Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="End" VerticalTextAlignment="Center" />
+        <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsCancelled}" />
+        <Button Text="Load Page" Grid.Row="1" Grid.Column="2" Command="{Binding ReloadCommand}" HorizontalOptions="FillAndExpand" />
+        <Button Text="Load Error Page" Grid.Row="1" Grid.Column="3" Command="{Binding ErrorCommand}" HorizontalOptions="FillAndExpand" />
+
+    </Grid>
+    
+</ContentPage>

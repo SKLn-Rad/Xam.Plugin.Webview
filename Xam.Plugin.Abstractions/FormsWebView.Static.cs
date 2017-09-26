@@ -7,7 +7,9 @@ namespace Xam.Plugin.Abstractions
 {
     public partial class FormsWebView
     {
-        
+
+        internal static event EventHandler<string> GlobalCallbackAdded;
+
         public static readonly BindableProperty NavigatingProperty = BindableProperty.Create(nameof(Navigating), typeof(bool), typeof(FormsWebView), false);
 
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(string), typeof(FormsWebView));
@@ -21,8 +23,28 @@ namespace Xam.Plugin.Abstractions
         public static readonly BindableProperty EnableGlobalCallbacksProperty = BindableProperty.Create(nameof(EnableGlobalCallbacks), typeof(bool), typeof(FormsWebView), true);
         public static readonly BindableProperty EnableGlobalHeadersProperty = BindableProperty.Create(nameof(EnableGlobalHeaders), typeof(bool), typeof(FormsWebView), true);
 
-        public readonly static Dictionary<string, Action<string>> GlobalRegisteredCallbacks = new Dictionary<string, Action<string>>();
+        internal readonly static Dictionary<string, Action<string>> GlobalRegisteredCallbacks = new Dictionary<string, Action<string>>();
         public readonly static Dictionary<string, string> GlobalRegisteredHeaders = new Dictionary<string, string>();
+
+        public static void AddGlobalCallback(string functionName, Action<string> action)
+        {
+            if (GlobalRegisteredCallbacks.ContainsKey(functionName))
+                GlobalRegisteredCallbacks.Remove(functionName);
+
+            GlobalRegisteredCallbacks.Add(functionName, action);
+            GlobalCallbackAdded?.Invoke(null, functionName);
+        }
+
+        public static void RemoveGlobalCallback(string functionName)
+        {
+            if (GlobalRegisteredCallbacks.ContainsKey(functionName))
+                GlobalRegisteredCallbacks.Remove(functionName);
+        }
+
+        public static void RemoveAllGlobalCallbacks()
+        {
+            GlobalRegisteredCallbacks.Clear();
+        }
 
         internal static string InjectedFunction
         {

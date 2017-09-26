@@ -47,8 +47,23 @@
     <Compile Include="Samples\InternetSample.xaml.cs">
       <DependentUpon>InternetSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\JavascriptSample.xaml.cs">
+      <DependentUpon>JavascriptSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\LocalFileSample.xaml.cs">
       <DependentUpon>LocalFileSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\NavigatingEvent.xaml.cs">
+      <DependentUpon>NavigatingEvent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\NavigationEventsSample.xaml.cs">
+      <DependentUpon>NavigationEventsSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\NavigationLocalSample.xaml.cs">
+      <DependentUpon>NavigationLocalSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\NavigationStringSample.xaml.cs">
+      <DependentUpon>NavigationStringSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Samples\SourceSwapSample.xaml.cs">
       <DependentUpon>SourceSwapSample.xaml</DependentUpon>
@@ -113,6 +128,36 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\SourceSwapSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigationEventsSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigationLocalSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigationStringSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigatingEvent.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\JavascriptSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

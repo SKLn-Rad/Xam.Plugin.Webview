@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Javascript Sample"
+             x:Class="SampleApp.Samples.JavascriptSample">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="125" />
+        </Grid.ColumnDefinitions>
+
+        <fwv:FormsWebView x:Name="WebView" ContentType="LocalFile" Source="Sample2.html" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+
+        <Entry Text="Test" Grid.Row="1" Grid.Column="0" />
+        <Entry Text="Test" Grid.Row="2" Grid.Column="0" />
+        <Entry Text="Test" Grid.Row="3" Grid.Column="0" />
+        <Entry Text="Test" Grid.Row="4" Grid.Column="0" />
+
+        <Button Text="Inject" Grid.Row="1" Grid.Column="1" />
+        <Button Text="Global Callback" Grid.Row="2" Grid.Column="1" />
+        <Button Text="Local Callback" Grid.Row="3" Grid.Column="1" />
+        <Button Text="Evaluate" Grid.Row="4" Grid.Column="1" />
+    </Grid>
+    
+</ContentPage>

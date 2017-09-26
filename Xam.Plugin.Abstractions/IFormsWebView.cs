@@ -37,5 +37,10 @@ namespace Xam.Plugin.Abstractions
 
         string EvaluateJavascriptAsync(string js);
 
+        void AddLocalCallback(string functionName, Action<string> action);
+
+        void RemoveLocalCallback(string functionName);
+
+        void RemoveAllLocalCallbacks();
     }
 }
