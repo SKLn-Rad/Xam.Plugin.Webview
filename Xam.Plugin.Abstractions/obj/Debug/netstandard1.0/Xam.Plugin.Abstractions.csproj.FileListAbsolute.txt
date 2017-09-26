@@ -1,9 +1,0 @@
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\bin\Debug\netstandard1.0\Xam.Plugin.Abstractions.deps.json
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\bin\Debug\netstandard1.0\Xam.Plugin.Abstractions.dll
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\bin\Debug\netstandard1.0\Xam.Plugin.Abstractions.pdb
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.csprojResolveAssemblyReference.cache
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.csproj.CoreCompileInputs.cache
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.AssemblyInfoInputs.cache
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.AssemblyInfo.cs
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.dll
-C:\Users\ryan.dixon\Source\Repos\Xam.Plugin.Webview\Xam.Plugin.Abstractions\obj\Debug\netstandard1.0\Xam.Plugin.Abstractions.pdb
