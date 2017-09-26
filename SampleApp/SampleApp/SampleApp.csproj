@@ -50,8 +50,14 @@
     <Compile Include="Samples\InternetSample.xaml.cs">
       <DependentUpon>InternetSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\JavascriptInternet.xaml.cs">
+      <DependentUpon>JavascriptInternet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\JavascriptSample.xaml.cs">
       <DependentUpon>JavascriptSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\JavascriptString.xaml.cs">
+      <DependentUpon>JavascriptString.xaml</DependentUpon>
     </Compile>
     <Compile Include="Samples\LocalFileSample.xaml.cs">
       <DependentUpon>LocalFileSample.xaml</DependentUpon>
@@ -64,6 +70,9 @@
     </Compile>
     <Compile Include="Samples\NavigationLocalSample.xaml.cs">
       <DependentUpon>NavigationLocalSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\BackForwardSample.xaml.cs">
+      <DependentUpon>BackForwardSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Samples\NavigationStringSample.xaml.cs">
       <DependentUpon>NavigationStringSample.xaml</DependentUpon>
@@ -166,6 +175,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\BackgroundColorSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\BackForwardSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\JavascriptInternet.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\JavascriptString.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

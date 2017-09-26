@@ -42,6 +42,8 @@ namespace Xam.Plugin.UWP
         {
             element.PropertyChanged += OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
+            element.OnBackRequested += OnBackRequested;
+            element.OnForwardRequested += OnForwardRequested;
 
             ReloadElement();
         }
@@ -50,6 +52,8 @@ namespace Xam.Plugin.UWP
         {
             element.PropertyChanged -= OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
+            element.OnBackRequested -= OnBackRequested;
+            element.OnForwardRequested -= OnForwardRequested;
 
             element.Dispose();
         }
@@ -71,6 +75,22 @@ namespace Xam.Plugin.UWP
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
             OnControlChanged?.Invoke(this, control);
+        }
+
+        void OnForwardRequested(object sender, EventArgs e)
+        {
+            if (Control == null) return;
+
+            if (Control.CanGoForward)
+                Control.GoForward();
+        }
+
+        void OnBackRequested(object sender, EventArgs e)
+        {
+            if (Control == null) return;
+
+            if (Control.CanGoBack)
+                Control.GoBack();
         }
 
         void OnWebViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -98,6 +118,9 @@ namespace Xam.Plugin.UWP
 
             if (!args.IsSuccess)
                 Element.HandleNavigationError((int) args.WebErrorStatus);
+
+            Element.CanGoBack = Control.CanGoBack;
+            Element.CanGoForward = Control.CanGoForward;
 
             Element.Navigating = false;
             Element.HandleNavigationCompleted();
@@ -138,13 +161,13 @@ namespace Xam.Plugin.UWP
         async Task<string> OnJavascriptInjectionRequestAsync(string js)
         {
             if (Control == null) return string.Empty;
-            return await Control.InvokeScriptAsync("eval", new[] { js });
+            var result = await Control.InvokeScriptAsync("eval", new[] { js });
+            return result;
         }
 
         void ReloadElement()
         {
             if (Element == null) return;
-
             SetSource();
         }
 

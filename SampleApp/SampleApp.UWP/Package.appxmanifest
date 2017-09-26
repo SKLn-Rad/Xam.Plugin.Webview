@@ -22,6 +22,7 @@
       </uap:VisualElements>
       <uap:ApplicationContentUriRules>
         <uap:Rule Match="https://www.xamarin.com/*" Type="include" WindowsRuntimeAccess="all" />
+        <uap:Rule Match="https://www.google.co.uk/*" Type="include" WindowsRuntimeAccess="all" />
       </uap:ApplicationContentUriRules>
     </Application>
   </Applications>

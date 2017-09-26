@@ -24,6 +24,10 @@ namespace Xam.Plugin.Abstractions
 
         public event EventHandler OnContentLoaded;
 
+        public event EventHandler OnBackRequested;
+
+        public event EventHandler OnForwardRequested;
+
         internal event JavascriptInjectionRequestDelegate OnJavascriptInjectionRequest;
 
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
@@ -81,6 +85,18 @@ namespace Xam.Plugin.Abstractions
         public FormsWebView()
         {
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
+        }
+
+        public void GoBack()
+        {
+            if (!CanGoBack) return;
+            OnBackRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void GoForward()
+        {
+            if (!CanGoForward) return;
+            OnForwardRequested?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task<string> InjectJavascriptAsync(string js)

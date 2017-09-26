@@ -84,15 +84,36 @@ namespace SampleApp
             Items.Add(new SelectionItem()
             {
                 Identifier = 8,
-                Title = "Javascript",
-                Detail = "Check javascript injection, callbacks, and evaluation functions"
+                Title = "Javascript (Internet)",
+                Detail = "Check javascript injection, callbacks, and evaluation functions on a real web page"
             });
 
             Items.Add(new SelectionItem()
             {
                 Identifier = 9,
+                Title = "Javascript (Local)",
+                Detail = "Check javascript injection, callbacks, and evaluation functions on a local file"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 10,
+                Title = "Javascript (String)",
+                Detail = "Check javascript injection, callbacks, and evaluation functions on string html"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 11,
                 Title = "Background Color",
                 Detail = "Test sites with a transparent background bleed onto the background set in Xamarin Forms"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 12,
+                Title = "CanGoForward and CanGoBack",
+                Detail = "Test bindable properties CanGoForward and CanGoBack, as well as the GoBack and GoForward functions"
             });
         }
 
@@ -135,11 +156,23 @@ namespace SampleApp
                     break;
 
                 case 8:
-                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptSample());
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptInternet());
                     break;
 
                 case 9:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptSample());
+                    break;
+
+                case 10:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new JavascriptString());
+                    break;
+
+                case 11:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new BackgroundColorSample());
+                    break;
+
+                case 12:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new BackForwardSample());
                     break;
 
                 default:

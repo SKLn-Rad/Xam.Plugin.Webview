@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Javascript Local Sample"
-             x:Class="SampleApp.Samples.JavascriptSample">
+             Title="Javascript Internet Sample"
+             x:Class="SampleApp.Samples.JavascriptInternet">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,7 +18,7 @@
             <ColumnDefinition Width="125" />
         </Grid.ColumnDefinitions>
 
-        <fwv:FormsWebView x:Name="WebView" ContentType="LocalFile" Source="Sample2.html" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+        <fwv:FormsWebView x:Name="WebView" ContentType="Internet" Source="https://www.google.co.uk" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
         <Entry x:Name="InjectionText" Grid.Row="1" Grid.Column="0" />
         <Entry x:Name="GlobalText" Grid.Row="2" Grid.Column="0" />
@@ -28,5 +28,5 @@
         <Button Text="Global Callback" Grid.Row="2" Grid.Column="1" Clicked="GlobalCallbackClicked" />
         <Button Text="Local Callback" Grid.Row="3" Grid.Column="1" Clicked="LocalCallbackClicked" />
     </Grid>
-    
+
 </ContentPage>

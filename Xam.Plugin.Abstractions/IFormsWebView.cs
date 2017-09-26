@@ -32,6 +32,10 @@ namespace Xam.Plugin.Abstractions
 
         bool CanGoForward { get; }
 
+        void GoBack();
+
+        void GoForward();
+
         Task<string> InjectJavascriptAsync(string js);
 
         void AddLocalCallback(string functionName, Action<string> action);
