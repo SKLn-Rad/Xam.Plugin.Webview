@@ -21,13 +21,6 @@ namespace SampleApp.Droid
             base.OnCreate(bundle);
 
             FormsWebViewRenderer.Init();
-            FormsWebViewRenderer.OnControlChanging += (sender, element, control) =>
-            {
-                var webView = control as Android.Webkit.WebView;
-                webView.SetLayerType(LayerType.Software, null);
-                webView.Settings.LoadWithOverviewMode = true;
-                webView.Settings.UseWideViewPort = true;
-            };
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
