@@ -86,8 +86,16 @@ namespace Xam.Plugin.Droid
             webView.SetWebChromeClient(new FormsWebViewChromeClient(this));
             webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
+            FormsWebView.CallbackAdded += OnCallbackAdded;
+
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, webView);
+        }
+
+        async void OnCallbackAdded(object sender, string e)
+        {
+            if (string.IsNullOrEmpty(e)) return;
+            await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
         }
 
         void OnForwardRequested(object sender, EventArgs e)

@@ -59,6 +59,9 @@
     <Compile Include="Samples\JavascriptString.xaml.cs">
       <DependentUpon>JavascriptString.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\LiveCallbackSample.xaml.cs">
+      <DependentUpon>LiveCallbackSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\LocalFileSample.xaml.cs">
       <DependentUpon>LocalFileSample.xaml</DependentUpon>
     </Compile>
@@ -202,6 +205,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\RefreshSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\LiveCallbackSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

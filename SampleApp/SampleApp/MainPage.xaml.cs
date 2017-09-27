@@ -129,6 +129,13 @@ namespace SampleApp
                 Title = "Headers",
                 Detail = "Test global and local request headers"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 15,
+                Title = "Live Callbacks",
+                Detail = "Test that callbacks which are added during content presentation get added to the DOM"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -195,6 +202,10 @@ namespace SampleApp
 
                 case 14:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new HeadersSample());
+                    break;
+
+                case 15:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new LiveCallbackSample());
                     break;
 
                 default:
