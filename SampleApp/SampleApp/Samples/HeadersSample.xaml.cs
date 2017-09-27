@@ -12,8 +12,11 @@ namespace SampleApp.Samples
         {
             InitializeComponent();
 
-            FormsWebView.GlobalRegisteredHeaders.Add("default-Global", "default");
-            WebView.LocalRegisteredHeaders.Add("default-Local", "default");
+            if (!FormsWebView.GlobalRegisteredHeaders.ContainsKey("default-Global"))
+                FormsWebView.GlobalRegisteredHeaders.Add("default-Global", "default");
+
+            if (!WebView.LocalRegisteredHeaders.ContainsKey("default-Local"))
+                WebView.LocalRegisteredHeaders.Add("default-Local", "default");
         }
 
         void OnGlobalAdd(object sender, EventArgs e)

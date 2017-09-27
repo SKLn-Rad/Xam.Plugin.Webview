@@ -45,7 +45,7 @@ namespace Xam.Plugin.UWP
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
 
-            ReloadElement();
+            SetSource();
         }
 
         void DestroyOldElement(FormsWebView element)
@@ -167,12 +167,6 @@ namespace Xam.Plugin.UWP
             if (Control == null) return string.Empty;
             var result = await Control.InvokeScriptAsync("eval", new[] { js });
             return result;
-        }
-
-        void ReloadElement()
-        {
-            if (Element == null) return;
-            SetSource();
         }
 
         void SetSource()

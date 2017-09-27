@@ -52,14 +52,20 @@ namespace Xam.Plugin.Droid
         {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnBackRequested += OnBackRequested;
+            element.OnForwardRequested += OnForwardRequested;
+            element.OnRefreshRequested += OnRefreshRequested;
 
-            ReloadElement();
+            SetSource();
         }
 
         void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
+            element.OnBackRequested -= OnBackRequested;
+            element.OnForwardRequested -= OnForwardRequested;
+            element.OnRefreshRequested -= OnRefreshRequested;
 
             element.Dispose();
         }
@@ -78,13 +84,33 @@ namespace Xam.Plugin.Droid
             webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
             webView.SetWebViewClient(new FormsWebViewClient(this));
             webView.SetWebChromeClient(new FormsWebViewChromeClient(this));
+            webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, webView);
         }
 
-        void ReloadElement()
+        void OnForwardRequested(object sender, EventArgs e)
         {
+            if (Control == null) return;
+
+            if (Control.CanGoForward())
+                Control.GoForward();
+        }
+
+        void OnBackRequested(object sender, EventArgs e)
+        {
+            if (Control == null) return;
+
+            if (Control.CanGoBack())
+                Control.GoBack();
+        }
+
+        void OnRefreshRequested(object sender, EventArgs e)
+        {
+            if (Control == null) return;
+
+            Control.LoadUrl("about:blank");
             SetSource();
         }
 
@@ -175,8 +201,8 @@ namespace Xam.Plugin.Droid
             // Add Local Headers
             foreach (var header in Element.LocalRegisteredHeaders)
             {
-                if (!headers.ContainsKey(header.Key))
-                    headers.Add(header.Key, header.Value);
+                if (!headers.ContainsKey(header.Key.ToLower()))
+                    headers.Add(header.Key.ToLower(), header.Value.ToLower());
             }
 
             // Add Global Headers
