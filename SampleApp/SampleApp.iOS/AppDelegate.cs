@@ -4,8 +4,8 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
-using Xam.Plugin.iOS;
 using WebKit;
+using Xam.Plugin.iOS;
 
 namespace SampleApp.iOS
 {
@@ -24,15 +24,7 @@ namespace SampleApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            FormsWebViewRenderer.Init();
-            FormsWebViewRenderer.OnControlChanging += (sender, element, control) =>
-            {
-                // Sender - The WebView triggering this event
-                // Element - The Xamarin.Forms abstraction view
-                // Control - WKWebView, WebKit.WebView or UI.WebView depending on platform, please case this accordingly.
-
-                var webView = control as WKWebView;
-            };
+            FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
