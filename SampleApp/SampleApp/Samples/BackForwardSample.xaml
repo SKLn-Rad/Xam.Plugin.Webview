@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
@@ -19,8 +19,8 @@
 
         <webview:FormsWebView x:Name="WebContent" ContentType="Internet" Source="https://www.google.co.uk" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" />
 
-        <Button Text="&lt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoBack}" Grid.Row="0" Grid.Column="0" Clicked="BackClicked" />
-        <Button Text="&gt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoForward}" Grid.Row="0" Grid.Column="1" Clicked="ForwardClicked" />
+        <Button Text="&lt;" IsEnabled="{Binding Source={x:Reference WebContent}, Path=CanGoBack}" Grid.Row="0" Grid.Column="0" Clicked="BackClicked" />
+        <Button Text="&gt;" IsEnabled="{Binding Source={x:Reference WebContent}, Path=CanGoForward}" Grid.Row="0" Grid.Column="1" Clicked="ForwardClicked" />
         <Entry x:Name="UrlText" Text="https://www.google.co.uk" Grid.Row="0" Grid.Column="2" />
         <Button Text="Go" Grid.Row="0" Grid.Column="3" Clicked="OnGoClicked" />
     </Grid>

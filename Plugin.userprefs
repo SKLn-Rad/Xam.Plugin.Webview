@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{516A9A24-FB43-42B4-9B6F-8A2813B319D8}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp/Samples/BackForwardSample.xaml">
+    <Files>
+      <File FileName="SampleApp/SampleApp/Samples/BackForwardSample.xaml" Line="23" Column="79" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Xam.Plugin.WebView.Droid PreferredExecutionTarget="Android.Android_Accelerated_x86" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.SampleApp.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.61BF9CD1-7626-4FCB-AD1F-703F92D5F681" />
+</Properties>
