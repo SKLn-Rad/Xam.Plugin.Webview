@@ -49,3 +49,7 @@
 /WebViewPlugin/WebView.Plugin.WindowsPhone/obj
 /WebViewPlugin/WebView.Plugin.WindowsStore/bin
 /WebViewPlugin/WebView.Plugin.WindowsStore/obj
+
+SampleApp\.userprefs
+
+SampleApp/SampleApp\.MacOS/\.DS_Store
