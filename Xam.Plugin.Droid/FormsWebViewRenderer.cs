@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Android.Webkit;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Xam.Plugin.Abstractions;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Droid;
@@ -25,6 +27,8 @@ namespace Xam.Plugin.Droid
 
         public static event EventHandler<Android.Webkit.WebView> OnControlChanged;
 
+        JavascriptValueCallback _callback;
+
         public static void Init()
         {
             var dt = DateTime.Now;
@@ -47,6 +51,7 @@ namespace Xam.Plugin.Droid
         void SetupElement(FormsWebView element)
         {
             element.PropertyChanged += OnPropertyChanged;
+            element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
 
             ReloadElement();
         }
@@ -54,6 +59,7 @@ namespace Xam.Plugin.Droid
         void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnPropertyChanged;
+            element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
 
             element.Dispose();
         }
@@ -61,7 +67,8 @@ namespace Xam.Plugin.Droid
         void SetupControl()
         {
             var webView = new Android.Webkit.WebView(Forms.Context);
-            
+            _callback = new JavascriptValueCallback(this);
+
             // https://github.com/SKLn-Rad/Xam.Plugin.Webview/issues/11
             webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
@@ -89,6 +96,35 @@ namespace Xam.Plugin.Droid
                     SetSource();
                     break;
             }
+        }
+
+        internal async Task<string> OnJavascriptInjectionRequest(string js)
+        {
+            if (Element == null || Control == null) return string.Empty;
+
+            // fire!
+            _callback.Reset();
+
+            var response = string.Empty;
+            Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, _callback));
+
+            // wait!
+            await Task.Run(() =>
+            {
+                while (_callback.Value == null) { }
+
+                // Get the string and strip off the quotes
+                if (_callback.Value is Java.Lang.String)
+                {
+                    response = _callback.Value.ToString();
+                    if (response.StartsWith("\"") && response.EndsWith("\""))
+                        response = response.Substring(1, response.Length - 2);
+                }
+
+            });
+
+            // return
+            return response;
         }
 
         void SetSource()
@@ -151,11 +187,6 @@ namespace Xam.Plugin.Droid
             }
             
             Control.LoadUrl(Element.Source, headers);
-        }
-
-        internal void OnScriptNotify(string data)
-        {
-
         }
     }
 }

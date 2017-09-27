@@ -18,9 +18,10 @@ namespace Xam.Plugin.Droid
         [Export("invokeAction")]
         public void InvokeAction(string data)
         {
-            FormsWebViewRenderer renderer;
-            if (Reference != null && Reference.TryGetTarget(out renderer))
-                renderer.OnScriptNotify(data);
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+
+            renderer.Element.HandleScriptReceived(data);
         }
     }
 }
