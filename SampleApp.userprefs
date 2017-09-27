@@ -1,16 +1,17 @@
-﻿<Properties StartupConfiguration="{516A9A24-FB43-42B4-9B6F-8A2813B319D8}|Default">
+﻿<Properties StartupConfiguration="{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
   <MonoDevelop.Ide.ItemProperties.SampleApp.Droid PreferredExecutionTarget="Android.Android_Accelerated_x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Xam.Plugin.iOS/FormsNavigationDelegate.cs">
+  <MonoDevelop.Ide.ItemProperties.SampleApp.MacOS PreferredExecutionTarget="Test1" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp/MainPage.xaml">
     <Files>
-      <File FileName="Xam.Plugin.iOS/FormsWebViewRenderer.cs" Line="149" Column="56" />
-      <File FileName="Xam.Plugin.iOS/FormsNavigationDelegate.cs" Line="18" Column="19" />
+      <File FileName="SampleApp/SampleApp.MacOS/AppDelegate.cs" Line="27" Column="26" />
+      <File FileName="SampleApp/SampleApp/MainPage.xaml" Line="23" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.SampleApp.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.61BF9CD1-7626-4FCB-AD1F-703F92D5F681" />
+  <MonoDevelop.Ide.ItemProperties.SampleApp.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.D8A36612-7314-45D2-BAFB-04B06FA46415" />
 </Properties>

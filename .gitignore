@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -17,6 +17,8 @@
 /SampleApp/SampleApp.Windows/obj
 /SampleApp/SampleApp.WinPhone/bin
 /SampleApp/SampleApp.WinPhone/obj
+/SampleApp/SampleApp.MacOS/bin
+/SampleApp/SampleApp.MacOS/obj
 
 /WebViewPlugin/WebView.Plugin.Abstractions/bin
 /WebViewPlugin/WebView.Plugin.Abstractions/obj
