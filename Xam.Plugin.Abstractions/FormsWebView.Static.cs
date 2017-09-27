@@ -59,6 +59,7 @@ namespace Xam.Plugin.Abstractions
                         return "function csharp(data){bridge.invokeAction(data);}";
 
                     case Device.iOS:
+                    case "macOS":
                         return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
 
                     default:

@@ -124,6 +124,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
     <BundleResource Include="Resources\Sample.html" />
     <BundleResource Include="Resources\Sample2.html" />
   </ItemGroup>

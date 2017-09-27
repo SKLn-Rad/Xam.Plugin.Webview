@@ -17,7 +17,7 @@ namespace Xam.Plugin.MacOS
 
 		public event EventHandler<WKWebView> OnControlChanged;
 
-		public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
+        public static string BaseUrl { get; set; } = NSBundle.MainBundle.ResourcePath;
 
 		FormsNavigationDelegate _navigationDelegate;
 
