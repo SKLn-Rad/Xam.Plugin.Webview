@@ -11,16 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.iOS", "SampleApp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.UWP", "SampleApp\SampleApp.UWP\SampleApp.UWP.csproj", "{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView.Plugin.Abstractions", "WebViewPlugin\WebView.Plugin.Abstractions\WebView.Plugin.Abstractions.csproj", "{67F9D3A8-F71E-4428-913F-C37AE82CDB24}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView.Plugin.UWP", "WebViewPlugin\WebView.Plugin.UWP\WebView.Plugin.UWP.csproj", "{C939B2D9-94A6-4F5F-8F90-5555484713C6}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WebView.Plugin.Shared", "WebViewPlugin\WebView.Plugin.Shared\WebView.Plugin.Shared.shproj", "{06DD69EA-9EA0-4711-8481-C3F6003CDD95}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView.Plugin.Droid", "WebViewPlugin\WebView.Plugin.Droid\WebView.Plugin.Droid.csproj", "{050DB3FB-3823-4D7F-A7F1-62A632179700}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView.Plugin.iOS", "WebViewPlugin\WebView.Plugin.iOS\WebView.Plugin.iOS.csproj", "{05BC7C4A-CCBD-4F19-8DEB-02801DBB2E55}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugin.Abstractions", "Xam.Plugin.Abstractions\Xam.Plugin.Abstractions.csproj", "{F690DD01-F04C-498B-B574-B870C8A7702C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugin.UWP", "Xam.Plugin.UWP\Xam.Plugin.UWP.csproj", "{A15600A1-4072-4C87-8862-F7B981F3A4F3}"
@@ -34,10 +24,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugin.MacOS", "Xam.Plugin.MacOS\Xam.Plugin.MacOS.csproj", "{8AF4B072-FE14-4139-B346-53AA2E94CCC8}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		WebViewPlugin\WebView.Plugin.Shared\WebView.Plugin.Shared.projitems*{06dd69ea-9ea0-4711-8481-c3f6003cdd95}*SharedItemsImports = 13
-		WebViewPlugin\WebView.Plugin.Shared\WebView.Plugin.Shared.projitems*{c939b2d9-94a6-4f5f-8f90-5555484713c6}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
 		Ad-Hoc|ARM = Ad-Hoc|ARM
