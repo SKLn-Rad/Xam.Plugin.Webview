@@ -150,10 +150,8 @@ namespace Xam.Plugin.UWP
 
         async void OnCallbackAdded(object sender, string e)
         {
-            if (Element == null) return;
-
-            if (sender == null || sender.Equals(Element))
-                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(e) });
+            if (string.IsNullOrWhiteSpace(e)) return;
+            await OnJavascriptInjectionRequestAsync(FormsWebView.GenerateFunctionScript(e));
         }
 
         void OnScriptNotify(object sender, NotifyEventArgs e)

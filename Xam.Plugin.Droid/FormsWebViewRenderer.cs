@@ -94,7 +94,7 @@ namespace Xam.Plugin.Droid
 
         async void OnCallbackAdded(object sender, string e)
         {
-            if (string.IsNullOrEmpty(e)) return;
+            if (string.IsNullOrWhiteSpace(e)) return;
             await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
         }
 

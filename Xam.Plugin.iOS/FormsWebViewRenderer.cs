@@ -47,6 +47,9 @@ namespace Xam.Plugin.iOS
 		{
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnBackRequested += OnBackRequested;
+            element.OnForwardRequested += OnForwardRequested;
+            element.OnRefreshRequested += OnRefreshRequested;
 
             SetSource();
 		}
@@ -55,6 +58,9 @@ namespace Xam.Plugin.iOS
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
+            element.OnBackRequested -= OnBackRequested;
+            element.OnForwardRequested -= OnForwardRequested;
+            element.OnRefreshRequested -= OnRefreshRequested;
 
             element.Dispose();
         }
@@ -75,11 +81,19 @@ namespace Xam.Plugin.iOS
                 NavigationDelegate = _navigationDelegate
             };
 
+            FormsWebView.CallbackAdded += OnCallbackAdded;
+
             SetNativeControl(wkWebView);
             OnControlChanged?.Invoke(this, wkWebView);
         }
 
-		void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        async void OnCallbackAdded(object sender, string e)
+        {
+            if (string.IsNullOrWhiteSpace(e)) return;
+            await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
+        }
+
+        void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
             switch (e.PropertyName) {
                 case "Source":
@@ -143,10 +157,19 @@ namespace Xam.Plugin.iOS
         {
             if (Control == null || Element == null) return;
 
-            // Get Headers
+            var headers = new NSMutableDictionary();
+
+            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+                headers.Add(new NSString(header.Key), new NSString(header.Value));
+
+            foreach (var header in Element.LocalRegisteredHeaders)
+                headers.Add(new NSString(header.Key), new NSString(header.Value));
 
             var url = new NSUrl(Element.Source);
-            var request = new NSMutableUrlRequest(url);
+            var request = new NSMutableUrlRequest(url)
+            {
+                Headers = headers
+            };
 
             Control.LoadRequest(request);
         }
@@ -155,6 +178,28 @@ namespace Xam.Plugin.iOS
         {
             if (Element == null || message == null || message.Body == null) return;
             Element.HandleScriptReceived(message.Body.ToString());
+        }
+
+        void OnRefreshRequested(object sender, EventArgs e)
+        {
+            if (Control == null) return;
+            Control.ReloadFromOrigin();
+        }
+
+        void OnForwardRequested(object sender, EventArgs e)
+        {
+            if (Control == null || Element == null) return;
+
+            if (Control.CanGoForward)
+                Control.GoForward();
+        }
+
+        void OnBackRequested(object sender, EventArgs e)
+        {
+            if (Control == null || Element == null) return;
+
+            if (Control.CanGoBack)
+                Control.GoBack();
         }
     }
 }

@@ -65,6 +65,8 @@ namespace Xam.Plugin.iOS
             foreach (var function in renderer.Element.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
 
+            renderer.Element.CanGoBack = webView.CanGoBack;
+            renderer.Element.CanGoForward = webView.CanGoForward;
             renderer.Element.Navigating = false;
             renderer.Element.HandleContentLoaded();
         }

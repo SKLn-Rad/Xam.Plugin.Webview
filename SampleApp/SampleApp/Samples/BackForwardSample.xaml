@@ -7,8 +7,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
             <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50" />
@@ -17,12 +17,12 @@
             <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
 
-        <webview:FormsWebView x:Name="WebView" ContentType="Internet" Source="https://www.google.co.uk" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" />
+        <webview:FormsWebView x:Name="WebView" ContentType="Internet" Source="https://www.google.co.uk" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" />
 
-        <Button Text="&lt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoBack}" Grid.Row="1" Grid.Column="0" Clicked="BackClicked" />
-        <Button Text="&gt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoForward}" Grid.Row="1" Grid.Column="1" Clicked="ForwardClicked" />
-        <Entry x:Name="UrlText" Text="https://www.google.co.uk" Grid.Row="1" Grid.Column="2" />
-        <Button Text="Go" Grid.Row="1" Grid.Column="3" Clicked="OnGoClicked" />
+        <Button Text="&lt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoBack}" Grid.Row="0" Grid.Column="0" Clicked="BackClicked" />
+        <Button Text="&gt;" IsEnabled="{Binding Source={x:Reference WebView}, Path=CanGoForward}" Grid.Row="0" Grid.Column="1" Clicked="ForwardClicked" />
+        <Entry x:Name="UrlText" Text="https://www.google.co.uk" Grid.Row="0" Grid.Column="2" />
+        <Button Text="Go" Grid.Row="0" Grid.Column="3" Clicked="OnGoClicked" />
     </Grid>
     
 </ContentPage>
