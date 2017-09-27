@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using Foundation;
 using WebKit;
 using Xam.Plugin.Abstractions;
@@ -45,6 +46,7 @@ namespace Xam.Plugin.iOS
 		void SetupElement(FormsWebView element)
 		{
             element.PropertyChanged += OnPropertyChanged;
+            element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
 
             SetSource();
 		}
@@ -52,6 +54,7 @@ namespace Xam.Plugin.iOS
         void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnPropertyChanged;
+            element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
 
             element.Dispose();
         }
@@ -60,6 +63,7 @@ namespace Xam.Plugin.iOS
         {
             _navigationDelegate = new FormsNavigationDelegate(this);
             _contentController = new WKUserContentController();
+            _contentController.AddScriptMessageHandler(this, "invokeAction");
             _configuration = new WKWebViewConfiguration {
                 UserContentController = _contentController
             };
@@ -82,6 +86,19 @@ namespace Xam.Plugin.iOS
                     SetSource();
                     break;
             }
+		}
+
+		internal async Task<string> OnJavascriptInjectionRequest(string js)
+		{
+            if (Control == null || Element == null) return string.Empty;
+
+            var response = string.Empty;
+            var obj = await Control.EvaluateJavaScriptAsync(js);
+
+            if (obj != null)
+                response = obj.ToString();
+
+            return response;
 		}
 
         void SetSource()
@@ -136,7 +153,8 @@ namespace Xam.Plugin.iOS
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            
+            if (Element == null || message == null || message.Body == null) return;
+            Element.HandleScriptReceived(message.Body.ToString());
         }
     }
 }

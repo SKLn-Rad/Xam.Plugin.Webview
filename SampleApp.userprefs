@@ -1,11 +1,9 @@
 ﻿<Properties StartupConfiguration="{516A9A24-FB43-42B4-9B6F-8A2813B319D8}|Default">
   <MonoDevelop.Ide.ItemProperties.SampleApp.Droid PreferredExecutionTarget="Android.Android_Accelerated_x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp.iOS/AppDelegate.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Xam.Plugin.iOS/FormsNavigationDelegate.cs">
     <Files>
-      <File FileName="Xam.Plugin.Droid/FormsWebViewRenderer.cs" Line="15" Column="91" />
-      <File FileName="Xam.Plugin.iOS/FormsWebViewRenderer.cs" Line="27" Column="10" />
-      <File FileName="Xam.Plugin.iOS/FormsNavigationDelegate.cs" Line="13" Column="75" />
-      <File FileName="SampleApp/SampleApp.iOS/AppDelegate.cs" Line="26" Column="41" />
+      <File FileName="Xam.Plugin.iOS/FormsWebViewRenderer.cs" Line="149" Column="56" />
+      <File FileName="Xam.Plugin.iOS/FormsNavigationDelegate.cs" Line="18" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
