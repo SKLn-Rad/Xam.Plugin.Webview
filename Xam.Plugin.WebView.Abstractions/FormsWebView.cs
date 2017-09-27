@@ -108,18 +108,27 @@ namespace Xam.Plugin.WebView.Abstractions
             set => SetValue(EnableGlobalHeadersProperty, value);
         }
 
+        /// <summary>
+        /// Bindable property which is true when the page is currently navigating.
+        /// </summary>
         public bool Navigating
         {
             get => (bool)GetValue(NavigatingProperty);
             internal set => SetValue(NavigatingProperty, value);
         }
 
+        /// <summary>
+        /// Bindable property which is true when the webview can go back a page.
+        /// </summary>
         public bool CanGoBack
         {
             get => (bool) GetValue(CanGoBackProperty);
             internal set => SetValue(CanGoBackProperty, value);
         }
 
+        /// <summary>
+        /// Bindable property which is true when the webview can go forward a page.
+        /// </summary>
         public bool CanGoForward
         {
             get => (bool) GetValue(CanGoForwardProperty);
@@ -131,23 +140,38 @@ namespace Xam.Plugin.WebView.Abstractions
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
         }
 
+        /// <summary>
+        /// Navigate back a page if capable of doing so.
+        /// </summary>
         public void GoBack()
         {
             if (!CanGoBack) return;
             OnBackRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Navigate forward a page if capable of doing so.
+        /// </summary>
         public void GoForward()
         {
             if (!CanGoForward) return;
             OnForwardRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Refresh the current page if capable of doing so.
+        /// </summary>
         public void Refresh()
         {
             OnRefreshRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Inject some javascript, returning a string result if the resulting Javascript resolves to a string on the DOM.
+        /// For example 'document.body.style.backgroundColor = \"red\";' will return 'red'.
+        /// </summary>
+        /// <param name="js">The javascript to inject</param>
+        /// <returns>A valid string response or string.Empty</returns>
         public async Task<string> InjectJavascriptAsync(string js)
         {
             if (string.IsNullOrWhiteSpace(js)) return string.Empty;
@@ -158,6 +182,11 @@ namespace Xam.Plugin.WebView.Abstractions
             return string.Empty;
         }
 
+        /// <summary>
+        /// Adds a callback to the DOM, this callback when passed a string by the Javascript, will fire an action with that string as the parameter.
+        /// </summary>
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="action">The action to call back to</param>
         public void AddLocalCallback(string functionName, Action<string> action)
         {
             if (string.IsNullOrWhiteSpace(functionName)) return;
@@ -169,17 +198,29 @@ namespace Xam.Plugin.WebView.Abstractions
             CallbackAdded?.Invoke(this, functionName);
         }
 
+        /// <summary>
+        /// Removes a callback by the function name.
+        /// Note: this does not remove it from the DOM, rather it removes the action, resulting in your view never getting the response.
+        /// </summary>
+        /// <param name="functionName"></param>
         public void RemoveLocalCallback(string functionName)
         {
             if (LocalRegisteredCallbacks.ContainsKey(functionName))
                 LocalRegisteredCallbacks.Remove(functionName);
         }
 
+        /// <summary>
+        /// Removes all local callbacks from the DOM.
+        /// Note: this does not remove it from the DOM, rather it removes the action, resulting in your view never getting the response.
+        /// </summary>
         public void RemoveAllLocalCallbacks()
         {
             LocalRegisteredCallbacks.Clear();
         }
 
+        /// <summary>
+        /// Dispose of the WebView
+        /// </summary>
         public void Dispose()
         {
             LocalRegisteredCallbacks.Clear();
