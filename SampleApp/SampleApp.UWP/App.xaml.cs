@@ -4,7 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Xam.Plugin.UWP;
+using Xam.Plugin.WebView.UWP;
 
 namespace SampleApp.UWP
 {
@@ -49,7 +49,7 @@ namespace SampleApp.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                FormsWebViewRenderer.Init();
+                FormsWebViewRenderer.Initialize();
                 Xamarin.Forms.Forms.Init(e);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

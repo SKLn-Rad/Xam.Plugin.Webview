@@ -33,16 +33,16 @@
 /WebViewPlugin/WebView.Plugin.WinPhone/bin
 /WebViewPlugin/WebView.Plugin.WinPhone/obj
 
-/Xam.Plugin.Abstractions/bin
-/Xam.Plugin.Abstractions/obj
-/Xam.Plugin.UWP/bin
-/Xam.Plugin.UWP/obj
-/Xam.Plugin.Droid/bin
-/Xam.Plugin.Droid/obj
-/Xam.Plugin.iOS/bin
-/Xam.Plugin.iOS/obj
-/Xam.Plugin.MacOS/bin
-/Xam.Plugin.MacOS/obj
+/Xam.Plugin.WebView.Abstractions/bin
+/Xam.Plugin.WebView.Abstractions/obj
+/Xam.Plugin.WebView.UWP/bin
+/Xam.Plugin.WebView.UWP/obj
+/Xam.Plugin.WebView.Droid/bin
+/Xam.Plugin.WebView.Droid/obj
+/Xam.Plugin.WebView.iOS/bin
+/Xam.Plugin.WebView.iOS/obj
+/Xam.Plugin.WebView.MacOS/bin
+/Xam.Plugin.WebView.MacOS/obj
 
 /UpgradeLog.htm
 /WebViewPlugin/WebView.Plugin.WindowsPhone/bin/Release

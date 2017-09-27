@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,17 +16,17 @@ namespace SampleApp.Samples
         void OnGoClicked(object sender, EventArgs e)
         {
             var path = UrlText.Text;
-            WebView.Source = path;
+            WebContent.Source = path;
         }
 
         void BackClicked(object sender, EventArgs e)
         {
-            WebView.GoBack();
+            WebContent.GoBack();
         }
 
         void ForwardClicked(object sender, EventArgs e)
         {
-            WebView.GoForward();
+            WebContent.GoForward();
         }
     }
 }

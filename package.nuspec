@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Xam.Plugin.WebView</id>
+    <id>Xam.Plugin.WebView.WebView</id>
     <version>1.8.0</version>
     <title>WebView Plugin for Xamarin Forms</title>
     <authors>Ryan Dixon</authors>

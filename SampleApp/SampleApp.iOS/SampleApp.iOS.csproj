@@ -157,13 +157,13 @@
       <Project>{740d15ef-4c44-4ead-8929-6060185742a2}</Project>
       <Name>SampleApp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xam.Plugin.Abstractions\Xam.Plugin.Abstractions.csproj">
+    <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
       <Project>{F690DD01-F04C-498B-B574-B870C8A7702C}</Project>
-      <Name>Xam.Plugin.Abstractions</Name>
+      <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xam.Plugin.iOS\Xam.Plugin.iOS.csproj">
+    <ProjectReference Include="..\..\Xam.Plugin.WebView.iOS\Xam.Plugin.WebView.iOS.csproj">
       <Project>{F6331DD7-E1D3-4650-8D9B-36CA729C2B4B}</Project>
-      <Name>Xam.Plugin.iOS</Name>
+      <Name>Xam.Plugin.WebView.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

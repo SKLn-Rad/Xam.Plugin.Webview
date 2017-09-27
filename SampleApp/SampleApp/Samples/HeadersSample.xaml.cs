@@ -1,5 +1,5 @@
 ﻿using System;
-using Xam.Plugin.Abstractions;
+using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,8 +15,8 @@ namespace SampleApp.Samples
             if (!FormsWebView.GlobalRegisteredHeaders.ContainsKey("default-Global"))
                 FormsWebView.GlobalRegisteredHeaders.Add("default-Global", "default");
 
-            if (!WebView.LocalRegisteredHeaders.ContainsKey("default-Local"))
-                WebView.LocalRegisteredHeaders.Add("default-Local", "default");
+            if (!WebContent.LocalRegisteredHeaders.ContainsKey("default-Local"))
+                WebContent.LocalRegisteredHeaders.Add("default-Local", "default");
         }
 
         void OnGlobalAdd(object sender, EventArgs e)
@@ -37,7 +37,7 @@ namespace SampleApp.Samples
             var localValue = LocalValue.Text;
 
             if (string.IsNullOrWhiteSpace(localKey) || string.IsNullOrWhiteSpace(localValue)) return;
-            WebView.LocalRegisteredHeaders.Add(localKey, localValue);
+            WebContent.LocalRegisteredHeaders.Add(localKey, localValue);
 
             LocalKey.Text = "";
             LocalValue.Text = "";
@@ -45,7 +45,7 @@ namespace SampleApp.Samples
 
         void OnReloadClicked(object sender, EventArgs e)
         {
-            WebView.Refresh();
+            WebContent.Refresh();
         }
     }
 }

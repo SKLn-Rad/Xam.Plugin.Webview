@@ -91,7 +91,7 @@ namespace SampleApp.Samples
             public event PropertyChangedEventHandler PropertyChanged;
         }
 
-        private void FormsWebView_OnNavigationStarted(object sender, Xam.Plugin.Abstractions.Delegates.DecisionHandlerDelegate e)
+        private void FormsWebView_OnNavigationStarted(object sender, Xam.Plugin.WebView.Abstractions.Delegates.DecisionHandlerDelegate e)
         {
             System.Diagnostics.Debug.WriteLine("Navigation has started");
             System.Diagnostics.Debug.WriteLine($"Will cancel: {ViewModel.IsCancelled}");

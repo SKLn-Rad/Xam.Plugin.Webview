@@ -136,13 +136,13 @@
     <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xam.Plugin.Abstractions\Xam.Plugin.Abstractions.csproj">
+    <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
       <Project>{f690dd01-f04c-498b-b574-b870c8a7702c}</Project>
-      <Name>Xam.Plugin.Abstractions</Name>
+      <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xam.Plugin.Droid\Xam.Plugin.Droid.csproj">
+    <ProjectReference Include="..\..\Xam.Plugin.WebView.Droid\Xam.Plugin.WebView.Droid.csproj">
       <Project>{a4818671-56ab-449f-9bb0-8931c8f5daf7}</Project>
-      <Name>Xam.Plugin.Droid</Name>
+      <Name>Xam.Plugin.WebView.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\SampleApp\SampleApp.csproj">
       <Project>{740d15ef-4c44-4ead-8929-6060185742a2}</Project>

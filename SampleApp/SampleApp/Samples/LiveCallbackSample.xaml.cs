@@ -19,12 +19,12 @@ namespace SampleApp.Samples
 
         void AddCallback(object sender, EventArgs e)
         {
-            WebView.AddLocalCallback("localCallback", HandleCallback);
+            WebContent.AddLocalCallback("localCallback", HandleCallback);
         }
 
         void CallCallback(object sender, EventArgs e)
         {
-            WebView.InjectJavascriptAsync("localCallback('Hello World');").ConfigureAwait(false);
+            WebContent.InjectJavascriptAsync("localCallback('Hello World');").ConfigureAwait(false);
         }
 
         void HandleCallback(string obj)

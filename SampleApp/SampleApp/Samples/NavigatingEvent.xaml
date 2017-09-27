@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:fwv="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
+             xmlns:fwv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Navigating Event"
              x:Class="SampleApp.Samples.NavigatingEvent">
@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <fwv:FormsWebView x:Name="WebView" Grid.Row="0" Grid.Column="0" Source="{Binding Uri}" />
+        <fwv:FormsWebView x:Name="WebContent" Grid.Row="0" Grid.Column="0" Source="{Binding Uri}" />
         <Button HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Text="Reload" Grid.Row="1" Grid.Column="0" Command="{Binding ReloadCommand}" />
 
         <BoxView x:Name="Box" IsVisible="{Binding Source={x:Reference WebView}, Path=Navigating}" BackgroundColor="#2f2f2f"

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xam.Plugin.Abstractions;
+using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,13 +16,13 @@ namespace SampleApp.Samples
 		{
 			InitializeComponent ();
 
-            WebView.Source = "<!doctype html><html><head></head><body><h1>String Data Example</h1></body></html>";
+            WebContent.Source = "<!doctype html><html><head></head><body><h1>String Data Example</h1></body></html>";
             InjectionText.Text = "document.body.style.backgroundColor = \"red\";";
             GlobalText.Text = "globalCallback('Hello from Javascript!');";
             LocalText.Text = "localCallback('Hello from Javascript!');";
 
             FormsWebView.AddGlobalCallback("globalCallback", GlobalCallback);
-            WebView.AddLocalCallback("localCallback", LocalCallback);
+            WebContent.AddLocalCallback("localCallback", LocalCallback);
         }
 
         void GlobalCallback(string obj)
@@ -38,7 +38,7 @@ namespace SampleApp.Samples
         async void OnInjectionClicked(object sender, EventArgs e)
         {
             var text = InjectionText.Text;
-            var response = await WebView.InjectJavascriptAsync(text);
+            var response = await WebContent.InjectJavascriptAsync(text);
 
             System.Diagnostics.Debug.WriteLine($"Got javascript response: {response}");
         }
@@ -46,13 +46,13 @@ namespace SampleApp.Samples
         void GlobalCallbackClicked(object sender, EventArgs e)
         {
             var text = GlobalText.Text;
-            WebView.InjectJavascriptAsync(text).ConfigureAwait(false);
+            WebContent.InjectJavascriptAsync(text).ConfigureAwait(false);
         }
 
         void LocalCallbackClicked(object sender, EventArgs e)
         {
             var text = LocalText.Text;
-            WebView.InjectJavascriptAsync(text).ConfigureAwait(false);
+            WebContent.InjectJavascriptAsync(text).ConfigureAwait(false);
         }
     }
 }

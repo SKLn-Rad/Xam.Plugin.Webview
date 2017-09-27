@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:webview="clr-namespace:Xam.Plugin.Abstractions;assembly=Xam.Plugin.Abstractions"
+             xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
              Title="Source Swap Sample"
              x:Class="SampleApp.Samples.SourceSwapSample">
 
@@ -15,7 +15,7 @@
             <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
 
-        <webview:FormsWebView x:Name="WebView" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+        <webview:FormsWebView x:Name="WebContent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                               ContentType="Internet" Source="{Binding Uri}" />
 
         <Entry x:Name="EntryField" Text="https://www.google.co.uk" Grid.Row="1" Grid.Column="0" />

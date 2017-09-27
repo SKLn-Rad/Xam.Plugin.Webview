@@ -1,8 +1,8 @@
 ﻿using System;
 using AppKit;
 using Foundation;
-using Xam.Plugin.Abstractions;
-using Xam.Plugin.MacOS;
+using Xam.Plugin.WebView.Abstractions;
+using Xam.Plugin.WebView.MacOS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 
@@ -18,7 +18,7 @@ namespace SampleApp.MacOS
 
             var rect = new CoreGraphics.CGRect(200, 1000, 1024, 768);
             _window = new NSWindow(rect, style, NSBackingStore.Buffered, false);
-            _window.Title = "Xam.Plugin.FormsWebView";
+            _window.Title = "Xam.Plugin.WebView.FormsWebView";
             _window.TitleVisibility = NSWindowTitleVisibility.Visible;
         }
 

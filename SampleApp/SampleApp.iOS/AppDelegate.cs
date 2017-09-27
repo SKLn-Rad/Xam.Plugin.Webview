@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using WebKit;
-using Xam.Plugin.iOS;
+using Xam.Plugin.WebView.iOS;
 
 namespace SampleApp.iOS
 {

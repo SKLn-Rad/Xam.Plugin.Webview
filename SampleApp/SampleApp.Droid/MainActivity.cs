@@ -6,7 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using Xam.Plugin.Droid;
+using Xam.Plugin.WebView.Droid;
 
 namespace SampleApp.Droid
 {
@@ -20,7 +20,7 @@ namespace SampleApp.Droid
 
             base.OnCreate(bundle);
 
-            FormsWebViewRenderer.Init();
+            FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
