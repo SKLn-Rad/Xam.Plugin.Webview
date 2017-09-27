@@ -1,6 +1,8 @@
 ﻿using System;
 using AppKit;
 using Foundation;
+using Xam.Plugin.Abstractions;
+using Xam.Plugin.MacOS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 
@@ -24,6 +26,7 @@ namespace SampleApp.MacOS
 
         public override void DidFinishLaunching(NSNotification notification)
         {
+            FormsWebViewRenderer.Initialize();
             Forms.Init();
             LoadApplication(new App());
             base.DidFinishLaunching(notification);

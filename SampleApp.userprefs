@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
   <MonoDevelop.Ide.ItemProperties.SampleApp.Droid PreferredExecutionTarget="Android.Android_Accelerated_x86" />
   <MonoDevelop.Ide.ItemProperties.SampleApp.MacOS PreferredExecutionTarget="Test1" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp/MainPage.xaml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp.iOS/Info.plist">
     <Files>
-      <File FileName="SampleApp/SampleApp.MacOS/AppDelegate.cs" Line="27" Column="26" />
-      <File FileName="SampleApp/SampleApp/MainPage.xaml" Line="23" Column="15" />
+      <File FileName="SampleApp/SampleApp.MacOS/Info.plist" />
+      <File FileName="SampleApp/SampleApp.iOS/Info.plist" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

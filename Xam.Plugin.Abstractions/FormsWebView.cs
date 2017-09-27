@@ -8,9 +8,10 @@ using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Models;
 using Xamarin.Forms;
 
-[assembly:InternalsVisibleTo("Xam.Plugin.UWP")]
+[assembly: InternalsVisibleTo("Xam.Plugin.UWP")]
 [assembly: InternalsVisibleTo("Xam.Plugin.Droid")]
 [assembly: InternalsVisibleTo("Xam.Plugin.iOS")]
+[assembly: InternalsVisibleTo("Xam.Plugin.MacOS")]
 namespace Xam.Plugin.Abstractions
 {
     public partial class FormsWebView : View, IFormsWebView, IDisposable
