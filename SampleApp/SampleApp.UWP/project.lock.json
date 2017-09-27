@@ -2407,7 +2407,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -2415,6 +2427,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -4880,7 +4893,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -4888,6 +4913,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -7389,7 +7415,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -7397,6 +7435,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -9871,7 +9910,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -9879,6 +9930,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -12389,7 +12441,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -12397,6 +12461,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -14871,7 +14936,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -14879,6 +14956,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -17389,7 +17467,19 @@
         }
       },
       "SampleApp/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "dependencies": {
+          "Xam.Plugin.WebView.Abstractions": "1.0.0"
+        }
+      },
+      "Xam.Plugin.WebView.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3",
+          "Xamarin.Forms": "2.4.0.269-pre2"
+        }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
         "type": "project",
@@ -17397,6 +17487,7 @@
         "dependencies": {
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
+          "Xam.Plugin.WebView.Abstractions": "1.0.0",
           "Xamarin.Forms": "2.4.0.269-pre2"
         }
       }
@@ -24192,6 +24283,11 @@
       "path": "../SampleApp/SampleApp.csproj",
       "msbuildProject": "../SampleApp/SampleApp.csproj"
     },
+    "Xam.Plugin.WebView.Abstractions/1.0.0": {
+      "type": "project",
+      "path": "../../Xam.Plugin.WebView.Abstractions/Xam.Plugin.WebView.Abstractions.csproj",
+      "msbuildProject": "../../Xam.Plugin.WebView.Abstractions/Xam.Plugin.WebView.Abstractions.csproj"
+    },
     "Xam.Plugin.WebView.UWP/1.0.0": {
       "type": "project",
       "path": "../../Xam.Plugin.WebView.UWP/Xam.Plugin.WebView.UWP.csproj",
@@ -24231,6 +24327,9 @@
       "frameworks": {
         "uap10.0.14393": {
           "projectReferences": {
+            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj": {
+              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj"
+            },
             "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj": {
               "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj"
             },

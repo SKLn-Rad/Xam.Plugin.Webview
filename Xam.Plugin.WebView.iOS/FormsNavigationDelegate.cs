@@ -59,8 +59,9 @@ namespace Xam.Plugin.WebView.iOS
             renderer.Element.HandleNavigationCompleted();
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
-            foreach (var function in FormsWebView.GlobalRegisteredCallbacks)
-				await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
+            if (renderer.Element.EnableGlobalCallbacks)
+                foreach (var function in FormsWebView.GlobalRegisteredCallbacks)
+    				await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
 
             foreach (var function in renderer.Element.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));

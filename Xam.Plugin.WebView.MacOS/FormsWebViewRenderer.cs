@@ -90,8 +90,10 @@ namespace Xam.Plugin.WebView.MacOS
 
 		async void OnCallbackAdded(object sender, string e)
 		{
-			if (string.IsNullOrWhiteSpace(e)) return;
-			await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
+			if (Element == null || string.IsNullOrWhiteSpace(e)) return;
+
+            if (Element.EnableGlobalCallbacks)
+			    await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
 		}
 
 		void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -162,12 +164,23 @@ namespace Xam.Plugin.WebView.MacOS
 
 			var headers = new NSMutableDictionary();
 
-			foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-				headers.Add(new NSString(header.Key), new NSString(header.Value));
+            foreach (var header in Element.LocalRegisteredHeaders)
+            {
+                var key = new NSString(header.Key);
+                if (!headers.ContainsKey(key))
+                    headers.Add(key, new NSString(header.Value));
+            }
 
-			foreach (var header in Element.LocalRegisteredHeaders)
-				headers.Add(new NSString(header.Key), new NSString(header.Value));
-
+            if (Element.EnableGlobalHeaders)
+            {
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+                {
+                    var key = new NSString(header.Key);
+                    if (!headers.ContainsKey(key))
+                        headers.Add(key, new NSString(header.Value));
+                }
+            }
+            
 			var url = new NSUrl(Element.Source);
 			var request = new NSMutableUrlRequest(url)
 			{

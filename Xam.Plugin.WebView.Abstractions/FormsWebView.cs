@@ -17,52 +17,91 @@ namespace Xam.Plugin.WebView.Abstractions
     public partial class FormsWebView : View, IFormsWebView, IDisposable
     {
 
+        /// <summary>
+        /// A delegate which takes valid javascript and returns the response from it, if the response is a string.
+        /// </summary>
+        /// <param name="js">The valid JS to inject</param>
+        /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
         
+        /// <summary>
+        /// Fired when navigation begins, for example when the source is set.
+        /// </summary>
         public event EventHandler<DecisionHandlerDelegate> OnNavigationStarted;
 
+        /// <summary>
+        /// Fires when navigation is completed. This can be either as the result of a valid navigation, or on an error.
+        /// </summary>
         public event EventHandler OnNavigationCompleted;
 
+        /// <summary>
+        /// Fires when navigation fires an error. By default this uses the native systems error codes.
+        /// </summary>
         public event EventHandler<int> OnNavigationError;
 
+        /// <summary>
+        /// Fires when the content on the DOM is ready. All your calls to Javascript using C# should be performed after this is fired.
+        /// </summary>
         public event EventHandler OnContentLoaded;
 
-        public event EventHandler OnBackRequested;
+        internal event EventHandler OnBackRequested;
 
-        public event EventHandler OnForwardRequested;
+        internal event EventHandler OnForwardRequested;
 
-        public event EventHandler OnRefreshRequested;
+        internal event EventHandler OnRefreshRequested;
 
         internal event JavascriptInjectionRequestDelegate OnJavascriptInjectionRequest;
 
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
 
+        /// <summary>
+        /// A dictionary containing all headers to be injected into the request. Local headers take precedence over global ones.
+        /// </summary>
         public readonly Dictionary<string, string> LocalRegisteredHeaders = new Dictionary<string, string>();
 
+        /// <summary>
+        /// The content type to attempt to load. By default this is Internet.
+        /// </summary>
         public WebViewContentType ContentType
         {
             get => (WebViewContentType)GetValue(ContentTypeProperty);
             set => SetValue(ContentTypeProperty, value);
         }
 
+        /// <summary>
+        /// The source data. This can either be a valid URL, a path to a local file, or a HTML string.
+        /// </summary>
         public string Source
         {
             get => (string) GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
         }
 
+        /// <summary>
+        /// Override the BaseURL in the renderer with this property.
+        /// By default, the BaseUrls are the following:
+        /// Android) Assets folder with AndroidAsset build property
+        /// iOS and MacOS) Resources folder with BundleResource build property
+        /// UWP) Project folder with content build property
+        /// </summary>
         public string BaseUrl
         {
             get { return (string)GetValue(BaseUrlProperty); }
             set { SetValue(BaseUrlProperty, value); }
         }
 
+        /// <summary>
+        /// Opt in and out of global callbacks
+        /// </summary>
         public bool EnableGlobalCallbacks
         {
             get => (bool) GetValue(EnableGlobalCallbacksProperty);
             set => SetValue(EnableGlobalCallbacksProperty, value);
         }
 
+        /// <summary>
+        /// Opt in and out of global headers
+        /// </summary>
         public bool EnableGlobalHeaders
         {
             get => (bool) GetValue(EnableGlobalHeadersProperty);

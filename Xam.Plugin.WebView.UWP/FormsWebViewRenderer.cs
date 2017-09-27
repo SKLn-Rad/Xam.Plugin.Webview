@@ -138,8 +138,9 @@ namespace Xam.Plugin.WebView.UWP
             await Control.InvokeScriptAsync("eval", new[] { FormsWebView.InjectedFunction });
 
             // Add Global Callbacks
-            foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
-                await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(callback.Key) });
+            if (Element.EnableGlobalCallbacks)
+                foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+                    await Control.InvokeScriptAsync("eval", new[] { FormsWebView.GenerateFunctionScript(callback.Key) });
 
             // Add Local Callbacks
             foreach (var callback in Element.LocalRegisteredCallbacks)
@@ -150,8 +151,10 @@ namespace Xam.Plugin.WebView.UWP
 
         async void OnCallbackAdded(object sender, string e)
         {
-            if (string.IsNullOrWhiteSpace(e)) return;
-            await OnJavascriptInjectionRequestAsync(FormsWebView.GenerateFunctionScript(e));
+            if (Element == null || string.IsNullOrWhiteSpace(e)) return;
+
+            if (Element.EnableGlobalCallbacks)
+                await OnJavascriptInjectionRequestAsync(FormsWebView.GenerateFunctionScript(e));
         }
 
         void OnScriptNotify(object sender, NotifyEventArgs e)
@@ -199,10 +202,13 @@ namespace Xam.Plugin.WebView.UWP
             }
 
             // Add Global Headers
-            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+            if (Element.EnableGlobalHeaders)
             {
-                if (!requestMsg.Headers.ContainsKey(header.Key))
-                    requestMsg.Headers.Add(header.Key, header.Value);
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+                {
+                    if (!requestMsg.Headers.ContainsKey(header.Key))
+                        requestMsg.Headers.Add(header.Key, header.Value);
+                }
             }
 
             // Navigate
