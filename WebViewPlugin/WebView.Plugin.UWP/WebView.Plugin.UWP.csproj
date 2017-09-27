@@ -121,7 +121,7 @@
       <Version>9.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>2.3.4.247</Version>
+      <Version>2.4.0.269-pre2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\WebView.Plugin.Shared\WebView.Plugin.Shared.projitems" Label="Shared" />
