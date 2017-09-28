@@ -24,6 +24,7 @@ namespace Xam.Plugin.WebView.Droid
             if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationError(errorResponse.StatusCode);
+            renderer.Element.HandleNavigationCompleted();
             renderer.Element.Navigating = false;
         }
 
@@ -33,6 +34,7 @@ namespace Xam.Plugin.WebView.Droid
             if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationError((int) error.ErrorCode);
+            renderer.Element.HandleNavigationCompleted();
             renderer.Element.Navigating = false;
         }
 
@@ -87,7 +89,9 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.CanGoBack = view.CanGoBack();
             renderer.Element.CanGoForward = view.CanGoForward();
             renderer.Element.Navigating = false;
+
             renderer.Element.HandleNavigationCompleted();
+            renderer.Element.HandleContentLoaded();
         }
     }
 }
