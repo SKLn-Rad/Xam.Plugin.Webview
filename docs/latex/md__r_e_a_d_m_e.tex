@@ -1,0 +1,187 @@
+/// Please call this before Forms is initialized to make sure assemblies link properly. /// Make sure to perform this step on each platform. /// 
+
+Lightweight cross platform Web\+View designed to leverage the native Web\+View components in Android, i\+OS, and Windows to provide enhanced functionality over the base control.
+
+\href{https://forums.xamarin.com/discussion/87935/new-simple-webview-plugin-for-forms}{\tt Xamarin Forums Link}
+
+\subsubsection*{This is a work in development}
+
+This Web\+View is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! Pay\+Pal\+: \href{mailto:ryandixon1993@gmail.com}{\tt ryandixon1993@gmail.\+com}
+
+\subsection*{New in 1.\+7.$\ast$}
+
+\subsubsection*{Request Headers}
+
+Headers can now be sent up as part of the H\+T\+TP request. To add a header, simple add them to the Request\+Headers dictionary property on the Forms\+Web\+View object. 
+\begin{DoxyCode}
+\{c#\}
+var fwv = new FormsWebView();
+fwv.RequestHeaders.Add("Key", "Value");
+\end{DoxyCode}
+
+
+\subsection*{Why I made this?}
+
+Hybrid Web\+Views are common across many applications these days with many different implementations available on the Web. Unfortunately for Xamarin, generally the only common Hybrid\+Web\+View is included as part of the X\+Labs toolset which gives the user the extra bloat of the additional components, as well as the problems associated with setting up this framework.
+
+{\bfseries Forms Web\+View} is designed to be a lightweight alternative with only minor configuration needed to be performed by the developer before giving them access to a denser A\+PI allowing them more flexibility in creating hybrid applications in the Xamarin platform.
+
+\subsection*{Setup}
+
+
+\begin{DoxyItemize}
+\item Nu\+G\+ET package available here\+: \href{https://www.nuget.org/packages/Xam.Plugin.WebView.WebView}{\tt https\+://www.\+nuget.\+org/packages/\+Xam.\+Plugin.\+Web\+View.\+Web\+View}
+\item Install into both your P\+CL and Platform projects
+\item On Android, include the Android.\+Mono.\+Export reference for the Javascript Interface
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+\{c#\}
+///
+FormsWebViewRenderer.Init();
+Xamarin.Forms.Forms.Init(e);
+\end{DoxyCode}
+
+
+\subsection*{Build Status}
+
+
+\begin{DoxyItemize}
+\item Jenkins build history can be found here\+: T\+BA
+\end{DoxyItemize}
+
+\subsection*{Platform Support}
+
+{\itshape Please note\+: I have only put in platforms I have tested myself.}
+\begin{DoxyItemize}
+\item Xamarin.\+i\+OS \+: i\+OS 9 +
+\item Xamarin.\+Droid \+: A\+PI 17 +
+\item Windows Phone/\+Store RT \+: 8.\+1 +
+\item Windows U\+WP \+: 10 +
+\item Xamarin Forms \+: 2.\+3.\+3.\+180
+\end{DoxyItemize}
+
+\subsubsection*{Known Limitations}
+
+
+\begin{DoxyItemize}
+\item Android A\+PI level 22 and below will not be able to report H\+T\+T\+P\+Errors correctly. This is down to the lack of A\+PI support from Google up until this release. If you need a way around this, you can add in a hack using System.\+Web during the On\+Navigation\+Request.
+\end{DoxyItemize}
+
+\subsection*{A\+PI Usage}
+
+\#\#\# New! 
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// Bind an action to a Javascript function
+/// </summary>
+FormsWebView WebView = new FormsWebView();
+WebView.RegisterCallback("test", (str) => Debug.WriteLine(str));
+WebView.RemoveCallback("test");
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// Initialize the WebView, Navigation will occur when the Source is changed so make sure to set the
+       BaseUrl and ContentType prior.
+/// </summary>
+FormsWebView WebView = new FormsWebView() \{
+    ContentType = WebContentType.Internet,
+    Source = "http://www.somewebsite.com"
+\}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// If you wish to further modify the native control, then you can bind to these events in your platform
+       specific code.
+/// These events will be called when the control is preparing and ready.
+/// </summary>
+FormsWebViewRenderer.OnControlChanging += ModifyControlBeforeReady;
+FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// Attach events using a instance of the WebView.
+/// </summary>
+WebView.OnNavigationStarted += OnNavigationStarted;
+WebView.OnNavigationCompleted += OnNavigationComplete;
+WebView.OnContentLoaded += OnContentLoaded;
+WebView.OnJavascriptResponse += OnJavascriptResponse;
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// You can cancel a URL from being loaded by returning a delegate with the cancel boolean set to true.
+/// </summary>
+private NavigationRequestedDelegate OnNavigationStarted(NavigationRequestedDelegate eventObj)
+\{
+    if (eventObj.Source == "www.somebadwebsite.com")
+        eventObj.Cancel = true;
+    return eventObj;
+\}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+\{c#\}
+/// <summary>
+/// To return a string to c#, simple invoke the csharp(str) method.
+/// </summary>
+private void OnNavigationComplete(NavigationCompletedDelegate eventObj)
+\{
+    System.Diagnostics.Debug.WriteLine(string.Format("Load Complete: \{0\}", eventObj.Sender.Source));
+\}
+
+/// <summary>
+/// RUN ALL JAVASCRIPT HERE
+/// </summary>
+private void OnContentLoaded(ContentLoadedDelegate eventObj)
+\{
+    System.Diagnostics.Debug.WriteLine(string.Format("DOM Ready: \{0\}", eventObj.Sender.Source));
+    eventObj.Sender.InjectJavascript("csharp('Testing');");
+\}
+\end{DoxyCode}
+
+
+{\bfseries Local File Locations} To modify the file locations, change the Base\+Url in each platforms renderer
+\begin{DoxyItemize}
+\item {\bfseries i\+OS}\+: Resources Folder as a bundle resource
+\item {\bfseries Android}\+: Assets folder as an Android Asset
+\item {\bfseries Windows}\+: Root folder as content
+\end{DoxyItemize}
+
+\subsection*{Feature Requests}
+
+DM me on Linked\+In\+: \href{http://linkedin.radsrc.com}{\tt http\+://linkedin.\+radsrc.\+com}
+
+\subsection*{Notes}
+
+{\bfseries For i\+OS 9 onwards, if you wish to access unsecure sites you may need to configure or disable A\+TS} 
+\begin{DoxyCode}
+<key>NSAppTransportSecurity</key>
+<dict>
+<key>NSAllowsArbitraryLoads</key><true/>
+</dict>
+\end{DoxyCode}
+
+
+{\bfseries For Android make sure to add the \char`\"{}\+Internet\char`\"{} property to your manifest.}
+
+{\bfseries For Windows make sure to add the websites to your appxmanifest Content\+Uris to allow JS invoking.} 

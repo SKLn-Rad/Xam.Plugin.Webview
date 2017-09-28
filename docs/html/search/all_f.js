@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['droid',['Droid',['../namespace_sample_app_1_1_droid.html',1,'SampleApp']]],
+  ['ios',['iOS',['../namespace_sample_app_1_1i_o_s.html',1,'SampleApp']]],
+  ['macos',['MacOS',['../namespace_sample_app_1_1_mac_o_s.html',1,'SampleApp']]],
+  ['models',['Models',['../namespace_sample_app_1_1_models.html',1,'SampleApp']]],
+  ['sampleapp',['SampleApp',['../namespace_sample_app.html',1,'']]],
+  ['samples',['Samples',['../namespace_sample_app_1_1_samples.html',1,'SampleApp']]],
+  ['selectionitem',['SelectionItem',['../class_sample_app_1_1_models_1_1_selection_item.html',1,'SampleApp::Models']]],
+  ['source',['Source',['../class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view.html#a67fca633a4ffb71e594925ba81250c6b',1,'Xam::Plugin::WebView::Abstractions::FormsWebView']]],
+  ['sourceproperty',['SourceProperty',['../class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view.html#a5b560fec025fb9b9a1c7ebd638cfceac',1,'Xam::Plugin::WebView::Abstractions::FormsWebView']]],
+  ['sourceswapsample',['SourceSwapSample',['../class_sample_app_1_1_samples_1_1_source_swap_sample.html',1,'SampleApp::Samples']]],
+  ['sourceswapviewmodel',['SourceSwapViewModel',['../class_sample_app_1_1_samples_1_1_source_swap_sample_1_1_source_swap_view_model.html',1,'SampleApp::Samples::SourceSwapSample']]],
+  ['string',['String',['../class_sample_app_1_1_droid_1_1_resource_1_1_string.html',1,'SampleApp::Droid::Resource']]],
+  ['stringdatasample',['StringDataSample',['../class_sample_app_1_1_samples_1_1_string_data_sample.html',1,'SampleApp::Samples']]],
+  ['style',['Style',['../class_sample_app_1_1_droid_1_1_resource_1_1_style.html',1,'SampleApp::Droid::Resource']]],
+  ['styleable',['Styleable',['../class_sample_app_1_1_droid_1_1_resource_1_1_styleable.html',1,'SampleApp::Droid::Resource']]],
+  ['uwp',['UWP',['../namespace_sample_app_1_1_u_w_p.html',1,'SampleApp']]]
+];

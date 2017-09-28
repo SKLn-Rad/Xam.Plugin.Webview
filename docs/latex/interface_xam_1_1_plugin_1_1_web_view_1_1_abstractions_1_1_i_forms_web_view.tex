@@ -1,0 +1,79 @@
+\hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{}\section{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View Interface Reference}
+\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}\index{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View@{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}}
+Inheritance diagram for Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a652454d1cd6f4db48849c54994eb8808}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a652454d1cd6f4db48849c54994eb8808}} 
+void {\bfseries Go\+Back} ()
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a5c324187f3087f82ce022def209e8e34}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a5c324187f3087f82ce022def209e8e34}} 
+void {\bfseries Go\+Forward} ()
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ab2687c47c9440d3bc9dc8bcf2048ce65}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ab2687c47c9440d3bc9dc8bcf2048ce65}} 
+void {\bfseries Refresh} ()
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a6ba56c6c8d043cc77a0251624258bb0e}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a6ba56c6c8d043cc77a0251624258bb0e}} 
+Task$<$ string $>$ {\bfseries Inject\+Javascript\+Async} (string js)
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_afeb9d2f2750336645be09a5cb338a14e}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_afeb9d2f2750336645be09a5cb338a14e}} 
+void {\bfseries Add\+Local\+Callback} (string function\+Name, Action$<$ string $>$ action)
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_aca5e9da2fdba46ddbf604a817e7d6b25}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_aca5e9da2fdba46ddbf604a817e7d6b25}} 
+void {\bfseries Remove\+Local\+Callback} (string function\+Name)
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_af595176c129fbe8269e1dae447249ebf}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_af595176c129fbe8269e1dae447249ebf}} 
+void {\bfseries Remove\+All\+Local\+Callbacks} ()
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a5f8fdb84e8b5144dadf2f04eedcf6da1}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a5f8fdb84e8b5144dadf2f04eedcf6da1}} 
+Web\+View\+Content\+Type {\bfseries Content\+Type}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ab9ec107a7fca447c64da24241fdcfd09}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ab9ec107a7fca447c64da24241fdcfd09}} 
+string {\bfseries Source}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ad31eda2e7e42fd9110a32873aa941590}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ad31eda2e7e42fd9110a32873aa941590}} 
+string {\bfseries Base\+Url}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a431ed42f814bed6df4a12e96564dfce3}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a431ed42f814bed6df4a12e96564dfce3}} 
+bool {\bfseries Enable\+Global\+Callbacks}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a54ec310bbf6db61168308b0463501c14}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a54ec310bbf6db61168308b0463501c14}} 
+bool {\bfseries Enable\+Global\+Headers}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a9e05c8d84fc03cf630cdaf71dc9dec80}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a9e05c8d84fc03cf630cdaf71dc9dec80}} 
+bool {\bfseries Navigating}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a6189ad707789cb0eb2ff838b939c2c0d}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a6189ad707789cb0eb2ff838b939c2c0d}} 
+bool {\bfseries Can\+Go\+Back}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_afb0f73e90962e66edd999a222a0ee62c}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_afb0f73e90962e66edd999a222a0ee62c}} 
+bool {\bfseries Can\+Go\+Forward}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\subsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_aae722771350cc9dab5fd12e017a3635e}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_aae722771350cc9dab5fd12e017a3635e}} 
+Event\+Handler$<$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_delegates_1_1_decision_handler_delegate}{Decision\+Handler\+Delegate} $>$ {\bfseries On\+Navigation\+Started}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a718e2180e518f76b322b74b8d042a3ad}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a718e2180e518f76b322b74b8d042a3ad}} 
+Event\+Handler {\bfseries On\+Navigation\+Completed}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ae2ee500d8ac31ef5acce2ccfc114aa62}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_ae2ee500d8ac31ef5acce2ccfc114aa62}} 
+Event\+Handler$<$ int $>$ {\bfseries On\+Navigation\+Error}
+\item 
+\mbox{\Hypertarget{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a7171fd59f3037aa4371ea96f38c09a42}\label{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view_a7171fd59f3037aa4371ea96f38c09a42}} 
+Event\+Handler {\bfseries On\+Content\+Loaded}
+\end{DoxyCompactItemize}
+
+
+The documentation for this interface was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Xam.\+Plugin.\+Web\+View.\+Abstractions/I\+Forms\+Web\+View.\+cs\end{DoxyCompactItemize}
