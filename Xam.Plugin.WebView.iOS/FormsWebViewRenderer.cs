@@ -120,7 +120,7 @@ namespace Xam.Plugin.WebView.iOS
 
         void SetSource()
         {
-            if (Element == null || Control == null) return;
+            if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
 
             switch (Element.ContentType) {
                 case WebViewContentType.Internet:

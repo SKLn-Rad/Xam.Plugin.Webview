@@ -150,6 +150,13 @@ namespace SampleApp
                 Title = "Navigation Page (Wipe)",
                 Detail = "Test forward navigation wiping the last view in the stack"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 18,
+                Title = "Null source",
+                Detail = "Test setting the source to null does not result in a crash"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -228,6 +235,10 @@ namespace SampleApp
 
                 case 17:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationPageWipe());
+                    break;
+
+                case 18:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NullSourceSample());
                     break;
 
                 default:
