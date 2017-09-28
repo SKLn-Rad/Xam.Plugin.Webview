@@ -87,6 +87,7 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.CanGoBack = view.CanGoBack();
             renderer.Element.CanGoForward = view.CanGoForward();
             renderer.Element.Navigating = false;
+            renderer.Element.HandleNavigationCompleted();
         }
     }
 }
