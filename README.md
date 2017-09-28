@@ -3,16 +3,34 @@ Lightweight cross platform WebView designed to leverage the native WebView compo
 
 [Xamarin Forums Link](https://forums.xamarin.com/discussion/87935/new-simple-webview-plugin-for-forms)
 
-### This is a work in development
-This WebView is the brain child of a need for a lightweight solution to supply in my own applications and is purely open source for you guys to use. If this helps you in anyway then please do support open source developers such as myself! PayPal: ryandixon1993@gmail.com
 
-## New in 1.7.*
-### Request Headers
-Headers can now be sent up as part of the HTTP request. To add a header, simple add them to the RequestHeaders dictionary property on the FormsWebView object.
-```c#
-var fwv = new FormsWebView();
-fwv.RequestHeaders.Add("Key", "Value");
-```
+## Version 2.0.0!
+Finally! in alignment with the MacOS and netstandard support in Xamarin.Forms, here is the new release of Xam.Plugins.WebView.
+Yes there are many changes, but all of these are designed to make less changes in the future with only stable from here on in.
+
+## Warning
+This build has many changes, please read migration before deciding to make the jump.
+
+### Whats new!
+1) netstandard support
+2) MacOS support
+3) Local and Global Headers
+4) Various fixes for bugs on the issue tracker
+5) The ability to evaluate Javascript directly without needing a callback
+6) Massively improved sample application, designed to help you with implementation
+
+### Migration
+1) WinRT (Desktop and Phone) are no longer supported! This is to align with Xamarin Forms.
+2) FormsWebViewRenderer.Init is now called FormsWebViewRenderer.Initialize. This is as not to hide a default property in the MacOS renderer.
+3) Headers now have to be applied globally or locally via GlobalRegisteredHeaders and LocalRegisteredHeaders. All previous calls will no longer work.
+4) OnNavigationRequest no longer requires a return response
+5) InjectJavascript is now called InjectJavascriptAsync as to allow the string response mentioned earlier
+6) The assembly name is now Xam.Plugin.WebView. This is to align with the namespaces in the plugin
+7) Callbacks are now added by calling AddLocalCallback and AddGlobalCallback
+8) OnControlChanging has been removed, OnControlChanged is still there. This will be called after the renderer has finished setting up the plugin.
+9) OnJavascriptResponse has been removed as it was no longer needed with the callbacks and string response.
+
+Anything I forgot? Let me know in the issues!
 
 ## Why I made this?
 Hybrid WebViews are common across many applications these days with many different implementations available on the Web.
@@ -31,7 +49,7 @@ Unfortunately for Xamarin, generally the only common HybridWebView is included a
 /// Please call this before Forms is initialized to make sure assemblies link properly.
 /// Make sure to perform this step on each platform.
 /// </summary>
-FormsWebViewRenderer.Init();
+FormsWebViewRenderer.Initialize();
 Xamarin.Forms.Forms.Init(e);
 ```
 
@@ -42,10 +60,9 @@ Xamarin.Forms.Forms.Init(e);
 ## Platform Support
 *Please note: I have only put in platforms I have tested myself.*
 * Xamarin.iOS : iOS 9 +
+* Xamarin.MacOS : All
 * Xamarin.Droid : API 17 +
-* Windows Phone/Store RT : 8.1 +
 * Windows UWP : 10 +
-* Xamarin Forms : 2.3.3.180
 
 ### Known Limitations
 * Android API level 22 and below will not be able to report HTTPErrors correctly. This is down to the lack of API support from Google up until this release. If you need a way around this, you can add in a hack using System.Web during the OnNavigationRequest.
@@ -57,8 +74,8 @@ Xamarin.Forms.Forms.Init(e);
 /// Bind an action to a Javascript function
 /// </summary>
 FormsWebView WebView = new FormsWebView();
-WebView.RegisterCallback("test", (str) => Debug.WriteLine(str));
-WebView.RemoveCallback("test");
+WebView.AddLocalCallback("test", (str) => Debug.WriteLine(str));
+WebView.RemoveLocalCallback("test");
 ```
 
 ```c#
@@ -76,7 +93,6 @@ FormsWebView WebView = new FormsWebView() {
 /// If you wish to further modify the native control, then you can bind to these events in your platform specific code.
 /// These events will be called when the control is preparing and ready.
 /// </summary>
-FormsWebViewRenderer.OnControlChanging += ModifyControlBeforeReady;
 FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
 ```
 
@@ -87,18 +103,16 @@ FormsWebViewRenderer.OnControlChanged += ModifyControlAfterReady;
 WebView.OnNavigationStarted += OnNavigationStarted;
 WebView.OnNavigationCompleted += OnNavigationComplete;
 WebView.OnContentLoaded += OnContentLoaded;
-WebView.OnJavascriptResponse += OnJavascriptResponse;
 ```
 
 ```c#
 /// <summary>
 /// You can cancel a URL from being loaded by returning a delegate with the cancel boolean set to true.
 /// </summary>
-private NavigationRequestedDelegate OnNavigationStarted(NavigationRequestedDelegate eventObj)
+private void OnNavigationStarted(NavigationRequestedDelegate eventObj)
 {
     if (eventObj.Source == "www.somebadwebsite.com")
         eventObj.Cancel = true;
-    return eventObj;
 }
 ```
 
@@ -127,13 +141,14 @@ To modify the file locations, change the BaseUrl in each platforms renderer
 * **iOS**: Resources Folder as a bundle resource
 * **Android**: Assets folder as an Android Asset
 * **Windows**: Root folder as content
+* **MacOS**: Resources Folder as a bundle resource
 
 
 ## Feature Requests
 DM me on LinkedIn: http://linkedin.radsrc.com
 
 ## Notes
-**For iOS 9 onwards, if you wish to access unsecure sites you may need to configure or disable ATS**
+**For iOS 9 onwards and MacOS, if you wish to access unsecure sites you may need to configure or disable ATS**
 ```
 <key>NSAppTransportSecurity</key>
 <dict>
