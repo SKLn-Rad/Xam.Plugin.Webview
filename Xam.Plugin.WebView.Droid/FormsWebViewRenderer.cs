@@ -94,8 +94,10 @@ namespace Xam.Plugin.WebView.Droid
 
         async void OnCallbackAdded(object sender, string e)
         {
-            if (string.IsNullOrWhiteSpace(e)) return;
-            await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
+            if (Element == null || string.IsNullOrWhiteSpace(e)) return;
+
+            if (sender != null || Element.EnableGlobalCallbacks)
+                await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
         }
 
         void OnForwardRequested(object sender, EventArgs e)
@@ -214,10 +216,13 @@ namespace Xam.Plugin.WebView.Droid
             }
 
             // Add Global Headers
-            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+            if (Element.EnableGlobalHeaders)
             {
-                if (!headers.ContainsKey(header.Key))
-                    headers.Add(header.Key, header.Value);
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+                {
+                    if (!headers.ContainsKey(header.Key))
+                        headers.Add(header.Key, header.Value);
+                }
             }
             
             Control.LoadUrl(Element.Source, headers);

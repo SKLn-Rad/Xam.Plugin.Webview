@@ -1,31 +1,34 @@
-1.3.0 Patch Notes:
+2.0.0 Patch Notes:
 
-I apologise for all the breaking changes. These changes were made with discussion with the community into making the plugin more friendly for people coming over from XLabs HWV.
-This patch is preparation for 1.4.0 which will include support for Razor templating.
+Hey everyone and thank you for trying my plugin!
+After a great amount of support for 1.*, I decided to fully revamp 2.0.0 from the ground up in order to maintain a more consistant API, with full support for netstandard and MacOS.
 
-BREAKING CHANGES:
---------------------------------------------------
+Yes there will be some breaking changes from 1.*.
+To make your life easier migrating, here is a list of some of them.
 
-All abstracted events now have the prefix of "On". Please change your NavigationStarted and NavigationCompleted methods to align with this.
-This will make it easier in the future for you to quickly highlight events added to FormsWebView.
+FormsWebViewRenderer:
+1) Init has been changed to Initialize(). This is as to not overlap with a method already in the new MacOS delegate.
+2) Android now has a static boolean called "IgnoreSSLErrors"; and as guessed by its name, setting this to true will cause the web client to ignore SSL errors.
 
-OnNavigationComplete has been changed to cohere to its actual meaning in UWP and Android.
-The OnNavigationComplete method will now be fired when the WebView starts loading the DOM whereas the new OnContentLoaded event will fire when the page has completed loading.
-For this reason, any Javascript calls MUST be made after the content has finished loading instead of previously when the OnNavigationComplete event had been invoked.
+FormsWebView:
 
-The WebView.URI parameter is now called Source. This was to make it clearer to users using HTML from a string to use this field as the source for their string data.
+Headers now exist in two scopes.
+1) Global can be accessed from a static context (FormsWebView.GlobalRegisteredHeaders)
+2) Local can be accessed from a class instance (obj.LocalRegisteredHeaders)
+3) These headers are only applied during Internet based requests, and global headers can be disabled for a class instance by setting EnableGlobalHeaders to false.
 
-BasePath was removed in favour for BaseUrl.
+Callbacks now exist in two scopes.
+1) Same as before, but with callbacks. However to access these, you instead need to call Add(Local/Global)Callback; passing in a string key and an action
 
-FEATURES:
---------------------------------------------------
+Navigation Request Delegate
+1) You no longer need to return the delegate, instead just set its cancel property to true if you wish to cancel the request
 
-OnContentLoaded is now a fully supported callback you can use to identify when the DOM is fully loaded.
-It is using this callback that you should then inject your Javascript to the DOM.
+Invoke Javascript
+1) This method is now called InjectJavascriptAsync
+2) This method will now return a string if the WebView so allows; allowing you to evaluate JS variables without having to pass them to a callback
 
-BaseUrl is now fully supported across Android and iOS projects. UWP needs further testing as API's are missing from the native component to include a base url when navigating from a string.
-To configure the BaseUrl, please set this field in the Renderer for each platform.
-Defaults for this are ->
-Android: Assets Folder
-iOS: Resources Folder
-Windows: Root Folder
+MacOS
+1) MacOS is now a supported platform, with identical functionality to iOS.
+2) Local assets must be put in the Resources folder with their build property set to "BundleResource"
+
+Once again, thanks a lot guys! And do feel free to pop me any errors on Github, or simply submit a PR yourself.

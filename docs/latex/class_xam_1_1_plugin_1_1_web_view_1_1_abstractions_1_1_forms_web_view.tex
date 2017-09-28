@@ -1,0 +1,525 @@
+\hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{}\section{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View Class Reference}
+\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}\index{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View@{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View}}
+Inheritance diagram for Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.204301cm]{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+delegate Task$<$ string $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab996fc2e09bce6f42e697e8faccea20c}{Javascript\+Injection\+Request\+Delegate} (string js)
+\begin{DoxyCompactList}\small\item\em A delegate which takes valid javascript and returns the response from it, if the response is a string. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a20b5e4e87cd76967d336cc7d174e156b}{Go\+Back} ()
+\begin{DoxyCompactList}\small\item\em Navigate back a page if capable of doing so. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a136009d93e59263b9468d91bc8d9cfca}{Go\+Forward} ()
+\begin{DoxyCompactList}\small\item\em Navigate forward a page if capable of doing so. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a248d560c049ea9a568d6daef207d33b2}{Refresh} ()
+\begin{DoxyCompactList}\small\item\em Refresh the current page if capable of doing so. \end{DoxyCompactList}\item 
+async Task$<$ string $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa5008d9dfe18f595a9dc7d9cb960b39b}{Inject\+Javascript\+Async} (string js)
+\begin{DoxyCompactList}\small\item\em Inject some javascript, returning a string result if the resulting Javascript resolves to a string on the D\+OM. For example \textquotesingle{}document.\+body.\+style.\+background\+Color = "red";\textquotesingle{} will return \textquotesingle{}red\textquotesingle{}. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b1fa9ce47383a6d375eab084e546f8e}{Add\+Local\+Callback} (string function\+Name, Action$<$ string $>$ action)
+\begin{DoxyCompactList}\small\item\em Adds a callback to the D\+OM, this callback when passed a string by the Javascript, will fire an action with that string as the parameter. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1335848a5cd8da3b36dd8e49fe31094d}{Remove\+Local\+Callback} (string function\+Name)
+\begin{DoxyCompactList}\small\item\em Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a322caae404bbd0c8ae7ab3d00b9ccdd0}{Remove\+All\+Local\+Callbacks} ()
+\begin{DoxyCompactList}\small\item\em Removes all local callbacks from the D\+OM. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. \end{DoxyCompactList}\item 
+void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc44efe2ad01ff5d59d6988a3c4f0099}{Dispose} ()
+\begin{DoxyCompactList}\small\item\em Dispose of the \hyperlink{namespace_xam_1_1_plugin_1_1_web_view}{Web\+View} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_acb603d4eb33bfa2f459cddeee3911f8b}{Add\+Global\+Callback} (string function\+Name, Action$<$ string $>$ action)
+\begin{DoxyCompactList}\small\item\em Adds a callback to every \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View} available in the application. \end{DoxyCompactList}\item 
+static void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a69ea9511c8b46d5156a64803e37863fa}{Remove\+Global\+Callback} (string function\+Name)
+\begin{DoxyCompactList}\small\item\em Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. \end{DoxyCompactList}\item 
+static void \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc6beaae6afb39dd9acf4c2af400131a}{Remove\+All\+Global\+Callbacks} ()
+\begin{DoxyCompactList}\small\item\em Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+readonly Dictionary$<$ string, string $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab54daf04e5112c23ca17c779fff81c36}{Local\+Registered\+Headers} = new Dictionary$<$string, string$>$()
+\begin{DoxyCompactList}\small\item\em A dictionary containing all headers to be injected into the request. Local headers take precedence over global ones. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a77bf69030f0aac583e6fe7f61603fcd6}{Navigating\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a63f9c0f6a44497e9febc0b4922cbe838}{Navigating}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Navigating property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b560fec025fb9b9a1c7ebd638cfceac}{Source\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67fca633a4ffb71e594925ba81250c6b}{Source}), typeof(string), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}))
+\begin{DoxyCompactList}\small\item\em A bindable property for the Source property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a96ddcfe6c508d10563ec47269ca77970}{Content\+Type\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7066440f9f0f094ba9266c43e1d940b3}{Content\+Type}), typeof(Web\+View\+Content\+Type), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), Web\+View\+Content\+Type.\+Internet)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Content\+Type property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ae7461a441fcc73e83e96b83342b592be}{Base\+Url\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa31fde920a7f9a83919ce02291fec4c6}{Base\+Url}), typeof(string), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}))
+\begin{DoxyCompactList}\small\item\em A bindable property for the Base\+Url property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ade895cc9c4842b6547d059a28049f851}{Can\+Go\+Back\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a59e06c36a967be7d282fad49ad08fe8b}{Can\+Go\+Back}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Can\+Go\+Back property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a28c4c26f0cbb0def7a8e25b39736dbfa}{Can\+Go\+Forward\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa311b0f3eff14d5edc8e37f42175168e}{Can\+Go\+Forward}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Can\+Go\+Forward property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a6f2e5d107b42e25203b7d6b3af51cf29}{Enable\+Global\+Callbacks\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1aa4c45b99c24d381fbe978a3d85cb25}{Enable\+Global\+Callbacks}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), true)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Enable\+Global\+Callbacks property. \end{DoxyCompactList}\item 
+static readonly Bindable\+Property \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7dab101868bc012944c3e5b50022634d}{Enable\+Global\+Headers\+Property} = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67ec337bf46584a17f2197fd2fe12b93}{Enable\+Global\+Headers}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), true)
+\begin{DoxyCompactList}\small\item\em A bindable property for the Enable\+Global\+Headers property. \end{DoxyCompactList}\item 
+static readonly Dictionary$<$ string, string $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab9de1bfb5c9c0b3dcb4498354d9f0e45}{Global\+Registered\+Headers} = new Dictionary$<$string, string$>$()
+\begin{DoxyCompactList}\small\item\em A dictionary used to add headers which are used throughout all instances of \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+Web\+View\+Content\+Type \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7066440f9f0f094ba9266c43e1d940b3}{Content\+Type}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The content type to attempt to load. By default this is Internet. \end{DoxyCompactList}\item 
+string \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67fca633a4ffb71e594925ba81250c6b}{Source}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The source data. This can either be a valid U\+RL, a path to a local file, or a H\+T\+ML string. \end{DoxyCompactList}\item 
+string \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa31fde920a7f9a83919ce02291fec4c6}{Base\+Url}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Override the Base\+U\+RL in the renderer with this property. By default, the Base\+Urls are the following\+: Android) Assets folder with Android\+Asset build property \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1i_o_s}{i\+OS} and \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1_mac_o_s}{Mac\+OS}) Resources folder with Bundle\+Resource build property \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1_u_w_p}{U\+WP}) Project folder with content build property \end{DoxyCompactList}\item 
+bool \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1aa4c45b99c24d381fbe978a3d85cb25}{Enable\+Global\+Callbacks}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Opt in and out of global callbacks \end{DoxyCompactList}\item 
+bool \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67ec337bf46584a17f2197fd2fe12b93}{Enable\+Global\+Headers}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Opt in and out of global headers \end{DoxyCompactList}\item 
+bool \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a63f9c0f6a44497e9febc0b4922cbe838}{Navigating}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Bindable property which is true when the page is currently navigating. \end{DoxyCompactList}\item 
+bool \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a59e06c36a967be7d282fad49ad08fe8b}{Can\+Go\+Back}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Bindable property which is true when the webview can go back a page. \end{DoxyCompactList}\item 
+bool \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa311b0f3eff14d5edc8e37f42175168e}{Can\+Go\+Forward}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Bindable property which is true when the webview can go forward a page. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+Event\+Handler$<$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_delegates_1_1_decision_handler_delegate}{Decision\+Handler\+Delegate} $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a87f3b76fb88fd4467d6f8f715af1645d}{On\+Navigation\+Started}
+\begin{DoxyCompactList}\small\item\em Fired when navigation begins, for example when the source is set. \end{DoxyCompactList}\item 
+Event\+Handler \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a476e9a105fd707e0567b7049e71983f2}{On\+Navigation\+Completed}
+\begin{DoxyCompactList}\small\item\em Fires when navigation is completed. This can be either as the result of a valid navigation, or on an error. \end{DoxyCompactList}\item 
+Event\+Handler$<$ int $>$ \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7c716b3098bfaa7c557ec49b89175055}{On\+Navigation\+Error}
+\begin{DoxyCompactList}\small\item\em Fires when navigation fires an error. By default this uses the native systems error codes. \end{DoxyCompactList}\item 
+Event\+Handler \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a822187ab3d98544ee6791706945ab303}{On\+Content\+Loaded}
+\begin{DoxyCompactList}\small\item\em Fires when the content on the D\+OM is ready. All your calls to Javascript using C\# should be performed after this is fired. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_acb603d4eb33bfa2f459cddeee3911f8b}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_acb603d4eb33bfa2f459cddeee3911f8b}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Add\+Global\+Callback@{Add\+Global\+Callback}}
+\index{Add\+Global\+Callback@{Add\+Global\+Callback}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Add\+Global\+Callback()}{AddGlobalCallback()}}
+{\footnotesize\ttfamily static void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Add\+Global\+Callback (\begin{DoxyParamCaption}\item[{string}]{function\+Name,  }\item[{Action$<$ string $>$}]{action }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Adds a callback to every \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View} available in the application. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Name} & The function to call\\
+\hline
+{\em action} & The returning action\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b1fa9ce47383a6d375eab084e546f8e}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b1fa9ce47383a6d375eab084e546f8e}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Add\+Local\+Callback@{Add\+Local\+Callback}}
+\index{Add\+Local\+Callback@{Add\+Local\+Callback}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Add\+Local\+Callback()}{AddLocalCallback()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Add\+Local\+Callback (\begin{DoxyParamCaption}\item[{string}]{function\+Name,  }\item[{Action$<$ string $>$}]{action }\end{DoxyParamCaption})}
+
+
+
+Adds a callback to the D\+OM, this callback when passed a string by the Javascript, will fire an action with that string as the parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Name} & The name of the function\\
+\hline
+{\em action} & The action to call back to\\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc44efe2ad01ff5d59d6988a3c4f0099}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc44efe2ad01ff5d59d6988a3c4f0099}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Dispose@{Dispose}}
+\index{Dispose@{Dispose}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Dispose()}{Dispose()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Dispose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Dispose of the \hyperlink{namespace_xam_1_1_plugin_1_1_web_view}{Web\+View} 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a20b5e4e87cd76967d336cc7d174e156b}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a20b5e4e87cd76967d336cc7d174e156b}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Go\+Back@{Go\+Back}}
+\index{Go\+Back@{Go\+Back}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Go\+Back()}{GoBack()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Go\+Back (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Navigate back a page if capable of doing so. 
+
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a136009d93e59263b9468d91bc8d9cfca}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a136009d93e59263b9468d91bc8d9cfca}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Go\+Forward@{Go\+Forward}}
+\index{Go\+Forward@{Go\+Forward}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Go\+Forward()}{GoForward()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Go\+Forward (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Navigate forward a page if capable of doing so. 
+
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa5008d9dfe18f595a9dc7d9cb960b39b}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa5008d9dfe18f595a9dc7d9cb960b39b}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Inject\+Javascript\+Async@{Inject\+Javascript\+Async}}
+\index{Inject\+Javascript\+Async@{Inject\+Javascript\+Async}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Inject\+Javascript\+Async()}{InjectJavascriptAsync()}}
+{\footnotesize\ttfamily async Task$<$string$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Inject\+Javascript\+Async (\begin{DoxyParamCaption}\item[{string}]{js }\end{DoxyParamCaption})}
+
+
+
+Inject some javascript, returning a string result if the resulting Javascript resolves to a string on the D\+OM. For example \textquotesingle{}document.\+body.\+style.\+background\+Color = "red";\textquotesingle{} will return \textquotesingle{}red\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em js} & The javascript to inject\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A valid string response or string.\+Empty
+\end{DoxyReturn}
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab996fc2e09bce6f42e697e8faccea20c}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab996fc2e09bce6f42e697e8faccea20c}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Javascript\+Injection\+Request\+Delegate@{Javascript\+Injection\+Request\+Delegate}}
+\index{Javascript\+Injection\+Request\+Delegate@{Javascript\+Injection\+Request\+Delegate}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Javascript\+Injection\+Request\+Delegate()}{JavascriptInjectionRequestDelegate()}}
+{\footnotesize\ttfamily delegate Task$<$string$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Javascript\+Injection\+Request\+Delegate (\begin{DoxyParamCaption}\item[{string}]{js }\end{DoxyParamCaption})}
+
+
+
+A delegate which takes valid javascript and returns the response from it, if the response is a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em js} & The valid JS to inject\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Any string response from the D\+OM or string.\+Empty
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a248d560c049ea9a568d6daef207d33b2}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a248d560c049ea9a568d6daef207d33b2}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Refresh@{Refresh}}
+\index{Refresh@{Refresh}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Refresh()}{Refresh()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Refresh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Refresh the current page if capable of doing so. 
+
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc6beaae6afb39dd9acf4c2af400131a}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_afc6beaae6afb39dd9acf4c2af400131a}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Remove\+All\+Global\+Callbacks@{Remove\+All\+Global\+Callbacks}}
+\index{Remove\+All\+Global\+Callbacks@{Remove\+All\+Global\+Callbacks}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Remove\+All\+Global\+Callbacks()}{RemoveAllGlobalCallbacks()}}
+{\footnotesize\ttfamily static void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Remove\+All\+Global\+Callbacks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Name} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a322caae404bbd0c8ae7ab3d00b9ccdd0}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a322caae404bbd0c8ae7ab3d00b9ccdd0}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Remove\+All\+Local\+Callbacks@{Remove\+All\+Local\+Callbacks}}
+\index{Remove\+All\+Local\+Callbacks@{Remove\+All\+Local\+Callbacks}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Remove\+All\+Local\+Callbacks()}{RemoveAllLocalCallbacks()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Remove\+All\+Local\+Callbacks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Removes all local callbacks from the D\+OM. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. 
+
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a69ea9511c8b46d5156a64803e37863fa}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a69ea9511c8b46d5156a64803e37863fa}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Remove\+Global\+Callback@{Remove\+Global\+Callback}}
+\index{Remove\+Global\+Callback@{Remove\+Global\+Callback}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Remove\+Global\+Callback()}{RemoveGlobalCallback()}}
+{\footnotesize\ttfamily static void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Remove\+Global\+Callback (\begin{DoxyParamCaption}\item[{string}]{function\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Name} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1335848a5cd8da3b36dd8e49fe31094d}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1335848a5cd8da3b36dd8e49fe31094d}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Remove\+Local\+Callback@{Remove\+Local\+Callback}}
+\index{Remove\+Local\+Callback@{Remove\+Local\+Callback}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Remove\+Local\+Callback()}{RemoveLocalCallback()}}
+{\footnotesize\ttfamily void Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Remove\+Local\+Callback (\begin{DoxyParamCaption}\item[{string}]{function\+Name }\end{DoxyParamCaption})}
+
+
+
+Removes a callback by the function name. Note\+: this does not remove it from the D\+OM, rather it removes the action, resulting in your view never getting the response. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+Name} & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{interface_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_i_forms_web_view}{Xam.\+Plugin.\+Web\+View.\+Abstractions.\+I\+Forms\+Web\+View}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ae7461a441fcc73e83e96b83342b592be}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ae7461a441fcc73e83e96b83342b592be}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Base\+Url\+Property@{Base\+Url\+Property}}
+\index{Base\+Url\+Property@{Base\+Url\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Base\+Url\+Property}{BaseUrlProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Base\+Url\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa31fde920a7f9a83919ce02291fec4c6}{Base\+Url}), typeof(string), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}))\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Base\+Url property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ade895cc9c4842b6547d059a28049f851}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ade895cc9c4842b6547d059a28049f851}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Can\+Go\+Back\+Property@{Can\+Go\+Back\+Property}}
+\index{Can\+Go\+Back\+Property@{Can\+Go\+Back\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Can\+Go\+Back\+Property}{CanGoBackProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Can\+Go\+Back\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a59e06c36a967be7d282fad49ad08fe8b}{Can\+Go\+Back}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Can\+Go\+Back property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a28c4c26f0cbb0def7a8e25b39736dbfa}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a28c4c26f0cbb0def7a8e25b39736dbfa}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Can\+Go\+Forward\+Property@{Can\+Go\+Forward\+Property}}
+\index{Can\+Go\+Forward\+Property@{Can\+Go\+Forward\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Can\+Go\+Forward\+Property}{CanGoForwardProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Can\+Go\+Forward\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa311b0f3eff14d5edc8e37f42175168e}{Can\+Go\+Forward}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Can\+Go\+Forward property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a96ddcfe6c508d10563ec47269ca77970}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a96ddcfe6c508d10563ec47269ca77970}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Content\+Type\+Property@{Content\+Type\+Property}}
+\index{Content\+Type\+Property@{Content\+Type\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Content\+Type\+Property}{ContentTypeProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Content\+Type\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7066440f9f0f094ba9266c43e1d940b3}{Content\+Type}), typeof(Web\+View\+Content\+Type), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), Web\+View\+Content\+Type.\+Internet)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Content\+Type property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a6f2e5d107b42e25203b7d6b3af51cf29}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a6f2e5d107b42e25203b7d6b3af51cf29}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Enable\+Global\+Callbacks\+Property@{Enable\+Global\+Callbacks\+Property}}
+\index{Enable\+Global\+Callbacks\+Property@{Enable\+Global\+Callbacks\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Enable\+Global\+Callbacks\+Property}{EnableGlobalCallbacksProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Enable\+Global\+Callbacks\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1aa4c45b99c24d381fbe978a3d85cb25}{Enable\+Global\+Callbacks}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), true)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Enable\+Global\+Callbacks property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7dab101868bc012944c3e5b50022634d}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7dab101868bc012944c3e5b50022634d}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Enable\+Global\+Headers\+Property@{Enable\+Global\+Headers\+Property}}
+\index{Enable\+Global\+Headers\+Property@{Enable\+Global\+Headers\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Enable\+Global\+Headers\+Property}{EnableGlobalHeadersProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Enable\+Global\+Headers\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67ec337bf46584a17f2197fd2fe12b93}{Enable\+Global\+Headers}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), true)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Enable\+Global\+Headers property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab9de1bfb5c9c0b3dcb4498354d9f0e45}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab9de1bfb5c9c0b3dcb4498354d9f0e45}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Global\+Registered\+Headers@{Global\+Registered\+Headers}}
+\index{Global\+Registered\+Headers@{Global\+Registered\+Headers}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Global\+Registered\+Headers}{GlobalRegisteredHeaders}}
+{\footnotesize\ttfamily readonly Dictionary$<$string, string$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Global\+Registered\+Headers = new Dictionary$<$string, string$>$()\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A dictionary used to add headers which are used throughout all instances of \hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab54daf04e5112c23ca17c779fff81c36}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_ab54daf04e5112c23ca17c779fff81c36}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Local\+Registered\+Headers@{Local\+Registered\+Headers}}
+\index{Local\+Registered\+Headers@{Local\+Registered\+Headers}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Local\+Registered\+Headers}{LocalRegisteredHeaders}}
+{\footnotesize\ttfamily readonly Dictionary$<$string, string$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Local\+Registered\+Headers = new Dictionary$<$string, string$>$()}
+
+
+
+A dictionary containing all headers to be injected into the request. Local headers take precedence over global ones. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a77bf69030f0aac583e6fe7f61603fcd6}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a77bf69030f0aac583e6fe7f61603fcd6}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Navigating\+Property@{Navigating\+Property}}
+\index{Navigating\+Property@{Navigating\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Navigating\+Property}{NavigatingProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Navigating\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a63f9c0f6a44497e9febc0b4922cbe838}{Navigating}), typeof(bool), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}), false)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Navigating property. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b560fec025fb9b9a1c7ebd638cfceac}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a5b560fec025fb9b9a1c7ebd638cfceac}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Source\+Property@{Source\+Property}}
+\index{Source\+Property@{Source\+Property}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Source\+Property}{SourceProperty}}
+{\footnotesize\ttfamily readonly Bindable\+Property Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Source\+Property = Bindable\+Property.\+Create(nameof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67fca633a4ffb71e594925ba81250c6b}{Source}), typeof(string), typeof(\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view}{Forms\+Web\+View}))\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+A bindable property for the Source property. 
+
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa31fde920a7f9a83919ce02291fec4c6}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa31fde920a7f9a83919ce02291fec4c6}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Base\+Url@{Base\+Url}}
+\index{Base\+Url@{Base\+Url}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Base\+Url}{BaseUrl}}
+{\footnotesize\ttfamily string Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Base\+Url\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Override the Base\+U\+RL in the renderer with this property. By default, the Base\+Urls are the following\+: Android) Assets folder with Android\+Asset build property \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1i_o_s}{i\+OS} and \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1_mac_o_s}{Mac\+OS}) Resources folder with Bundle\+Resource build property \hyperlink{namespace_xam_1_1_plugin_1_1_web_view_1_1_u_w_p}{U\+WP}) Project folder with content build property 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a59e06c36a967be7d282fad49ad08fe8b}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a59e06c36a967be7d282fad49ad08fe8b}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Can\+Go\+Back@{Can\+Go\+Back}}
+\index{Can\+Go\+Back@{Can\+Go\+Back}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Can\+Go\+Back}{CanGoBack}}
+{\footnotesize\ttfamily bool Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Can\+Go\+Back\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Bindable property which is true when the webview can go back a page. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa311b0f3eff14d5edc8e37f42175168e}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_aa311b0f3eff14d5edc8e37f42175168e}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Can\+Go\+Forward@{Can\+Go\+Forward}}
+\index{Can\+Go\+Forward@{Can\+Go\+Forward}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Can\+Go\+Forward}{CanGoForward}}
+{\footnotesize\ttfamily bool Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Can\+Go\+Forward\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Bindable property which is true when the webview can go forward a page. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7066440f9f0f094ba9266c43e1d940b3}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7066440f9f0f094ba9266c43e1d940b3}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Content\+Type@{Content\+Type}}
+\index{Content\+Type@{Content\+Type}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Content\+Type}{ContentType}}
+{\footnotesize\ttfamily Web\+View\+Content\+Type Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Content\+Type\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+The content type to attempt to load. By default this is Internet. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1aa4c45b99c24d381fbe978a3d85cb25}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a1aa4c45b99c24d381fbe978a3d85cb25}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Enable\+Global\+Callbacks@{Enable\+Global\+Callbacks}}
+\index{Enable\+Global\+Callbacks@{Enable\+Global\+Callbacks}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Enable\+Global\+Callbacks}{EnableGlobalCallbacks}}
+{\footnotesize\ttfamily bool Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Enable\+Global\+Callbacks\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Opt in and out of global callbacks 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67ec337bf46584a17f2197fd2fe12b93}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67ec337bf46584a17f2197fd2fe12b93}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Enable\+Global\+Headers@{Enable\+Global\+Headers}}
+\index{Enable\+Global\+Headers@{Enable\+Global\+Headers}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Enable\+Global\+Headers}{EnableGlobalHeaders}}
+{\footnotesize\ttfamily bool Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Enable\+Global\+Headers\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Opt in and out of global headers 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a63f9c0f6a44497e9febc0b4922cbe838}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a63f9c0f6a44497e9febc0b4922cbe838}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Navigating@{Navigating}}
+\index{Navigating@{Navigating}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Navigating}{Navigating}}
+{\footnotesize\ttfamily bool Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Navigating\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Bindable property which is true when the page is currently navigating. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67fca633a4ffb71e594925ba81250c6b}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a67fca633a4ffb71e594925ba81250c6b}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!Source@{Source}}
+\index{Source@{Source}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{Source}{Source}}
+{\footnotesize\ttfamily string Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+Source\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+The source data. This can either be a valid U\+RL, a path to a local file, or a H\+T\+ML string. 
+
+
+
+\subsection{Event Documentation}
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a822187ab3d98544ee6791706945ab303}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a822187ab3d98544ee6791706945ab303}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!On\+Content\+Loaded@{On\+Content\+Loaded}}
+\index{On\+Content\+Loaded@{On\+Content\+Loaded}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{On\+Content\+Loaded}{OnContentLoaded}}
+{\footnotesize\ttfamily Event\+Handler Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+On\+Content\+Loaded}
+
+
+
+Fires when the content on the D\+OM is ready. All your calls to Javascript using C\# should be performed after this is fired. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a476e9a105fd707e0567b7049e71983f2}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a476e9a105fd707e0567b7049e71983f2}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!On\+Navigation\+Completed@{On\+Navigation\+Completed}}
+\index{On\+Navigation\+Completed@{On\+Navigation\+Completed}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{On\+Navigation\+Completed}{OnNavigationCompleted}}
+{\footnotesize\ttfamily Event\+Handler Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+On\+Navigation\+Completed}
+
+
+
+Fires when navigation is completed. This can be either as the result of a valid navigation, or on an error. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7c716b3098bfaa7c557ec49b89175055}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a7c716b3098bfaa7c557ec49b89175055}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!On\+Navigation\+Error@{On\+Navigation\+Error}}
+\index{On\+Navigation\+Error@{On\+Navigation\+Error}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{On\+Navigation\+Error}{OnNavigationError}}
+{\footnotesize\ttfamily Event\+Handler$<$int$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+On\+Navigation\+Error}
+
+
+
+Fires when navigation fires an error. By default this uses the native systems error codes. 
+
+\mbox{\Hypertarget{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a87f3b76fb88fd4467d6f8f715af1645d}\label{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_forms_web_view_a87f3b76fb88fd4467d6f8f715af1645d}} 
+\index{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}!On\+Navigation\+Started@{On\+Navigation\+Started}}
+\index{On\+Navigation\+Started@{On\+Navigation\+Started}!Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View@{Xam\+::\+Plugin\+::\+Web\+View\+::\+Abstractions\+::\+Forms\+Web\+View}}
+\subsubsection{\texorpdfstring{On\+Navigation\+Started}{OnNavigationStarted}}
+{\footnotesize\ttfamily Event\+Handler$<$\hyperlink{class_xam_1_1_plugin_1_1_web_view_1_1_abstractions_1_1_delegates_1_1_decision_handler_delegate}{Decision\+Handler\+Delegate}$>$ Xam.\+Plugin.\+Web\+View.\+Abstractions.\+Forms\+Web\+View.\+On\+Navigation\+Started}
+
+
+
+Fired when navigation begins, for example when the source is set. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Xam.\+Plugin.\+Web\+View.\+Abstractions/Forms\+Web\+View.\+cs\item 
+Xam.\+Plugin.\+Web\+View.\+Abstractions/Forms\+Web\+View.\+Static.\+cs\end{DoxyCompactItemize}
