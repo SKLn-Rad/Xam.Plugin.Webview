@@ -2387,7 +2387,7 @@
           }
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -2418,7 +2418,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -2428,7 +2428,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -4873,7 +4873,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -4904,7 +4904,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -4914,7 +4914,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -7395,7 +7395,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -7426,7 +7426,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -7436,7 +7436,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -9890,7 +9890,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -9921,7 +9921,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -9931,7 +9931,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -12421,7 +12421,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -12452,7 +12452,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -12462,7 +12462,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -14916,7 +14916,7 @@
           "lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -14947,7 +14947,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -14957,7 +14957,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     },
@@ -17447,7 +17447,7 @@
           "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll": {}
         }
       },
-      "Xamarin.Forms/2.4.0.269-pre2": {
+      "Xamarin.Forms/2.4.0.280": {
         "type": "package",
         "compile": {
           "lib/uap10.0/Xamarin.Forms.Core.dll": {},
@@ -17478,7 +17478,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.3",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       },
       "Xam.Plugin.WebView.UWP/1.0.0": {
@@ -17488,7 +17488,7 @@
           "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
           "Newtonsoft.Json": "10.0.3",
           "Xam.Plugin.WebView.Abstractions": "1.0.0",
-          "Xamarin.Forms": "2.4.0.269-pre2"
+          "Xamarin.Forms": "2.4.0.280"
         }
       }
     }
@@ -24089,10 +24089,10 @@
         "system.xml.xmlserializer.nuspec"
       ]
     },
-    "Xamarin.Forms/2.4.0.269-pre2": {
-      "sha512": "Ldt+hKlwtQ+Zt2mB1nf/1gxuRMTYLNi7kb9egsrFCbqAHaEM0KYkjNTEasw0wMKyOArXVUHoocIodHuzLhNd8g==",
+    "Xamarin.Forms/2.4.0.280": {
+      "sha512": "YzXTyRvhMv2kHgs6CGA89OVwUWrS05i7GW/OXl0vcn77OeJ4Zj08tErhc5bL6TAJYg4vWi+uMTWryO+J65U0yA==",
       "type": "package",
-      "path": "xamarin.forms/2.4.0.269-pre2",
+      "path": "xamarin.forms/2.4.0.280",
       "files": [
         "build/netstandard1.0/Mono.Cecil.Mdb.dll",
         "build/netstandard1.0/Mono.Cecil.Pdb.dll",
@@ -24111,6 +24111,7 @@
         "build/portable-win+net45+wp80+win81+wpa81/Mono.Cecil.dll",
         "build/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Build.Tasks.dll",
         "build/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Core.dll",
+        "build/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.DefaultItems.targets",
         "build/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Xaml.dll",
         "build/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.targets",
         "lib/MonoAndroid10/Design/Xamarin.Forms.Core.Design.dll",
@@ -24149,7 +24150,6 @@
         "lib/Xamarin.iOS10/Xamarin.Forms.Core.xml",
         "lib/Xamarin.iOS10/Xamarin.Forms.Platform.dll",
         "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.dll",
-        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.dll.mdb",
         "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.pdb",
         "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.dll",
         "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.dll.mdb",
@@ -24196,7 +24196,6 @@
         "lib/netstandard1.0/Xamarin.Forms.Core.pdb",
         "lib/netstandard1.0/Xamarin.Forms.Core.xml",
         "lib/netstandard1.0/Xamarin.Forms.Platform.dll",
-        "lib/netstandard1.0/Xamarin.Forms.Platform.dll.mdb",
         "lib/netstandard1.0/Xamarin.Forms.Platform.pdb",
         "lib/netstandard1.0/Xamarin.Forms.Xaml.dll",
         "lib/netstandard1.0/Xamarin.Forms.Xaml.dll.mdb",
@@ -24209,7 +24208,6 @@
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Core.pdb",
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Core.xml",
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Platform.dll",
-        "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Platform.dll.mdb",
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Platform.pdb",
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Xaml.dll",
         "lib/portable-win+net45+wp80+win81+wpa81/Xamarin.Forms.Xaml.dll.mdb",
@@ -24274,7 +24272,7 @@
         "lib/wpa81/Xamarin.Forms.Platform.dll",
         "lib/wpa81/Xamarin.Forms.Xaml.dll",
         "lib/wpa81/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.2.4.0.269-pre2.nupkg.sha512",
+        "xamarin.forms.2.4.0.280.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     },
@@ -24298,7 +24296,7 @@
     "": [
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2",
       "Newtonsoft.Json >= 10.0.3",
-      "Xamarin.Forms >= 2.4.0.269-pre2"
+      "Xamarin.Forms >= 2.4.0.280"
     ],
     "UAP,Version=v10.0.14393": []
   },
@@ -24343,7 +24341,7 @@
     "dependencies": {
       "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
       "Newtonsoft.Json": "10.0.3",
-      "Xamarin.Forms": "2.4.0.269-pre2"
+      "Xamarin.Forms": "2.4.0.280"
     },
     "frameworks": {
       "uap10.0.14393": {}
