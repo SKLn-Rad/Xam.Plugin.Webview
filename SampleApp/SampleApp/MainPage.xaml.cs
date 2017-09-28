@@ -136,6 +136,20 @@ namespace SampleApp
                 Title = "Live Callbacks",
                 Detail = "Test that callbacks which are added during content presentation get added to the DOM"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 16,
+                Title = "Navigation Page (Push)",
+                Detail = "Test forward navigation maintaining the last view in the stack"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 17,
+                Title = "Navigation Page (Wipe)",
+                Detail = "Test forward navigation wiping the last view in the stack"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -206,6 +220,14 @@ namespace SampleApp
 
                 case 15:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new LiveCallbackSample());
+                    break;
+
+                case 16:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationPageStart());
+                    break;
+
+                case 17:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new NavigationPageWipe());
                     break;
 
                 default:

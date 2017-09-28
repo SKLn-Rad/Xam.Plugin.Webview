@@ -27,7 +27,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (Control == null && Element != null)
                 SetupControl();
 
             if (e.NewElement != null)

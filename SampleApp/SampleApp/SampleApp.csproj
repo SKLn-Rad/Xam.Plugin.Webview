@@ -77,6 +77,12 @@
     <Compile Include="Samples\BackForwardSample.xaml.cs">
       <DependentUpon>BackForwardSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\NavigationPageStart.xaml.cs">
+      <DependentUpon>NavigationPageStart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\NavigationPageWipe.xaml.cs">
+      <DependentUpon>NavigationPageWipe.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\NavigationStringSample.xaml.cs">
       <DependentUpon>NavigationStringSample.xaml</DependentUpon>
     </Compile>
@@ -211,6 +217,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\LiveCallbackSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigationPageStart.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NavigationPageWipe.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
