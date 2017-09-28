@@ -172,7 +172,7 @@ namespace Xam.Plugin.WebView.UWP
 
         void SetSource()
         {
-            if (Element == null || Control == null || Element.Source == null) return;
+            if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
             
             switch (Element.ContentType)
             {

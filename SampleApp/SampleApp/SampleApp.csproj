@@ -86,6 +86,9 @@
     <Compile Include="Samples\NavigationStringSample.xaml.cs">
       <DependentUpon>NavigationStringSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\NullSourceSample.xaml.cs">
+      <DependentUpon>NullSourceSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\RefreshSample.xaml.cs">
       <DependentUpon>RefreshSample.xaml</DependentUpon>
     </Compile>
@@ -229,6 +232,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\NavigationPageWipe.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\NullSourceSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
