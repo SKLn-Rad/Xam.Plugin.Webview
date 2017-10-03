@@ -1,7 +1,9 @@
 ﻿using Android.Webkit;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
@@ -152,8 +154,14 @@ namespace Xam.Plugin.WebView.Droid
                 // Get the string and strip off the quotes
                 if (_callback.Value is Java.Lang.String)
                 {
-                    response = _callback.Value.ToString();
-                    if (response.StartsWith("\"") && response.EndsWith("\""))
+                    // Unescape that damn Unicode Java bull.
+                    response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char) ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+                    response = Regex.Unescape(response);
+
+                    if (response.Equals("\"null\""))
+                        response = null;
+
+                    else if (response.StartsWith("\"") && response.EndsWith("\""))
                         response = response.Substring(1, response.Length - 2);
                 }
 

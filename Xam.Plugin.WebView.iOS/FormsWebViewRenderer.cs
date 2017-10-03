@@ -110,11 +110,15 @@ namespace Xam.Plugin.WebView.iOS
             if (Control == null || Element == null) return string.Empty;
 
             var response = string.Empty;
-            var obj = await Control.EvaluateJavaScriptAsync(js);
 
-            if (obj != null)
-                response = obj.ToString();
+            try
+            {
+                var obj = await Control.EvaluateJavaScriptAsync(js).ConfigureAwait(true);
+                if (obj != null)
+                    response = obj.ToString();
+            }
 
+            catch (Exception) { /* The Webview might not be ready... */ }
             return response;
 		}
 

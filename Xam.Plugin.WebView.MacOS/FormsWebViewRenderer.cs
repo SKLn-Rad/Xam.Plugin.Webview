@@ -108,16 +108,20 @@ namespace Xam.Plugin.WebView.MacOS
 
 		internal async Task<string> OnJavascriptInjectionRequest(string js)
 		{
-			if (Control == null || Element == null) return string.Empty;
+            if (Control == null || Element == null) return string.Empty;
 
-			var response = string.Empty;
-			var obj = await Control.EvaluateJavaScriptAsync(js);
+            var response = string.Empty;
 
-			if (obj != null)
-				response = obj.ToString();
+            try
+            {
+                var obj = await Control.EvaluateJavaScriptAsync(js).ConfigureAwait(true);
+                if (obj != null)
+                    response = obj.ToString();
+            }
 
-			return response;
-		}
+            catch (Exception) { /* The Webview might not be ready... */ }
+            return response;
+        }
 
 		void SetSource()
 		{
