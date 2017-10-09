@@ -219,8 +219,8 @@ namespace Xam.Plugin.WebView.Droid
             // Add Local Headers
             foreach (var header in Element.LocalRegisteredHeaders)
             {
-                if (!headers.ContainsKey(header.Key.ToLower()))
-                    headers.Add(header.Key.ToLower(), header.Value.ToLower());
+                if (!headers.ContainsKey(header.Key))
+                    headers.Add(header.Key, header.Value);
             }
 
             // Add Global Headers
