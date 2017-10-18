@@ -171,7 +171,7 @@ namespace Xam.Plugin.WebView.Droid
             return response;
         }
 
-        void SetSource()
+        internal void SetSource()
         {
             if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
 

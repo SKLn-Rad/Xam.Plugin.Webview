@@ -21,7 +21,7 @@ namespace Xam.Plugin.WebView.iOS
 			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
 			if (renderer.Element == null) return;
 
-            var response = renderer.Element.HandleNavigationStartRequest(renderer.Element.Source);
+            var response = renderer.Element.HandleNavigationStartRequest(webView.Url.AbsoluteString);
 
             if (response.Cancel) {
                 decisionHandler(WKNavigationActionPolicy.Cancel);
