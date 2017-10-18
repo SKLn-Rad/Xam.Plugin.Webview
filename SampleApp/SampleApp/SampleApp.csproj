@@ -89,9 +89,6 @@
     <Compile Include="Samples\NullSourceSample.xaml.cs">
       <DependentUpon>NullSourceSample.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Samples\RedirectionOnCancelSample.xaml.cs">
-      <DependentUpon>RedirectionOnCancelSample.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Samples\RefreshSample.xaml.cs">
       <DependentUpon>RefreshSample.xaml</DependentUpon>
     </Compile>
@@ -151,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{f690dd01-f04c-498b-b574-b870c8a7702c}</Project>
+      <Project>{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}</Project>
       <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
@@ -241,12 +238,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\NullSourceSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Samples\RedirectionOnCancelSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
