@@ -1,10 +1,13 @@
-﻿<Properties StartupConfiguration="{516A9A24-FB43-42B4-9B6F-8A2813B319D8}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="SampleApp/SampleApp/Samples/BackForwardSample.xaml">
+﻿<Properties StartupConfiguration="{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}|Default">
+  <MonoDevelop.Ide.ItemProperties.SampleApp.MacOS PreferredExecutionTarget="Test1" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Xam.Plugin.WebView.MacOS/FormsNavigationDelegate.cs">
     <Files>
-      <File FileName="SampleApp/SampleApp/Samples/BackForwardSample.xaml" Line="23" Column="79" />
+      <File FileName="SampleApp/SampleApp/Samples/BackForwardSample.xaml" Line="28" Column="15" />
+      <File FileName="SampleApp/SampleApp/MainPage.xaml.cs" Line="1" Column="1" />
+      <File FileName="Xam.Plugin.WebView.MacOS/FormsNavigationDelegate.cs" Line="24" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

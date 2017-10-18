@@ -24320,6 +24320,7 @@
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Users\\ryan.dixon\\Nuget\\repo": {},
         "M:\\Nuget\\vistair.xamarin.core": {},
+        "http://nuget.syncfusion.com/nuget_xamarin/nuget/getsyncfusionpackages/xamarin/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
