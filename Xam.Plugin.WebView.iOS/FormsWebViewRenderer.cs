@@ -16,7 +16,7 @@ namespace Xam.Plugin.WebView.iOS
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WKWebView>, IWKScriptMessageHandler, IWKUIDelegate
     {
 
-        public event EventHandler<WKWebView> OnControlChanged;
+        public static event EventHandler<WKWebView> OnControlChanged;
 
         public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
 

@@ -24373,7 +24373,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: Microsoft.NETCore.UniversalWindowsPlatform from 5.4.0 to 5.2.2. Reference the package directly from the project to select a different version. \r\n SampleApp.UWP (>= 1.0.0) -> Xam.Plugin.WebView.UWP (>= 1.0.0) -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.4.0) \r\n SampleApp.UWP (>= 1.0.0) -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.2.2)",
+      "message": "Detected package downgrade: Microsoft.NETCore.UniversalWindowsPlatform from 5.4.0 to 5.2.2. Reference the package directly from the project to select a different version. \r\n SampleApp.UWP -> Xam.Plugin.WebView.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.4.0) \r\n SampleApp.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.2.2)",
       "libraryId": "Microsoft.NETCore.UniversalWindowsPlatform",
       "targetGraphs": [
         "UAP,Version=v10.0.14393",
