@@ -2,6 +2,7 @@
 using Foundation;
 using WebKit;
 using Xam.Plugin.WebView.Abstractions;
+using UIKit;
 
 namespace Xam.Plugin.WebView.iOS
 {
@@ -15,18 +16,37 @@ namespace Xam.Plugin.WebView.iOS
             Reference = new WeakReference<FormsWebViewRenderer>(renderer);
         }
 
+        public bool AttemptOpenCustomUrlScheme(NSUrl url)
+        {
+            var app = UIApplication.SharedApplication;
+
+            if (app.CanOpenUrl(url))
+                return app.OpenUrl(url);
+
+            return false;
+        }
+
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
 			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
 			if (renderer.Element == null) return;
+            
+            var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
 
-            var response = renderer.Element.HandleNavigationStartRequest(webView.Url.AbsoluteString);
-
-            if (response.Cancel) {
+            if (response.Cancel)
+            {
                 decisionHandler(WKNavigationActionPolicy.Cancel);
             }
-            else {
+
+            else
+            {
+                if (navigationAction.NavigationType == WKNavigationType.LinkActivated && AttemptOpenCustomUrlScheme(navigationAction.Request.Url))
+                {
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                    return;
+                }
+
                 decisionHandler(WKNavigationActionPolicy.Allow);
                 renderer.Element.Navigating = true;
             }

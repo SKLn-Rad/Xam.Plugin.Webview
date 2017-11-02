@@ -21,7 +21,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>7.1</string>
+	<string>11.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>SampleApp</string>
 	<key>CFBundleIdentifier</key>
@@ -57,5 +57,12 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>CFBundleName</key>
 	<string>SampleApp</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>URL Type 1</string>
+		</dict>
+	</array>
 </dict>
 </plist>

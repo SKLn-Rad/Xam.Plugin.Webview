@@ -5,6 +5,8 @@ using Android.Net.Http;
 using Android.Graphics;
 using Xam.Plugin.WebView.Abstractions;
 using Android.Runtime;
+using Android.Content;
+using Xamarin.Forms;
 
 namespace Xam.Plugin.WebView.Droid
 {
@@ -42,18 +44,35 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
-
-            if (FormsWebViewRenderer.OnUrlLoading != null)
-                if (FormsWebViewRenderer.OnUrlLoading(view, url))
-                    return;
-
+            
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
             if (response.Cancel)
+            {
                 view.StopLoading();
+            }
 
             else
+            {
+                if (url.StartsWith("mailto:"))
+                {
+                    view.StopLoading();
+                    view.GoBack();
+
+                    url = url.Replace("mailto:", "");
+
+                    Intent email = new Intent(Intent.ActionSendto);
+                    email.SetData(Android.Net.Uri.Parse("mailto:"));
+                    email.PutExtra(Intent.ExtraEmail, new String[] { url.Split('?')[0] });
+
+                    if (email.ResolveActivity(Forms.Context.PackageManager) != null)
+                        Forms.Context.StartActivity(email);
+
+                    return;
+                }
+
                 renderer.Element.Navigating = true;
+            }
         }
 
         public override void OnReceivedSslError(Android.Webkit.WebView view, SslErrorHandler handler, SslError error)

@@ -14,7 +14,7 @@ namespace SampleApp.Samples
 <html>
     <body>
         <h1>This is a HTML string</h1>
-        <a href='mailto: someone @example.com'>Click here to mail someone</a>
+        <a href='mailto:someone@example.com'>Click here to mail someone</a>
     </body>
 </html>
             ";

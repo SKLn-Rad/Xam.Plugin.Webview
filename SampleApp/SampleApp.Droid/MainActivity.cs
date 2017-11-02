@@ -21,33 +21,11 @@ namespace SampleApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
-
-            FormsWebViewRenderer.OnUrlLoading = ShouldOverrideUrlLoading;
+            
             FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
-        }
-
-        public bool ShouldOverrideUrlLoading(WebView webView, string url)
-        {
-            if (url.StartsWith("mailto:"))
-            {
-                webView.StopLoading();
-                webView.GoBack();
-
-                url = url.Replace("mailto:", "");
-
-                Intent email = new Intent(Intent.ActionSendto);
-                email.SetData(Android.Net.Uri.Parse("mailto:"));
-                email.PutExtra(Intent.ExtraEmail, new String[] { url.Split('?')[0] });
-                if (email.ResolveActivity(PackageManager) != null)
-                    StartActivity(email);
-
-                return true;
-            }
-
-            return false;
         }
     }
 }

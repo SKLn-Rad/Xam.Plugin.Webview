@@ -2,6 +2,7 @@
 using Foundation;
 using WebKit;
 using Xam.Plugin.WebView.Abstractions;
+using AppKit;
 
 namespace Xam.Plugin.WebView.MacOS
 {
@@ -15,27 +16,27 @@ namespace Xam.Plugin.WebView.MacOS
 			Reference = new WeakReference<FormsWebViewRenderer>(renderer);
 		}
 
-		[Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
-		public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
-		{
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
+        [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
+        public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
 
-			var response = renderer.Element.HandleNavigationStartRequest(webView.Url.AbsoluteString);
+            var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
 
-			if (response.Cancel)
-			{
-				decisionHandler(WKNavigationActionPolicy.Cancel);
-			}
+            if (response.Cancel)
+            {
+                decisionHandler(WKNavigationActionPolicy.Cancel);
+            }
 
-			else
-			{
-				decisionHandler(WKNavigationActionPolicy.Allow);
-				renderer.Element.Navigating = true;
-			}
-		}
+            else
+            {
+                decisionHandler(WKNavigationActionPolicy.Allow);
+                renderer.Element.Navigating = true;
+            }
+        }
 
-		public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
+        public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
 		{
 			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
 			if (renderer.Element == null) return;
