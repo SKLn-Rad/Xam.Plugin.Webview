@@ -16,6 +16,7 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
     {
+        public static Func<Android.Webkit.WebView, string, bool> OnUrlLoading { get; set; }
 
         public static string MimeType = "text/html";
 

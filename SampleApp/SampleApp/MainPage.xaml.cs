@@ -157,6 +157,13 @@ namespace SampleApp
                 Title = "Null source",
                 Detail = "Test setting the source to null does not result in a crash"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 19,
+                Title = "Email data",
+                Detail = "Load a WebView using string data as the source with a mailto: link"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -239,6 +246,10 @@ namespace SampleApp
 
                 case 18:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new NullSourceSample());
+                    break;
+
+                case 19:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new EmailDataSample());
                     break;
 
                 default:

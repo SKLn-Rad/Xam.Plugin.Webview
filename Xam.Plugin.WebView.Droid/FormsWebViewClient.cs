@@ -43,6 +43,10 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
+            if (FormsWebViewRenderer.OnUrlLoading != null)
+                if (FormsWebViewRenderer.OnUrlLoading(view, url))
+                    return;
+
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
             if (response.Cancel)
