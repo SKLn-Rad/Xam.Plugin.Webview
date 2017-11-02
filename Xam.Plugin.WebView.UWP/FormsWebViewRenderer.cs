@@ -127,7 +127,7 @@ namespace Xam.Plugin.WebView.UWP
             Element.CanGoForward = Control.CanGoForward;
 
             Element.Navigating = false;
-            Element.HandleNavigationCompleted();
+            Element.HandleNavigationCompleted(args.Uri.ToString());
         }
 
         async void OnDOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)

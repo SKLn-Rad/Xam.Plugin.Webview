@@ -26,7 +26,7 @@ namespace Xam.Plugin.WebView.Droid
             if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationError(errorResponse.StatusCode);
-            renderer.Element.HandleNavigationCompleted();
+            renderer.Element.HandleNavigationCompleted(request.Url.ToString());
             renderer.Element.Navigating = false;
         }
 
@@ -36,7 +36,7 @@ namespace Xam.Plugin.WebView.Droid
             if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationError((int) error.ErrorCode);
-            renderer.Element.HandleNavigationCompleted();
+            renderer.Element.HandleNavigationCompleted(request.Url.ToString());
             renderer.Element.Navigating = false;
         }
 
@@ -54,25 +54,33 @@ namespace Xam.Plugin.WebView.Droid
 
             else
             {
-                if (url.StartsWith("mailto:"))
-                {
-                    view.StopLoading();
-                    view.GoBack();
-
-                    url = url.Replace("mailto:", "");
-
-                    Intent email = new Intent(Intent.ActionSendto);
-                    email.SetData(Android.Net.Uri.Parse("mailto:"));
-                    email.PutExtra(Intent.ExtraEmail, new String[] { url.Split('?')[0] });
-
-                    if (email.ResolveActivity(Forms.Context.PackageManager) != null)
-                        Forms.Context.StartActivity(email);
-
+                if (AttemptToHandleCustomUrlScheme(view, url))
                     return;
-                }
-
+                
                 renderer.Element.Navigating = true;
             }
+        }
+
+        bool AttemptToHandleCustomUrlScheme(Android.Webkit.WebView view, string url)
+        {
+            if (url.StartsWith("mailto:"))
+            {
+                view.StopLoading();
+                view.GoBack();
+
+                url = url.Replace("mailto:", "");
+
+                Intent email = new Intent(Intent.ActionSendto);
+                email.SetData(Android.Net.Uri.Parse("mailto:"));
+                email.PutExtra(Intent.ExtraEmail, new String[] { url.Split('?')[0] });
+
+                if (email.ResolveActivity(Forms.Context.PackageManager) != null)
+                    Forms.Context.StartActivity(email);
+
+                return true;
+            }
+
+            return false;
         }
 
         public override void OnReceivedSslError(Android.Webkit.WebView view, SslErrorHandler handler, SslError error)
@@ -113,7 +121,7 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.CanGoForward = view.CanGoForward();
             renderer.Element.Navigating = false;
 
-            renderer.Element.HandleNavigationCompleted();
+            renderer.Element.HandleNavigationCompleted(url);
             renderer.Element.HandleContentLoaded();
         }
     }

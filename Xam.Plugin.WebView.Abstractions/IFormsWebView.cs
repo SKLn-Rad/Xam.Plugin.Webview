@@ -10,7 +10,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         event EventHandler<DecisionHandlerDelegate> OnNavigationStarted;
 
-        event EventHandler OnNavigationCompleted;
+        event EventHandler<string> OnNavigationCompleted;
 
         event EventHandler<int> OnNavigationError;
 

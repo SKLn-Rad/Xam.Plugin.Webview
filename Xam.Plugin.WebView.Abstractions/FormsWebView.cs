@@ -31,8 +31,9 @@ namespace Xam.Plugin.WebView.Abstractions
 
         /// <summary>
         /// Fires when navigation is completed. This can be either as the result of a valid navigation, or on an error.
+        /// Returns the URL of the page navigated to.
         /// </summary>
-        public event EventHandler OnNavigationCompleted;
+        public event EventHandler<string> OnNavigationCompleted;
 
         /// <summary>
         /// Fires when navigation fires an error. By default this uses the native systems error codes.
@@ -237,9 +238,9 @@ namespace Xam.Plugin.WebView.Abstractions
             return handler;
         }
 
-        internal void HandleNavigationCompleted()
+        internal void HandleNavigationCompleted(string uri)
         {
-            OnNavigationCompleted?.Invoke(this, EventArgs.Empty);
+            OnNavigationCompleted?.Invoke(this, uri);
         }
 
         internal void HandleNavigationError(int errorCode)

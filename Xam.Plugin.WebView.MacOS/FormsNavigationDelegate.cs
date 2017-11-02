@@ -62,7 +62,7 @@ namespace Xam.Plugin.WebView.MacOS
 			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
 			if (renderer.Element == null) return;
 
-			renderer.Element.HandleNavigationCompleted();
+			renderer.Element.HandleNavigationCompleted(webView.Url.ToString());
 			await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
             if (renderer.Element.EnableGlobalCallbacks)
