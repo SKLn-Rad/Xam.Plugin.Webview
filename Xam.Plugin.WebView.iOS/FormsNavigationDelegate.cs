@@ -33,20 +33,17 @@ namespace Xam.Plugin.WebView.iOS
 			if (renderer.Element == null) return;
             
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
-
-            if (response.Cancel)
+            
+            if (response.Cancel || response.OffloadOntoDevice)
             {
+                if (response.OffloadOntoDevice)
+                    AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+
                 decisionHandler(WKNavigationActionPolicy.Cancel);
             }
 
             else
             {
-                if (navigationAction.NavigationType == WKNavigationType.LinkActivated && AttemptOpenCustomUrlScheme(navigationAction.Request.Url))
-                {
-                    decisionHandler(WKNavigationActionPolicy.Allow);
-                    return;
-                }
-
                 decisionHandler(WKNavigationActionPolicy.Allow);
                 renderer.Element.Navigating = true;
             }

@@ -45,16 +45,16 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return true;
             if (renderer.Element == null) return true;
 
-            // Allow custom urls to be cancelled too!
             string url = request.Url.ToString();
-            if (!url.StartsWith("http"))
+            var response = renderer.Element.HandleNavigationStartRequest(url);
+
+            if (response.Cancel || response.OffloadOntoDevice)
             {
-                var response = renderer.Element.HandleNavigationStartRequest(url);
-                if (response.Cancel || AttemptToHandleCustomUrlScheme(view, url))
-                {
-                    view.StopLoading();
-                    return true;
-                }
+                if (response.OffloadOntoDevice)
+                    AttemptToHandleCustomUrlScheme(view, url);
+
+                view.StopLoading();
+                return true;
             }
 
             return false;
@@ -65,19 +65,12 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            var response = renderer.Element.HandleNavigationStartRequest(url);
-            if (response.Cancel)
-            {
-                view.StopLoading();
-                return;
-            }
-
             renderer.Element.Navigating = true;
         }
 
         bool AttemptToHandleCustomUrlScheme(Android.Webkit.WebView view, string url)
         {
-            if (url.StartsWith("mailto:"))
+            if (url.StartsWith("mailto"))
             {
                 url = url.Replace("mailto:", "");
 
@@ -87,6 +80,15 @@ namespace Xam.Plugin.WebView.Droid
 
                 if (email.ResolveActivity(Forms.Context.PackageManager) != null)
                     Forms.Context.StartActivity(email);
+
+                return true;
+            }
+
+            if (url.StartsWith("http"))
+            {
+                Intent webPage = new Intent(Intent.ActionView, Android.Net.Uri.Parse(url));
+                if (webPage.ResolveActivity(Forms.Context.PackageManager) != null)
+                    Forms.Context.StartActivity(webPage);
 
                 return true;
             }

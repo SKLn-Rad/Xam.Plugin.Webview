@@ -8,7 +8,7 @@
 
 
     <StackLayout x:Name="ContainerLayout" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#2f2f2f" Padding="25, 25, 25, 25">
-        <Label Text="Welcome to Xam.Plugin.WebView.Webview" FontAttributes="Bold" FontSize="30" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" TextColor="#f2f2f2" />
+        <Label Text="Welcome to Xam.Plugin.WebView" FontAttributes="Bold" FontSize="30" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" TextColor="#f2f2f2" />
         <Label Text="Click an item to try it" FontSize="12" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" TextColor="#f2f2f2" />
 
         <ListView x:Name="ItemList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemSelected="OnItemSelected" BackgroundColor="#2f2f2f">

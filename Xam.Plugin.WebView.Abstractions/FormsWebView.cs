@@ -233,7 +233,19 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal DecisionHandlerDelegate HandleNavigationStartRequest(string uri)
         {
-            var handler = new DecisionHandlerDelegate() { Uri = uri };
+            // By default, we only attempt to offload valid Uris with none http/s schemes
+            bool validUri = Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult);
+            bool validScheme = false;
+            
+            if (validUri)
+                validScheme = uriResult.Scheme.StartsWith("http") || uriResult.Scheme.StartsWith("file");
+
+            var handler = new DecisionHandlerDelegate()
+            {
+                Uri = uri,
+                OffloadOntoDevice = validUri && !validScheme
+            };
+
             OnNavigationStarted?.Invoke(this, handler);
             return handler;
         }

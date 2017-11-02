@@ -5,6 +5,6 @@
              Title="Email Data"
              x:Class="SampleApp.Samples.EmailDataSample">
 
-    <webview:FormsWebView x:Name="stringContent" ContentType="StringData" />
+    <webview:FormsWebView x:Name="stringContent" ContentType="StringData" OnNavigationStarted="stringContent_OnNavigationStarted" />
 
 </ContentPage>
