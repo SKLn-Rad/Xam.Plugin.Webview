@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             x:Class="SampleApp.Samples.ScrollToSample">
+    
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <webview:FormsWebView x:Name="SampleWebview" Source="https://www.xamarin.com" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+            <Button x:Name="ScrollUpButton" Text="Scroll Down" Clicked="ScrollUpButtonClicked" Grid.Row="1" Grid.Column="0" />
+            <Button x:Name="ScrollDownButton" Text="Scroll Up" Clicked="ScrollDownButtonClicked" Grid.Row="1" Grid.Column="1" />
+
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>

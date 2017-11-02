@@ -40,34 +40,45 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.Navigating = false;
         }
 
+        public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return true;
+            if (renderer.Element == null) return true;
+
+            // Allow custom urls to be cancelled too!
+            string url = request.Url.ToString();
+            if (!url.StartsWith("http"))
+            {
+                var response = renderer.Element.HandleNavigationStartRequest(url);
+                if (response.Cancel || AttemptToHandleCustomUrlScheme(view, url))
+                {
+                    view.StopLoading();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
-            
-            var response = renderer.Element.HandleNavigationStartRequest(url);
 
+            var response = renderer.Element.HandleNavigationStartRequest(url);
             if (response.Cancel)
             {
                 view.StopLoading();
+                return;
             }
 
-            else
-            {
-                if (AttemptToHandleCustomUrlScheme(view, url))
-                    return;
-                
-                renderer.Element.Navigating = true;
-            }
+            renderer.Element.Navigating = true;
         }
 
         bool AttemptToHandleCustomUrlScheme(Android.Webkit.WebView view, string url)
         {
             if (url.StartsWith("mailto:"))
             {
-                view.StopLoading();
-                view.GoBack();
-
                 url = url.Replace("mailto:", "");
 
                 Intent email = new Intent(Intent.ActionSendto);

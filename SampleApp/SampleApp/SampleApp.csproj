@@ -92,6 +92,9 @@
     <Compile Include="Samples\RefreshSample.xaml.cs">
       <DependentUpon>RefreshSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\ScrollToSample.xaml.cs">
+      <DependentUpon>ScrollToSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\SourceSwapSample.xaml.cs">
       <DependentUpon>SourceSwapSample.xaml</DependentUpon>
     </Compile>
@@ -245,6 +248,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\NullSourceSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\ScrollToSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

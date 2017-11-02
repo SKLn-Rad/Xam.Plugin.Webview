@@ -164,6 +164,13 @@ namespace SampleApp
                 Title = "Email data",
                 Detail = "Load a WebView using string data as the source with a mailto: link"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 20,
+                Title = "Scroll test",
+                Detail = "Loads a long webview with buttons to scroll to the top and bottom"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -250,6 +257,10 @@ namespace SampleApp
 
                 case 19:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new EmailDataSample());
+                    break;
+
+                case 20:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new ScrollToSample());
                     break;
 
                 default:
