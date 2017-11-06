@@ -72,11 +72,15 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (url.StartsWith("mailto"))
             {
-                url = url.Replace("mailto:", "");
+                Android.Net.MailTo emailData = Android.Net.MailTo.Parse(url);
 
                 Intent email = new Intent(Intent.ActionSendto);
+
                 email.SetData(Android.Net.Uri.Parse("mailto:"));
-                email.PutExtra(Intent.ExtraEmail, new String[] { url.Split('?')[0] });
+                email.PutExtra(Intent.ExtraEmail, new String[] { emailData.To });
+                email.PutExtra(Intent.ExtraSubject, emailData.Subject);
+                email.PutExtra(Intent.ExtraCc, emailData.Cc);
+                email.PutExtra(Intent.ExtraText, emailData.Body);
 
                 if (email.ResolveActivity(Forms.Context.PackageManager) != null)
                     Forms.Context.StartActivity(email);
