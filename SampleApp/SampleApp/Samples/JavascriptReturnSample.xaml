@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:wv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             x:Class="SampleApp.Samples.JavascriptReturnSample">
+    
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <wv:FormsWebView x:Name="TestWebview" Grid.Row="0" Grid.Column="0" Source="Sample2.html" ContentType="LocalFile" />
+            <Button Text="Fire JS event" Grid.Row="1" Grid.Column="0" Clicked="Button_Clicked" />
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>

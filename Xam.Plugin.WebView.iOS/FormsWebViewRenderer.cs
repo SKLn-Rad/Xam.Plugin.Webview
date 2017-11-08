@@ -92,7 +92,7 @@ namespace Xam.Plugin.WebView.iOS
         {
             if (Element == null || string.IsNullOrWhiteSpace(e)) return;
 
-            if (Element.EnableGlobalCallbacks)
+            if ((sender == null && Element.EnableGlobalCallbacks) || sender != null)
                 await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
         }
 

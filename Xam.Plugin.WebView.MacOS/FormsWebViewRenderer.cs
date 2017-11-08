@@ -92,8 +92,8 @@ namespace Xam.Plugin.WebView.MacOS
 		{
 			if (Element == null || string.IsNullOrWhiteSpace(e)) return;
 
-            if (Element.EnableGlobalCallbacks)
-			    await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
+            if ((sender == null && Element.EnableGlobalCallbacks) || sender != null)
+                await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
 		}
 
 		void OnPropertyChanged(object sender, PropertyChangedEventArgs e)

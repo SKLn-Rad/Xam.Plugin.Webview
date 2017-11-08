@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
@@ -270,6 +271,10 @@ namespace Xam.Plugin.WebView.Abstractions
             if (string.IsNullOrWhiteSpace(data)) return;
             
             var action = JsonConvert.DeserializeObject<ActionEvent>(data);
+
+            // Decode
+            byte[] dBytes = Convert.FromBase64String(action.Data);
+            action.Data = Encoding.UTF8.GetString(dBytes, 0, dBytes.Length);
 
             // Local takes priority
             if (LocalRegisteredCallbacks.ContainsKey(action.Action))

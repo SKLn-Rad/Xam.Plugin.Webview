@@ -153,7 +153,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             if (Element == null || string.IsNullOrWhiteSpace(e)) return;
 
-            if (Element.EnableGlobalCallbacks)
+            if ((sender == null && Element.EnableGlobalCallbacks) || sender != null)
                 await OnJavascriptInjectionRequestAsync(FormsWebView.GenerateFunctionScript(e));
         }
 

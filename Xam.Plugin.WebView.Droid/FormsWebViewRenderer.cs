@@ -98,7 +98,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Element == null || string.IsNullOrWhiteSpace(e)) return;
 
-            if (sender != null || Element.EnableGlobalCallbacks)
+            if ((sender == null && Element.EnableGlobalCallbacks) || sender != null)
                 await OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(e));
         }
 

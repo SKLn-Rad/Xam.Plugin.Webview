@@ -116,7 +116,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal static string GenerateFunctionScript(string name)
         {
-            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+str+\"'}}\");}}";
+            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(str)+\"'}}\");}}";
         }
     }
 }
