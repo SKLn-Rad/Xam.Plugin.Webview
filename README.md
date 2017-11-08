@@ -1,3 +1,6 @@
+Copyright (c) 2017 Vistair Systems
+https://www.vistair.com/
+
 # WebView Plugin for Xamarin
 Lightweight cross platform WebView designed to leverage the native WebView components in Android, iOS, and Windows to provide enhanced functionality over the base control.
 
