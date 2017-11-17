@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Xam.Plugin.WebView.Abstractions;
 using Xam.Plugin.WebView.UWP;
 
 namespace SampleApp.UWP
@@ -50,6 +53,7 @@ namespace SampleApp.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 FormsWebViewRenderer.Initialize();
+                
                 Xamarin.Forms.Forms.Init(e);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

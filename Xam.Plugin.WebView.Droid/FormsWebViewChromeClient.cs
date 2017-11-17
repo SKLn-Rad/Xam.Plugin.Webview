@@ -22,5 +22,6 @@ namespace Xam.Plugin.WebView.Droid
         {
             Reference = new WeakReference<FormsWebViewRenderer>(renderer);
         }
+
     }
 }
