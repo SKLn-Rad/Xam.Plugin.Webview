@@ -137,6 +137,12 @@ namespace Xam.Plugin.WebView.Abstractions
             internal set => SetValue(CanGoForwardProperty, value);
         }
 
+        public bool UseWideViewPort
+        {
+            get => (bool) GetValue(UseWideViewPortProperty);
+            set => SetValue(UseWideViewPortProperty, value);
+        }
+
         public FormsWebView()
         {
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;

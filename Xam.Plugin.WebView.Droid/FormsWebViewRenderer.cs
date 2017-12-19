@@ -48,8 +48,13 @@ namespace Xam.Plugin.WebView.Droid
 
             if (e.OldElement != null)
                 DestroyElement(e.OldElement);
-        }
 
+            if (Element.UseWideViewPort)
+            {
+                Control.Settings.LoadWithOverviewMode = true;
+                Control.Settings.UseWideViewPort = true;
+            }
+        }
         void SetupElement(FormsWebView element)
         {
             element.PropertyChanged += OnPropertyChanged;
