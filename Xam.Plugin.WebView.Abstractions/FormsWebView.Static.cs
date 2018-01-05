@@ -51,6 +51,12 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public static readonly BindableProperty EnableGlobalHeadersProperty = BindableProperty.Create(nameof(EnableGlobalHeaders), typeof(bool), typeof(FormsWebView), true);
 
+
+        /// <summary>
+        /// A bindable property for the ScalesPageToFit property.
+        /// </summary>
+        public static readonly BindableProperty UseWideViewPortProperty = BindableProperty.Create(nameof(UseWideViewPort), typeof(bool), typeof(FormsWebView), false);
+
         /// <summary>
         /// A dictionary used to add headers which are used throughout all instances of FormsWebView.
         /// </summary>

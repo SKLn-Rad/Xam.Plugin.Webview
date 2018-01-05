@@ -53,3 +53,4 @@
 SampleApp\.userprefs
 
 SampleApp/SampleApp\.MacOS/\.DS_Store
+*.vspscc
