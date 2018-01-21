@@ -1,3 +1,5 @@
+<span><b>This project is no longer being maintained due to a legal dispute with my old place of employment...</b></span>
+
 Copyright (c) 2017 Vistair Systems
 https://www.vistair.com/
 
