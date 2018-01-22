@@ -88,11 +88,14 @@ namespace Xam.Plugin.WebView.Droid
             // Defaults
             webView.Settings.JavaScriptEnabled = true;
             webView.Settings.DomStorageEnabled = true;
+            if (Element.UserAgent != null && Element.UserAgent.Length > 0)
+            {
+                webView.Settings.UserAgentString = Element.UserAgent;
+            }
             webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
             webView.SetWebViewClient(new FormsWebViewClient(this));
             webView.SetWebChromeClient(new FormsWebViewChromeClient(this));
             webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
             SetNativeControl(webView);
