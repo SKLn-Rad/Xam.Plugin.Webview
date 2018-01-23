@@ -24301,39 +24301,36 @@
     "UAP,Version=v10.0.14393": []
   },
   "packageFolders": {
-    "C:\\Users\\ryan.dixon\\.nuget\\packages\\": {}
+    "C:\\Users\\t.nagasawa\\.nuget\\packages\\": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
+      "projectUniqueName": "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
       "projectName": "SampleApp.UWP",
-      "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
-      "projectJsonPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\project.json",
-      "packagesPath": "C:\\Users\\ryan.dixon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\obj\\",
+      "projectPath": "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
+      "projectJsonPath": "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\project.json",
+      "packagesPath": "C:\\Users\\t.nagasawa\\.nuget\\packages\\",
+      "outputPath": "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\obj\\",
       "projectStyle": "ProjectJson",
       "configFilePaths": [
-        "C:\\Users\\ryan.dixon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\t.nagasawa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\ryan.dixon\\Nuget\\repo": {},
-        "M:\\Nuget\\vistair.xamarin.core": {},
-        "http://nuget.syncfusion.com/nuget_xamarin/nuget/getsyncfusionpackages/xamarin/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "uap10.0.14393": {
           "projectReferences": {
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj"
+            "D:\\Gtot\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj": {
+              "projectPath": "D:\\Gtot\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj"
             },
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj"
+            "D:\\Gtot\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj": {
+              "projectPath": "D:\\Gtot\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj"
             },
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj"
+            "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj": {
+              "projectPath": "D:\\Gtot\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj"
             }
           }
         }
@@ -24373,7 +24370,7 @@
       "code": "NU1605",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package downgrade: Microsoft.NETCore.UniversalWindowsPlatform from 5.4.0 to 5.2.2. Reference the package directly from the project to select a different version. \r\n SampleApp.UWP -> Xam.Plugin.WebView.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.4.0) \r\n SampleApp.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.2.2)",
+      "message": "Microsoft.NETCore.UniversalWindowsPlatform の 5.4.0 から 5.2.2 へのパッケージ ダウングレードが検出されました。別のバージョンを選択するには、プロジェクトから直接パッケージを参照してください。 \r\n SampleApp.UWP -> Xam.Plugin.WebView.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.4.0) \r\n SampleApp.UWP -> Microsoft.NETCore.UniversalWindowsPlatform (>= 5.2.2)",
       "libraryId": "Microsoft.NETCore.UniversalWindowsPlatform",
       "targetGraphs": [
         "UAP,Version=v10.0.14393",

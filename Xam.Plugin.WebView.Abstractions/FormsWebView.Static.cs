@@ -58,9 +58,9 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty UseWideViewPortProperty = BindableProperty.Create(nameof(UseWideViewPort), typeof(bool), typeof(FormsWebView), false);
 
         /// <summary>
-        /// A bindable property for the ScalesPageToFit property.
+        /// A bindable property for the ApplicationNameForUserAgent property.
         /// </summary>
-        public static readonly BindableProperty UserAgentProperty = BindableProperty.Create(nameof(UserAgent), typeof(string), typeof(FormsWebView), "");
+        public static readonly BindableProperty ApplicationNameForUserAgentProperty = BindableProperty.Create(nameof(ApplicationNameForUserAgent), typeof(string), typeof(FormsWebView), "");
 
         /// <summary>
         /// A dictionary used to add headers which are used throughout all instances of FormsWebView.

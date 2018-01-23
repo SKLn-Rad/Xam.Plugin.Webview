@@ -88,9 +88,9 @@ namespace Xam.Plugin.WebView.Droid
             // Defaults
             webView.Settings.JavaScriptEnabled = true;
             webView.Settings.DomStorageEnabled = true;
-            if (Element.UserAgent != null && Element.UserAgent.Length > 0)
+            if (Element.ApplicationNameForUserAgent != null && Element.ApplicationNameForUserAgent.Length > 0)
             {
-                webView.Settings.UserAgentString = Element.UserAgent;
+                webView.Settings.UserAgentString += " " + Element.ApplicationNameForUserAgent;
             }
             webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
             webView.SetWebViewClient(new FormsWebViewClient(this));

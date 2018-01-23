@@ -81,10 +81,6 @@ namespace Xam.Plugin.WebView.MacOS
 				UIDelegate = this,
 				NavigationDelegate = _navigationDelegate
 			};
-            if (Element.UserAgent != null && Element.UserAgent.Length > 0)
-            {
-                wkWebView.CustomUserAgent = Element.UserAgent;
-            }
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
 			SetNativeControl(wkWebView);

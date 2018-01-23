@@ -143,10 +143,10 @@ namespace Xam.Plugin.WebView.Abstractions
             set => SetValue(UseWideViewPortProperty, value);
         }
 
-        public string UserAgent
+        public string ApplicationNameForUserAgent
         {
-            get => (string)GetValue(UserAgentProperty);
-            set => SetValue(UserAgentProperty, value);
+            get => (string)GetValue(ApplicationNameForUserAgentProperty);
+            set => SetValue(ApplicationNameForUserAgentProperty, value);
         }
 
         public FormsWebView()
