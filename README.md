@@ -1,8 +1,3 @@
-<span><b>This project is no longer being maintained due to a legal dispute with my old place of employment...</b></span>
-
-Copyright (c) 2017 Vistair Systems
-https://www.vistair.com/
-
 # WebView Plugin for Xamarin
 Lightweight cross platform WebView designed to leverage the native WebView components in Android, iOS, and Windows to provide enhanced functionality over the base control.
 
