@@ -127,7 +127,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal static string GenerateFunctionScript(string name)
         {
-            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(str)+\"'}}\");}}";
+            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(encodeURIComponent(str).replace(/%([0-9A-F]{{2}})/g,function (match, p1){{return String.fromCharCode('0x' + p1);}}))+\"'}}\");}}";
         }
     }
 }
