@@ -44,6 +44,8 @@ namespace Xam.Plugin.WebView.Droid
         [Obsolete]
         public override void OnReceivedError(Android.Webkit.WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
         {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Lollipop) return;
+
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
@@ -56,6 +58,8 @@ namespace Xam.Plugin.WebView.Droid
         [Obsolete]
         public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, string url)
         {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Lollipop) goto EndShouldInterceptRequest;
+
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) goto EndShouldInterceptRequest;
             if (renderer.Element == null) goto EndShouldInterceptRequest;
 
