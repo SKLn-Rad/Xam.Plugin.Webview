@@ -1,16 +1,17 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace SampleApp.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class JavascriptInternet : ContentPage
-	{
-		public JavascriptInternet ()
-		{
-			InitializeComponent ();
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class JavascriptInternet : ContentPage
+    {
+        public JavascriptInternet()
+        {
+            InitializeComponent();
 
             InjectionText.Text = "document.body.style.backgroundColor = \"red\";";
             GlobalText.Text = "globalCallback('Hello from Javascript!');";
@@ -20,12 +21,12 @@ namespace SampleApp.Samples
             WebContent.AddLocalCallback("localCallback", LocalCallback);
         }
 
-        void GlobalCallback(string obj)
+        void GlobalCallback(JToken obj)
         {
             System.Diagnostics.Debug.WriteLine($"Got global callback: {obj}");
         }
 
-        void LocalCallback(string obj)
+        void LocalCallback(JToken obj)
         {
             System.Diagnostics.Debug.WriteLine($"Got local callback: {obj}");
         }

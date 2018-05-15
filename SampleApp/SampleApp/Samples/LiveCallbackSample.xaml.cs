@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,7 +27,7 @@ namespace SampleApp.Samples
             WebContent.InjectJavascriptAsync("localCallback('Hello World');").ConfigureAwait(false);
         }
 
-        void HandleCallback(string obj)
+        void HandleCallback(JToken obj)
         {
             System.Diagnostics.Debug.WriteLine($"Got callback: {obj}");
         }

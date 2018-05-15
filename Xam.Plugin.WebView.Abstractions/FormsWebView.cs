@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -24,7 +25,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <param name="js">The valid JS to inject</param>
         /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
-        
+
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
         /// </summary>
@@ -54,7 +55,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal event JavascriptInjectionRequestDelegate OnJavascriptInjectionRequest;
 
-        internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
+        internal readonly Dictionary<string, Action<JToken>> LocalRegisteredCallbacks = new Dictionary<string, Action<JToken>>();
 
         /// <summary>
         /// A dictionary containing all headers to be injected into the request. Local headers take precedence over global ones.
@@ -75,7 +76,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public string Source
         {
-            get => (string) GetValue(SourceProperty);
+            get => (string)GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
         }
 
@@ -97,7 +98,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool EnableGlobalCallbacks
         {
-            get => (bool) GetValue(EnableGlobalCallbacksProperty);
+            get => (bool)GetValue(EnableGlobalCallbacksProperty);
             set => SetValue(EnableGlobalCallbacksProperty, value);
         }
 
@@ -106,7 +107,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool EnableGlobalHeaders
         {
-            get => (bool) GetValue(EnableGlobalHeadersProperty);
+            get => (bool)GetValue(EnableGlobalHeadersProperty);
             set => SetValue(EnableGlobalHeadersProperty, value);
         }
 
@@ -124,7 +125,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool CanGoBack
         {
-            get => (bool) GetValue(CanGoBackProperty);
+            get => (bool)GetValue(CanGoBackProperty);
             internal set => SetValue(CanGoBackProperty, value);
         }
 
@@ -133,13 +134,13 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool CanGoForward
         {
-            get => (bool) GetValue(CanGoForwardProperty);
+            get => (bool)GetValue(CanGoForwardProperty);
             internal set => SetValue(CanGoForwardProperty, value);
         }
 
         public bool UseWideViewPort
         {
-            get => (bool) GetValue(UseWideViewPortProperty);
+            get => (bool)GetValue(UseWideViewPortProperty);
             set => SetValue(UseWideViewPortProperty, value);
         }
 
@@ -195,7 +196,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         /// <param name="functionName">The name of the function</param>
         /// <param name="action">The action to call back to</param>
-        public void AddLocalCallback(string functionName, Action<string> action)
+        public void AddLocalCallback(string functionName, Action<JToken> action)
         {
             if (string.IsNullOrWhiteSpace(functionName)) return;
 
@@ -243,7 +244,7 @@ namespace Xam.Plugin.WebView.Abstractions
             // By default, we only attempt to offload valid Uris with none http/s schemes
             bool validUri = Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult);
             bool validScheme = false;
-            
+
             if (validUri)
                 validScheme = uriResult.Scheme.StartsWith("http") || uriResult.Scheme.StartsWith("file");
 
@@ -275,12 +276,8 @@ namespace Xam.Plugin.WebView.Abstractions
         internal void HandleScriptReceived(string data)
         {
             if (string.IsNullOrWhiteSpace(data)) return;
-            
-            var action = JsonConvert.DeserializeObject<ActionEvent>(data);
 
-            // Decode
-            byte[] dBytes = Convert.FromBase64String(action.Data);
-            action.Data = Encoding.UTF8.GetString(dBytes, 0, dBytes.Length);
+            var action = JsonConvert.DeserializeObject<ActionEvent>(data);
 
             // Local takes priority
             if (LocalRegisteredCallbacks.ContainsKey(action.Action))
