@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 
@@ -17,7 +18,7 @@ namespace Xam.Plugin.WebView.Abstractions
         event EventHandler OnContentLoaded;
 
         WebViewContentType ContentType { get; set; }
-        
+
         string Source { get; set; }
 
         string BaseUrl { get; set; }
@@ -40,7 +41,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         Task<string> InjectJavascriptAsync(string js);
 
-        void AddLocalCallback(string functionName, Action<string> action);
+        void AddLocalCallback(string functionName, Action<JToken> action);
 
         void RemoveLocalCallback(string functionName);
 

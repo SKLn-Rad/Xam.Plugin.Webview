@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -24,12 +25,12 @@ namespace SampleApp.Samples
             WebContent.AddLocalCallback("localCallback", LocalCallback);
         }
 
-        void GlobalCallback(string obj)
+        void GlobalCallback(JToken obj)
         {
             System.Diagnostics.Debug.WriteLine($"Got global callback: {obj}");
         }
 
-        void LocalCallback(string obj)
+        void LocalCallback(JToken obj)
         {
             System.Diagnostics.Debug.WriteLine($"Got local callback: {obj}");
         }

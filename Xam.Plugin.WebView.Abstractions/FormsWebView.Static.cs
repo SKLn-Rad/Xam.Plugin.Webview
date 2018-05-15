@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json.Linq;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xamarin.Forms;
 
@@ -62,14 +63,14 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public readonly static Dictionary<string, string> GlobalRegisteredHeaders = new Dictionary<string, string>();
 
-        internal readonly static Dictionary<string, Action<string>> GlobalRegisteredCallbacks = new Dictionary<string, Action<string>>();
-        
+        internal readonly static Dictionary<string, Action<JToken>> GlobalRegisteredCallbacks = new Dictionary<string, Action<JToken>>();
+
         /// <summary>
         /// Adds a callback to every FormsWebView available in the application.
         /// </summary>
         /// <param name="functionName">The function to call</param>
         /// <param name="action">The returning action</param>
-        public static void AddGlobalCallback(string functionName, Action<string> action)
+        public static void AddGlobalCallback(string functionName, Action<JToken> action)
         {
             if (string.IsNullOrWhiteSpace(functionName)) return;
 
@@ -122,7 +123,9 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal static string GenerateFunctionScript(string name)
         {
-            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(str)+\"'}}\");}}";
+            return $@"function {name}(obj) {{
+            csharp(JSON.stringify({{ action: '{name}', data: obj }}));
+}}";
         }
     }
 }
