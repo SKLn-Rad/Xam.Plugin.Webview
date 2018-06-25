@@ -17,7 +17,7 @@ namespace Xam.Plugin.WebView.Abstractions
         event EventHandler OnContentLoaded;
 
         WebViewContentType ContentType { get; set; }
-        
+
         string Source { get; set; }
 
         string BaseUrl { get; set; }
@@ -45,5 +45,6 @@ namespace Xam.Plugin.WebView.Abstractions
         void RemoveLocalCallback(string functionName);
 
         void RemoveAllLocalCallbacks();
+        Task ClearCookiesAsync();
     }
 }

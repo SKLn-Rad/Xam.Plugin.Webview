@@ -1,4 +1,5 @@
-﻿using Android.Webkit;
+﻿using Android.OS;
+using Android.Webkit;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -59,6 +60,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested += OnClearCookiesRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -70,6 +72,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested -= OnClearCookiesRequest;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -141,6 +144,28 @@ namespace Xam.Plugin.WebView.Droid
             }
         }
 
+        private async Task OnClearCookiesRequest()
+        {
+            if (Control == null) return;
+
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+            {
+                CookieManager.Instance.RemoveAllCookies(null);
+                CookieManager.Instance.Flush();
+            }
+            else
+            {
+                //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.StartSync();
+                CookieManager cookieManager = CookieManager.Instance;
+                cookieManager.RemoveAllCookie();
+                cookieManager.RemoveSessionCookie();
+                cookieSyncMngr.StopSync();
+                cookieSyncMngr.Sync();
+            }
+        }
+
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
             if (Element == null || Control == null) return string.Empty;
@@ -160,7 +185,7 @@ namespace Xam.Plugin.WebView.Droid
                 if (_callback.Value is Java.Lang.String)
                 {
                     // Unescape that damn Unicode Java bull.
-                    response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char) ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+                    response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
                     response = Regex.Unescape(response);
 
                     if (response.Equals("\"null\""))
@@ -237,7 +262,7 @@ namespace Xam.Plugin.WebView.Droid
                         headers.Add(header.Key, header.Value);
                 }
             }
-            
+
             Control.LoadUrl(Element.Source, headers);
         }
     }

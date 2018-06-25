@@ -24301,48 +24301,44 @@
     "UAP,Version=v10.0.14393": []
   },
   "packageFolders": {
-    "C:\\Users\\ryan.dixon\\.nuget\\packages\\": {}
+    "C:\\Users\\kriber\\.nuget\\packages\\": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
+      "projectUniqueName": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
       "projectName": "SampleApp.UWP",
-      "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
-      "projectJsonPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\project.json",
-      "packagesPath": "C:\\Users\\ryan.dixon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\obj\\",
+      "projectPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\SampleApp.UWP.csproj",
+      "projectJsonPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\project.json",
+      "packagesPath": "C:\\Users\\kriber\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp.UWP\\obj\\",
       "projectStyle": "ProjectJson",
       "configFilePaths": [
-        "C:\\Users\\ryan.dixon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kriber\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\ryan.dixon\\Nuget\\repo": {},
-        "M:\\Nuget\\vistair.xamarin.core": {},
-        "http://nuget.syncfusion.com/nuget_xamarin/nuget/getsyncfusionpackages/xamarin/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "uap10.0.14393": {
           "projectReferences": {
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj"
+            "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj": {
+              "projectPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj"
             },
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj"
+            "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj": {
+              "projectPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.Abstractions\\Xam.Plugin.WebView.Abstractions.csproj"
             },
-            "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj": {
-              "projectPath": "C:\\Users\\ryan.dixon\\Source\\Repos\\Xam.Plugin.Webview\\SampleApp\\SampleApp\\SampleApp.csproj"
+            "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj": {
+              "projectPath": "C:\\Users\\kriber\\source\\repos\\Xam.Plugin.Webview\\Xam.Plugin.WebView.UWP\\Xam.Plugin.WebView.UWP.csproj"
             }
           }
         }
       }
     },
     "dependencies": {
-      "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-      "Newtonsoft.Json": "10.0.3",
-      "Xamarin.Forms": "2.4.0.280"
+      "Microsoft.NETCore.UniversalWindowsPlatform": "[5.2.2, )",
+      "Newtonsoft.Json": "[10.0.3, )",
+      "Xamarin.Forms": "[2.4.0.280, )"
     },
     "frameworks": {
       "uap10.0.14393": {}

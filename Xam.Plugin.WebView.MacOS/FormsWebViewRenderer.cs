@@ -48,18 +48,20 @@ namespace Xam.Plugin.WebView.MacOS
 		{
 			element.PropertyChanged += OnPropertyChanged;
 			element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
-			element.OnBackRequested += OnBackRequested;
+			element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnBackRequested += OnBackRequested;
 			element.OnForwardRequested += OnForwardRequested;
 			element.OnRefreshRequested += OnRefreshRequested;
 
 			SetSource();
 		}
 
-		void DestroyElement(FormsWebView element)
+        void DestroyElement(FormsWebView element)
 		{
 			element.PropertyChanged -= OnPropertyChanged;
 			element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
-			element.OnBackRequested -= OnBackRequested;
+            element.OnClearCookiesRequested -= OnClearCookiesRequest;
+            element.OnBackRequested -= OnBackRequested;
 			element.OnForwardRequested -= OnForwardRequested;
 			element.OnRefreshRequested -= OnRefreshRequested;
 
@@ -106,7 +108,20 @@ namespace Xam.Plugin.WebView.MacOS
 			}
 		}
 
-		internal async Task<string> OnJavascriptInjectionRequest(string js)
+        private async Task OnClearCookiesRequest()
+        {
+            if (Control == null) return;
+
+            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+
+            var cookies = await store.GetAllCookiesAsync();
+            foreach (var c in cookies)
+            {
+                await store.DeleteCookieAsync(c);
+            }
+        }
+
+        internal async Task<string> OnJavascriptInjectionRequest(string js)
 		{
             if (Control == null || Element == null) return string.Empty;
 
