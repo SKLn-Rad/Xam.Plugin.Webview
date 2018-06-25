@@ -169,6 +169,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             if (Control == null) return;
 
+            // This clears all tmp. data. Not only cookies
             await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
         }
 

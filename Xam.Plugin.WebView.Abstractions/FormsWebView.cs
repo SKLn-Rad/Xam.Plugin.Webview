@@ -25,6 +25,10 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
 
+
+        /// <summary>
+        /// Delegate to await clearing cookies. Will remove all temporary data on UWP
+        /// </summary>
         public delegate Task ClearCookiesRequestDelegate();
 
         /// <summary>
@@ -178,6 +182,11 @@ namespace Xam.Plugin.WebView.Abstractions
             OnRefreshRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Clearing all cookies.
+        /// For UWP, all temporary browser data will be cleared.
+        /// The cookies will not disappear before after a refresh or navigation on UWP.
+        /// </summary>
         public async Task ClearCookiesAsync() {
             if (OnClearCookiesRequested != null)
                 await OnClearCookiesRequested.Invoke();
