@@ -185,7 +185,6 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// Clearing all cookies.
         /// For UWP, all temporary browser data will be cleared.
-        /// The cookies will not disappear before after a refresh or navigation on UWP.
         /// </summary>
         public async Task ClearCookiesAsync() {
             if (OnClearCookiesRequested != null)
