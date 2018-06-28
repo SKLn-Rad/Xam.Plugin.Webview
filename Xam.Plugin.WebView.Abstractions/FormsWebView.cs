@@ -24,7 +24,13 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <param name="js">The valid JS to inject</param>
         /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
-        
+
+
+        /// <summary>
+        /// Delegate to await clearing cookies. Will remove all temporary data on UWP
+        /// </summary>
+        public delegate Task ClearCookiesRequestDelegate();
+
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
         /// </summary>
@@ -53,6 +59,8 @@ namespace Xam.Plugin.WebView.Abstractions
         internal event EventHandler OnRefreshRequested;
 
         internal event JavascriptInjectionRequestDelegate OnJavascriptInjectionRequest;
+
+        internal event ClearCookiesRequestDelegate OnClearCookiesRequested;
 
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
 
@@ -172,6 +180,15 @@ namespace Xam.Plugin.WebView.Abstractions
         public void Refresh()
         {
             OnRefreshRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Clearing all cookies.
+        /// For UWP, all temporary browser data will be cleared.
+        /// </summary>
+        public async Task ClearCookiesAsync() {
+            if (OnClearCookiesRequested != null)
+                await OnClearCookiesRequested.Invoke();
         }
 
         /// <summary>

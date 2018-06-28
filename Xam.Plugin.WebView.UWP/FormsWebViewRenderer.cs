@@ -12,7 +12,7 @@ namespace Xam.Plugin.WebView.UWP
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Windows.UI.Xaml.Controls.WebView>
     {
-        
+
         public static event EventHandler<Windows.UI.Xaml.Controls.WebView> OnControlChanged;
 
         public static string BaseUrl { get; set; } = "ms-appx:///";
@@ -41,6 +41,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             element.PropertyChanged += OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
+            element.OnClearCookiesRequested += OnClearCookiesRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -52,6 +53,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             element.PropertyChanged -= OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
+            element.OnClearCookiesRequested -= OnClearCookiesRequest;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -72,7 +74,7 @@ namespace Xam.Plugin.WebView.UWP
             Control.DOMContentLoaded += OnDOMContentLoaded;
             Control.ScriptNotify += OnScriptNotify;
             Control.DefaultBackgroundColor = Windows.UI.Colors.Transparent;
-            
+
             OnControlChanged?.Invoke(this, control);
         }
 
@@ -121,7 +123,7 @@ namespace Xam.Plugin.WebView.UWP
             if (Element == null) return;
 
             if (!args.IsSuccess)
-                Element.HandleNavigationError((int) args.WebErrorStatus);
+                Element.HandleNavigationError((int)args.WebErrorStatus);
 
             Element.CanGoBack = Control.CanGoBack;
             Element.CanGoForward = Control.CanGoForward;
@@ -133,7 +135,7 @@ namespace Xam.Plugin.WebView.UWP
         async void OnDOMContentLoaded(Windows.UI.Xaml.Controls.WebView sender, WebViewDOMContentLoadedEventArgs args)
         {
             if (Element == null) return;
-            
+
             // Add Injection Function
             await Control.InvokeScriptAsync("eval", new[] { FormsWebView.InjectedFunction });
 
@@ -163,6 +165,14 @@ namespace Xam.Plugin.WebView.UWP
             Element.HandleScriptReceived(e.Value);
         }
 
+        private async Task OnClearCookiesRequest()
+        {
+            if (Control == null) return;
+
+            // This clears all tmp. data. Not only cookies
+            await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+        }
+
         async Task<string> OnJavascriptInjectionRequestAsync(string js)
         {
             if (Control == null) return string.Empty;
@@ -173,7 +183,7 @@ namespace Xam.Plugin.WebView.UWP
         void SetSource()
         {
             if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
-            
+
             switch (Element.ContentType)
             {
                 case WebViewContentType.Internet:

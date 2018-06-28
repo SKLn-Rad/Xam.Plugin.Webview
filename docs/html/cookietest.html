@@ -1,0 +1,44 @@
+<html>
+<body>
+    <button id="theButton" onclick="setCookie()">Set random cookie</button>
+    <button id="theButton" onclick="refreshCookies()">Refresh cookies</button>
+    <div id="theDiv"></div>
+</body>
+<script>
+    var btn = document.getElementById("theButton");
+    var div = document.getElementById("theDiv");
+
+    function setCookie() {
+        var randName = Math.random().toString(36).substring(3);
+        var randValue = Math.random().toString(36).substring(5);
+        var expDate = new Date();
+        expDate.setDate(expDate.getDate() + 1);
+        document.cookie = randName + "=" + randValue + "; expires=" + expDate.toUTCString() + ";";
+        refreshCookies();
+    }
+
+    function refreshCookies() {
+        // Clear div
+        div.innerHTML = "";
+
+        // Set all current cookies to output
+        var allCookies = document.cookie.split(";");
+        for (var c of allCookies) {
+            var d = document.createElement("div");
+            d.innerHTML = c;
+            div.appendChild(d);
+        }
+    }
+
+</script>
+<style>
+button{
+  font-size:2em;
+  padding: 0.5em;
+  margin-right:1em;
+}
+div{
+  font-size:1.5em;
+}
+</style>
+</html>
