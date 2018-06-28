@@ -206,8 +206,7 @@ namespace Xam.Plugin.WebView.UWP
                 cookie = cookie.Remove(cookie.Length - 2);
             }
             // This clears all tmp. data. Not only cookies
-            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
-            return cookie;
+            await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
         }
 
         private async Task<string> OnGetAllCookieRequestAsync() {
