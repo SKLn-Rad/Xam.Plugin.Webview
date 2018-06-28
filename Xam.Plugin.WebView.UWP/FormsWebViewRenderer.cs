@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
@@ -213,13 +214,13 @@ namespace Xam.Plugin.WebView.UWP
             if (Control == null || Element == null) return string.Empty;
         }
 
-        private async Task<string> OnGetCookieRequestAsync(string cookieName)
+        private async Task<string> OnGetCookieRequestAsync(string key)
         {
             if (Control == null || Element == null) return;
 
             var cookie = string.Empty;
             foreach(Cookie currentCookie in cookieCollection.GetCookies(new Uri(Element.Source))) {
-                if (currentCookie.Name == cookieName)
+                if (currentCookie.Name == key)
                 {
                     cookie = currentCookie.Value;
                     break;
@@ -230,7 +231,7 @@ namespace Xam.Plugin.WebView.UWP
             return cookie;
         }
 
-        private async Task<string> OnSetCookieRequestAsync(string cookieName, string cookieValue)
+        private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
             if (Control == null) return;
 
