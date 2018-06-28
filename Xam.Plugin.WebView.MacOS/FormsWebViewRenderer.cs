@@ -201,7 +201,11 @@ namespace Xam.Plugin.WebView.MacOS
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
             {
-                cookieCollection += c.Name + "=" + c.Value + "; ";
+                Console.WriteLine("here 1 " + c);
+                if (c.Domain == url.Host)
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
             }
 
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
@@ -209,7 +213,11 @@ namespace Xam.Plugin.WebView.MacOS
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                cookieCollection += c.Name + "=" + c.Value + "; ";
+                Console.WriteLine("here 2 " + c);
+                if (c.Domain == url.Host)
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
             }
             if (cookieCollection.Length > 0)
             {
@@ -228,7 +236,7 @@ namespace Xam.Plugin.WebView.MacOS
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
             {
-                if (c.Name == cookieName)
+                if (c.Name == cookieName && c.Domain == url.Host)
                 {
                     return c.Value;
                 }
@@ -239,7 +247,7 @@ namespace Xam.Plugin.WebView.MacOS
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                if (c.Name == cookieName)
+                if (c.Name == cookieName && c.Domain == url.Host)
                     return c.Value;
             }
 

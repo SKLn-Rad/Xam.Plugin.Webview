@@ -196,7 +196,11 @@ namespace Xam.Plugin.WebView.iOS
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
             {
-                cookieCollection += c.Name + "=" + c.Value + "; ";
+                Console.WriteLine("here 1 " + c);
+                if (c.Domain == url.Host)
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
             }
 
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
@@ -204,7 +208,11 @@ namespace Xam.Plugin.WebView.iOS
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                cookieCollection += c.Name + "=" + c.Value + "; ";
+                Console.WriteLine("here 2 " + c);
+                if (c.Domain == url.Host)
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
             }
             if(cookieCollection.Length > 0) {
                 cookieCollection = cookieCollection.Remove(cookieCollection.Length - 2);
@@ -214,13 +222,16 @@ namespace Xam.Plugin.WebView.iOS
 
         /* gets cookie based on cookiekey */
 
-        private async Task<string> OnGetCookieRequest(string cookieName) {
+        private async Task<string> OnGetCookieRequest(string cookieName)
+        {
             if (Control == null || Element == null) return string.Empty;
             var url = new Uri(Element.Source);
             var toReturn = string.Empty;
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
-            foreach(NSHttpCookie c in sharedCookies) {
-                if(c.Name == cookieName) {
+            foreach (NSHttpCookie c in sharedCookies)
+            {
+                if (c.Name == cookieName && c.Domain == url.Host)
+                {
                     return c.Value;
                 }
             }
@@ -230,7 +241,7 @@ namespace Xam.Plugin.WebView.iOS
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                if (c.Name == cookieName)
+                if (c.Name == cookieName && c.Domain == url.Host)
                     return c.Value;
             }
 
