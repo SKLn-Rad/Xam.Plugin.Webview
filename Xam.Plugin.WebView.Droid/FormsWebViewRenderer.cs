@@ -17,6 +17,10 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
     {
+void Element_OnSetCookieValueRequested(string cookieName, string cookieValue, string url)
+        {
+        }
+
 
         public static string MimeType = "text/html";
 
@@ -60,6 +64,9 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnGetCookieValueRequested += OnGetCookieValueRequest;
+            element.OnGetAllCookiesRequested += OnGetAllCookieRequest;
+            element.OnSetCookieValueRequested += OnSetCookieValueRequest;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
@@ -73,6 +80,9 @@ namespace Xam.Plugin.WebView.Droid
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
+            element.OnGetAllCookiesRequested -= OnGetAllCookieRequest;
+            element.OnGetCookieValueRequested -= OnGetCookieValueRequest;
+            element.OnSetCookieValueRequested -= OnSetCookieValueRequest;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -165,6 +175,121 @@ namespace Xam.Plugin.WebView.Droid
                 cookieSyncMngr.Sync();
             }
         }
+
+        /* Returns all cookies for the current page */
+
+        private async Task<string> OnGetAllCookieRequest() {
+            if (Control == null || Element == null) return string.Empty;
+            var cookies = string.Empty;
+            await Task.Run(() =>
+            {
+                if (Control != null && Element != null)
+                {
+                    var url = Element.Source;
+                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                    {
+                        CookieManager.Instance.Flush();
+                        cookies = CookieManager.Instance.GetCookie(url);
+                    }
+                    else
+                    {
+                        //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                        cookieSyncMngr.StartSync();
+                        CookieManager cookieManager = CookieManager.Instance;
+                        cookies = cookieManager.GetCookie(url);
+                    }
+                }
+
+            });
+
+            return cookies;
+        }
+
+        /* Sets cookie value based on cookiename. */
+
+        private async Task<string> OnSetCookieValueRequest(string cookieName, string cookieValue, long? duration = null)
+        {
+            var cookie = string.Empty;
+            // wait!
+            await Task.Run(() =>
+            {
+                if (Control != null && Element != null)
+                {
+                    var url = Element.Source;
+                    //Console.WriteLine(Control.)
+                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                    {
+                        
+                        CookieManager.Instance.SetCookie(url, cookieName + "=" + cookieValue);
+                        CookieManager.Instance.Flush();
+                    }
+                    else
+                    {
+                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                        cookieSyncMngr.StartSync();
+                        CookieManager cookieManager = CookieManager.Instance;
+                        cookieManager.SetCookie(url, cookieName + "=" + cookieValue);
+                        cookieManager.Flush();
+                    }
+                }
+
+            });
+
+            cookie = await OnGetCookieValueRequest(cookieName);
+
+            return cookie;
+        }
+
+        /* Gets cookie value based on cookiename. */
+
+        private async Task<string> OnGetCookieValueRequest(string cookieName)
+        {
+
+            var cookie = default(string);
+            // wait!
+            await Task.Run(() =>
+            {
+                if (Control != null && Element != null)
+                {
+                    var url = Element.Source;
+                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                    {
+                        CookieManager.Instance.Flush();
+                        string[] cookieCollection = CookieManager.Instance.GetCookie(url).Split(new string[] { "; " }, StringSplitOptions.None);
+
+                        foreach(var c in cookieCollection) {
+                            var keyValue = c.Split(new[] { '=' }, 2);
+                            if(keyValue[0] == cookieName) {
+                                cookie = keyValue[1];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                        cookieSyncMngr.StartSync();
+                        CookieManager cookieManager = CookieManager.Instance;
+                        string[] cookieCollection = cookieManager.GetCookie(url).Split(new string[] { "; " }, StringSplitOptions.None);
+                        foreach (var c in cookieCollection)
+                        {
+                            var keyValue = c.Split(new[] { '=' }, 2);
+                            if (keyValue[0] == cookieName)
+                            {
+                                cookie = keyValue[1];
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            return cookie;
+        }
+
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {

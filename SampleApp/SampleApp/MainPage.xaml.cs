@@ -27,6 +27,13 @@ namespace SampleApp
         {
             Items.Add(new SelectionItem()
             {
+                Identifier = 22,
+                Title = "Get/Set Cookie test",
+                Detail = "Set cookie in the web view"
+            });
+
+            Items.Add(new SelectionItem()
+            {
                 Identifier = 0,
                 Title = "Internet",
                 Detail = "Generic content loaded from the internet, no additions whatsoever."
@@ -272,6 +279,10 @@ namespace SampleApp
 
                 case 21:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new ClearCookieSample());
+                    break;
+
+                case 22:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new GetSetCookieSample());
                     break;
 
                 default:

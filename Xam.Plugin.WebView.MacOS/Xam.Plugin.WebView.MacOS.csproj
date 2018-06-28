@@ -34,6 +34,7 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -53,6 +54,7 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -87,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{F690DD01-F04C-498B-B574-B870C8A7702C}</Project>
+      <Project>{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}</Project>
       <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>

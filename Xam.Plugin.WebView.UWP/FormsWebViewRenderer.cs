@@ -14,7 +14,7 @@ namespace Xam.Plugin.WebView.UWP
     {
 
         public static event EventHandler<Windows.UI.Xaml.Controls.WebView> OnControlChanged;
-
+        private CookieCollection cookieCollection = new CookieCollection();
         public static string BaseUrl { get; set; } = "ms-appx:///";
         LocalFileStreamResolver _resolver;
 
@@ -22,6 +22,7 @@ namespace Xam.Plugin.WebView.UWP
         {
             var dt = DateTime.Now;
         }
+
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
         {
@@ -42,6 +43,9 @@ namespace Xam.Plugin.WebView.UWP
             element.PropertyChanged += OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnGetCookieValueRequested += OnGetCookieRequest;
+            element.OnGetAllCookiesRequested += OnGetAllCookieRequest;
+            element.OnSetCookieValueRequested += OnSetCookieRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -55,6 +59,9 @@ namespace Xam.Plugin.WebView.UWP
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
             element.OnBackRequested -= OnBackRequested;
+            element.OnGetAllCookiesRequested -= OnGetAllCookieRequest;
+            element.OnGetCookieValueRequested -= OnGetCookieRequest;
+            element.OnSetCookieValueRequested -= OnSetCookieRequest;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
 
@@ -125,6 +132,26 @@ namespace Xam.Plugin.WebView.UWP
             if (!args.IsSuccess)
                 Element.HandleNavigationError((int)args.WebErrorStatus);
 
+
+            /* Setting cookies */
+
+
+            var filter = new HttpBaseProtocolFilter();
+            HttpClient client = new HttpClient(filter);
+            HttpCookieCollection httpCookieCollection = filter.CookieManager.GetCookies(navigationEventArgs.Uri);
+            //httpCookieCollection.
+            // Use this, while it comes from an instance, its shared across everything.
+            foreach (var cookie in httpCookieCollection)
+            {
+                cookieCollection.Add(new Cookie
+                {
+                    Domain = cookie.Domain,
+                    Name = cookie.Name,
+                    Value = cookie.Value,
+
+                });
+            }
+
             Element.CanGoBack = Control.CanGoBack;
             Element.CanGoForward = Control.CanGoForward;
 
@@ -168,9 +195,48 @@ namespace Xam.Plugin.WebView.UWP
         private async Task OnClearCookiesRequest()
         {
             if (Control == null) return;
+            var cookie = string.Empty;
+            foreach (Cookie currentCookie in cookieCollection.GetCookies(new Uri(Element.Source)))
+            {
+                cookie += currentCookie.Name + "=" + currentCookie.Value + "; ";
+            }
+
+            if(cookie.Length > 2) {
+                cookie = cookie.Remove(cookie.Length - 2);
+            }
+            // This clears all tmp. data. Not only cookies
+            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+            return cookie;
+        }
+
+        private async Task<string> OnGetAllCookieRequest() {
+            if (Control == null || Element == null) return string.Empty;
+        }
+
+        private async Task<string> OnGetCookieRequest(string cookieName)
+        {
+            if (Control == null || Element == null) return;
+
+            var cookie = string.Empty;
+            foreach(Cookie currentCookie in cookieCollection.GetCookies(new Uri(Element.Source))) {
+                if (currentCookie.Name == cookieName)
+                {
+                    cookie = currentCookie.Value;
+                    break;
+                }
+            }
+            // This clears all tmp. data. Not only cookies
+            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+            return cookie;
+        }
+
+        private async Task<string> OnSetCookieRequest(string cookieName, string cookieValue)
+        {
+            if (Control == null) return;
 
             // This clears all tmp. data. Not only cookies
-            await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+            throw new NotImplementedException();
         }
 
         async Task<string> OnJavascriptInjectionRequestAsync(string js)

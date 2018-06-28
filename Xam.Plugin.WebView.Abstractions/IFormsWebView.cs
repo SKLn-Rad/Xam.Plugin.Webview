@@ -46,5 +46,8 @@ namespace Xam.Plugin.WebView.Abstractions
 
         void RemoveAllLocalCallbacks();
         Task ClearCookiesAsync();
+        Task<string> GetAllCookiesValue();
+        Task<string> GetCookieValue(string cookieName);
+        Task<string> SetCookieValue(string cookieName, string cookieValue, long? duration = null);
     }
 }

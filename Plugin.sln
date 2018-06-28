@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xam.Plugin.WebView.Abstractions", "Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj", "{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugin.WebView.Abstractions", "Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj", "{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugin.WebView.Droid", "Xam.Plugin.WebView.Droid\Xam.Plugin.WebView.Droid.csproj", "{A4818671-56AB-449F-9BB0-8931C8F5DAF7}"
 EndProject
@@ -371,6 +371,7 @@ Global
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|x64.ActiveCfg = Release|iPhone
 		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Release|x86.ActiveCfg = Release|iPhone
+		{516A9A24-FB43-42B4-9B6F-8A2813B319D8}.Debug|Any CPU.Build.0 = Debug|iPhone
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
 		{C1013657-7E4E-4ACA-8193-D4F330ED1B2B}.Ad-Hoc|Any CPU.Deploy.0 = Release|Any CPU
@@ -481,6 +482,7 @@ Global
 		{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}.Release|x64.ActiveCfg = Release|iPhoneSimulator
 		{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}.Release|x86.ActiveCfg = Release|iPhoneSimulator
+		{8487547E-06FB-44E3-BBC2-BFDF31FFA4B2}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Ad-Hoc|Any CPU.ActiveCfg = Release|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Ad-Hoc|Any CPU.Build.0 = Release|x86
 		{C2E2D1C5-24EA-4CD7-BD5D-856879CD930D}.Ad-Hoc|Any CPU.Deploy.0 = Release|x86

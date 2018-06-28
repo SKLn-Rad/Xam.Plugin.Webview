@@ -2,16 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
-             x:Class="SampleApp.Samples.ClearCookieSample">
+             x:Class="SampleApp.Samples.GetSetCookieSample">
     <StackLayout Orientation="Vertical">
         <webview:FormsWebView x:Name="localContent"
+                              ContentType="Internet"
                               VerticalOptions="FillAndExpand"
                               HorizontalOptions="FillAndExpand"
                               Source="https://kristofferberge.github.io/Xam.Plugin.Webview/html/cookietest.html" />
 
-        <Button Text="ClearAllCookies"
+        <Button Text="Set data Cookie"
                 HorizontalOptions="End"
-                Clicked="ClearCookiesClicked" />
-        <Button Text="Refresh page" HorizontalOptions="End" Clicked="OnRefreshPageClicked" />
+                Clicked="SetCookieClicked" />
+        <Button Text="Get data Cookie"
+                HorizontalOptions="End"
+                Clicked="GetCookieClicked" />
+        <Button Text="Get all Cookies"
+                HorizontalOptions="End"
+                Clicked="GetAllCookiesClicked" />
+        <Button Text="Refresh " HorizontalOptions="End" Clicked="OnRefreshPageClicked" />
     </StackLayout>
 </ContentPage>
