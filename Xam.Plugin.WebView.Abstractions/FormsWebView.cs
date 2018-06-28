@@ -32,10 +32,20 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public delegate Task ClearCookiesRequestDelegate();
 
+
+        /// <summary>
+        ///  Delegate to await getting all cookies. Returns string or string.Empty
+        /// </summary>
         public delegate Task<string> GetAllCookiesDelegate();
 
+        /// <summary>
+        ///  Delegate to await getting specified cookie from cookiename. Returns string or string.Empty
+        /// </summary>
         public delegate Task<string> GetCookieValueDelegate(string cookieName);
 
+        /// <summary>
+        ///  Delegate to await setting cookie by name and value. Returns cookievalue or string.Empty if something failed
+        /// </summary>
         public delegate Task<string> SetCookieValueDelegate(string cookieName, string cookieValue, long? duration = null);
 
         /// <summary>
@@ -207,6 +217,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// Getting all cookies from the current domain from shared storage
         /// </summary>
+        /// <returns>All cookies found for the current website. Returned on regular format "KEY=VALUE; KEY2=VALUE2". If no cookies where found, returns string.Empty</returns>
         public async Task<string> GetAllCookiesValue() {
             Debug.WriteLine("Got this far");
             if (OnGetAllCookiesRequested != null)
@@ -215,8 +226,10 @@ namespace Xam.Plugin.WebView.Abstractions
         }
 
         /// <summary>
-        /// Getting a cookie value by cookiename.
+        /// Getting a cookie value by cookiename
         /// </summary>
+        /// <paramref name="cookieName">Cookie name to fetch</paramref>
+        /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
         public async Task<string> GetCookieValue(string cookieName)
         {
             if (string.IsNullOrWhiteSpace(cookieName)) return string.Empty;
@@ -226,8 +239,11 @@ namespace Xam.Plugin.WebView.Abstractions
         }
 
         /// <summary>
-        /// Setting a cookies value by cookiename.
+        /// Getting a cookie value by cookiename
         /// </summary>
+        /// <param name="cookieName">Cookie name to fetch</param>
+        /// <param name="duration">Expiration of cookie in seconds. If set to 0 or lower, the cookie is deleted. If not specified the cookie is set as sessioncookie and removed on app-close (Only works with iOS/macOS for now)</param>
+        /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
         public async Task<string> SetCookieValue(string cookieName, string cookieValue, long? duration = null)
         {
             if (string.IsNullOrWhiteSpace(cookieName)) return string.Empty;
