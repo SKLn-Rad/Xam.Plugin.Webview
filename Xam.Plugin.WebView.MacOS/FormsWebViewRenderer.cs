@@ -49,9 +49,9 @@ namespace Xam.Plugin.WebView.MacOS
 			element.PropertyChanged += OnPropertyChanged;
 			element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
 			element.OnClearCookiesRequested += OnClearCookiesRequest;
-            element.OnGetCookieValueRequested += OnGetCookieRequest;
-            element.OnGetAllCookiesRequested += OnGetAllCookiesRequest;
-            element.OnSetCookieValueRequested += OnSetCookieRequest;
+            element.OnGetAllCookiesRequestedAsync += OnGetAllCookiesRequestAsync;
+            element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnBackRequested += OnBackRequested;
 			element.OnForwardRequested += OnForwardRequested;
 			element.OnRefreshRequested += OnRefreshRequested;
@@ -64,9 +64,9 @@ namespace Xam.Plugin.WebView.MacOS
 			element.PropertyChanged -= OnPropertyChanged;
 			element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
-            element.OnGetAllCookiesRequested -= OnGetAllCookiesRequest;
-            element.OnGetCookieValueRequested -= OnGetCookieRequest;
-            element.OnSetCookieValueRequested -= OnSetCookieRequest;
+            element.OnGetAllCookiesRequestedAsync -= OnGetAllCookiesRequestAsync;
+            element.OnGetCookieRequestedAsync -= OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync -= OnSetCookieRequestAsync;
             element.OnBackRequested -= OnBackRequested;
 			element.OnForwardRequested -= OnForwardRequested;
 			element.OnRefreshRequested -= OnRefreshRequested;
@@ -143,7 +143,7 @@ namespace Xam.Plugin.WebView.MacOS
          * If duration isn't specified, the cookie is marked as sessioncookie. 
         */
 
-        private async Task<string> OnSetCookieRequest(string cookieName, string cookieValue, long? duration = null)
+        private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
             if (Control == null) return string.Empty;
             var toReturn = string.Empty;
@@ -151,37 +151,21 @@ namespace Xam.Plugin.WebView.MacOS
             {
                 var url = new Uri(Element.Source);
                 var domain = url.Host;
+                var newCookie = new NSHttpCookie(cookie);
 
-                NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
-
-                var cookieDictionary = new NSMutableDictionary();
-                cookieDictionary.Add(NSHttpCookie.KeyName, new NSString(cookieName));
-                cookieDictionary.Add(NSHttpCookie.KeyValue, new NSString(cookieValue));
-                cookieDictionary.Add(NSHttpCookie.KeyDomain, new NSString(domain));
-                cookieDictionary.Add(NSHttpCookie.KeyPath, new NSString(url.AbsolutePath));
-                if (url.Scheme == "https")
-                {
-                    cookieDictionary.Add(NSHttpCookie.KeySecure, new NSString("true"));
-                }
-                else
-                {
-                    cookieDictionary.Add(NSHttpCookie.KeySecure, new NSString("false"));
-                }
-                if (duration != null)
-                {
-                    double _duration = (long)duration;
-                    cookieDictionary.Add(NSHttpCookie.KeyExpires, (NSDate)DateTime.Now.AddSeconds(_duration));
-                }
-
-                var newCookie = new NSHttpCookie(cookieDictionary);
+                // Adding cookie to Shared cookie storage, and WebsiteDataStore
 
                 NSHttpCookieStorage.SharedStorage.SetCookie(newCookie);
 
-                toReturn = await OnGetCookieRequest(cookieName);
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
+                store.SetCookie(newCookie, () => { });
+
+                toReturn = await OnGetCookieRequestAsync(cookie.Name);
 
             }
             catch (Exception e)
             {
+                Console.WriteLine("We had a crash " + e);
                 toReturn = string.Empty;
             }
             return toReturn;
@@ -189,7 +173,7 @@ namespace Xam.Plugin.WebView.MacOS
 
         /* gets all cookies on current page */
 
-        private async Task<string> OnGetAllCookiesRequest()
+        private async Task<string> OnGetAllCookiesRequestAsync()
         {
             if (Control == null || Element == null)
             {
@@ -201,7 +185,6 @@ namespace Xam.Plugin.WebView.MacOS
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
             {
-                Console.WriteLine("here 1 " + c);
                 if (c.Domain == url.Host)
                 {
                     cookieCollection += c.Name + "=" + c.Value + "; ";
@@ -213,7 +196,6 @@ namespace Xam.Plugin.WebView.MacOS
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                Console.WriteLine("here 2 " + c);
                 if (c.Domain == url.Host)
                 {
                     cookieCollection += c.Name + "=" + c.Value + "; ";
@@ -226,29 +208,33 @@ namespace Xam.Plugin.WebView.MacOS
             return cookieCollection;
         }
 
-        /* gets cookie based on cookiekey */
+        /* gets cookie based on cookiekey. 
+         * Fetches from WebsiteDataStore first, and if doesn't find the cookie 
+         * there, it searches through the sharedstorage on the current domain.
+         */
 
-        private async Task<string> OnGetCookieRequest(string cookieName)
+        private async Task<string> OnGetCookieRequestAsync(string key)
         {
             if (Control == null || Element == null) return string.Empty;
             var url = new Uri(Element.Source);
             var toReturn = string.Empty;
-            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
-            foreach (NSHttpCookie c in sharedCookies)
-            {
-                if (c.Name == cookieName && c.Domain == url.Host)
-                {
-                    return c.Value;
-                }
-            }
 
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
 
             var cookies = await store.GetAllCookiesAsync();
             foreach (var c in cookies)
             {
-                if (c.Name == cookieName && c.Domain == url.Host)
+                if (c.Name == key && c.Domain == url.Host)
                     return c.Value;
+            }
+
+            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
+            foreach (NSHttpCookie c in sharedCookies)
+            {
+                if (c.Name == key && c.Domain == url.Host)
+                {
+                    return c.Value;
+                }
             }
 
             return string.Empty;

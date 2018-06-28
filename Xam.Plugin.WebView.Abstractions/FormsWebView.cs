@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,12 +42,12 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         ///  Delegate to await getting specified cookie from cookiename. Returns string or string.Empty
         /// </summary>
-        public delegate Task<string> GetCookieValueDelegate(string cookieName);
+        public delegate Task<string> GetCookieDelegate(string key);
 
         /// <summary>
-        ///  Delegate to await setting cookie by name and value. Returns cookievalue or string.Empty if something failed
+        ///  Delegate to await setting cookie Cookie object. Returns cookievalue or string.Empty if something failed
         /// </summary>
-        public delegate Task<string> SetCookieValueDelegate(string cookieName, string cookieValue, long? duration = null);
+        public delegate Task<string> SetCookieDelegate(Cookie cookie);
 
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
@@ -71,11 +72,11 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal event EventHandler OnBackRequested;
 
-        internal event GetAllCookiesDelegate OnGetAllCookiesRequested;
+        internal event GetAllCookiesDelegate OnGetAllCookiesRequestedAsync;
 
-        internal event GetCookieValueDelegate OnGetCookieValueRequested;
+        internal event GetCookieDelegate OnGetCookieRequestedAsync;
 
-        internal event SetCookieValueDelegate OnSetCookieValueRequested;
+        internal event SetCookieDelegate OnSetCookieRequestedAsync;
 
         internal event EventHandler OnForwardRequested;
 
@@ -218,37 +219,36 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Getting all cookies from the current domain from shared storage
         /// </summary>
         /// <returns>All cookies found for the current website. Returned on regular format "KEY=VALUE; KEY2=VALUE2". If no cookies where found, returns string.Empty</returns>
-        public async Task<string> GetAllCookiesValue() {
-            Debug.WriteLine("Got this far");
-            if (OnGetAllCookiesRequested != null)
-                return await OnGetAllCookiesRequested.Invoke();
+        public async Task<string> GetAllCookiesAsync() {
+            if (OnGetAllCookiesRequestedAsync != null)
+                return await OnGetAllCookiesRequestedAsync.Invoke();
             return string.Empty;
         }
 
         /// <summary>
         /// Getting a cookie value by cookiename
         /// </summary>
-        /// <paramref name="cookieName">Cookie name to fetch</paramref>
+        /// <paramref name="key">Cookie name to fetch</paramref>
         /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
-        public async Task<string> GetCookieValue(string cookieName)
+        public async Task<string> GetCookieAsync(string key)
         {
-            if (string.IsNullOrWhiteSpace(cookieName)) return string.Empty;
-            if (OnGetCookieValueRequested != null)
-                return await OnGetCookieValueRequested.Invoke(cookieName);
+            if (string.IsNullOrWhiteSpace(key)) return string.Empty;
+            if (OnGetCookieRequestedAsync != null)
+                return await OnGetCookieRequestedAsync.Invoke(key);
             return string.Empty;
         }
 
         /// <summary>
-        /// Getting a cookie value by cookiename
+        /// Setting a cookie value by cookiename
         /// </summary>
-        /// <param name="cookieName">Cookie name to fetch</param>
+        /// <param name="cookie">Cookie object to set as cookie</param>
         /// <param name="duration">Expiration of cookie in seconds. If set to 0 or lower, the cookie is deleted. If not specified the cookie is set as sessioncookie and removed on app-close (Only works with iOS/macOS for now)</param>
         /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
-        public async Task<string> SetCookieValue(string cookieName, string cookieValue, long? duration = null)
+        public async Task<string> SetCookieAsync(Cookie cookie)
         {
-            if (string.IsNullOrWhiteSpace(cookieName)) return string.Empty;
-            if (OnGetCookieValueRequested != null)
-                return await OnSetCookieValueRequested.Invoke(cookieName, cookieValue, duration);
+            if (cookie == null) return string.Empty;
+            if (OnGetCookieRequestedAsync != null)
+                return await OnSetCookieRequestedAsync.Invoke(cookie);
             return string.Empty;
         }
 

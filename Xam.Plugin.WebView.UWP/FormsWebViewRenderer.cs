@@ -43,9 +43,9 @@ namespace Xam.Plugin.WebView.UWP
             element.PropertyChanged += OnWebViewPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequestAsync;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
-            element.OnGetCookieValueRequested += OnGetCookieRequest;
-            element.OnGetAllCookiesRequested += OnGetAllCookieRequest;
-            element.OnSetCookieValueRequested += OnSetCookieRequest;
+            element.OnGetAllCookiesRequestedAsync += OnGetAllCookieRequestAsync;
+            element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -59,9 +59,9 @@ namespace Xam.Plugin.WebView.UWP
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequestAsync;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
             element.OnBackRequested -= OnBackRequested;
-            element.OnGetAllCookiesRequested -= OnGetAllCookieRequest;
-            element.OnGetCookieValueRequested -= OnGetCookieRequest;
-            element.OnSetCookieValueRequested -= OnSetCookieRequest;
+            element.OnGetAllCookiesRequestedAsync -= OnGetAllCookieRequestAsync;
+            element.OnGetCookieRequestedAsync -= OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync -= OnSetCookieRequestAsync;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
 
@@ -209,11 +209,11 @@ namespace Xam.Plugin.WebView.UWP
             return cookie;
         }
 
-        private async Task<string> OnGetAllCookieRequest() {
+        private async Task<string> OnGetAllCookieRequestAsync() {
             if (Control == null || Element == null) return string.Empty;
         }
 
-        private async Task<string> OnGetCookieRequest(string cookieName)
+        private async Task<string> OnGetCookieRequestAsync(string cookieName)
         {
             if (Control == null || Element == null) return;
 
@@ -230,7 +230,7 @@ namespace Xam.Plugin.WebView.UWP
             return cookie;
         }
 
-        private async Task<string> OnSetCookieRequest(string cookieName, string cookieValue)
+        private async Task<string> OnSetCookieRequestAsync(string cookieName, string cookieValue)
         {
             if (Control == null) return;
 

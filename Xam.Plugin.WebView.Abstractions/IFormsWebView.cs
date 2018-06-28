@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
@@ -46,8 +47,8 @@ namespace Xam.Plugin.WebView.Abstractions
 
         void RemoveAllLocalCallbacks();
         Task ClearCookiesAsync();
-        Task<string> GetAllCookiesValue();
-        Task<string> GetCookieValue(string cookieName);
-        Task<string> SetCookieValue(string cookieName, string cookieValue, long? duration = null);
+        Task<string> GetAllCookiesAsync();
+        Task<string> GetCookieAsync(string key);
+        Task<string> SetCookieAsync(Cookie cookie);
     }
 }
