@@ -83,8 +83,7 @@ namespace Xam.Plugin.WebView.MacOS
 				UIDelegate = this,
 				NavigationDelegate = _navigationDelegate
 			};
-
-			FormsWebView.CallbackAdded += OnCallbackAdded;
+            FormsWebView.CallbackAdded += OnCallbackAdded;
 
 			SetNativeControl(wkWebView);
 			OnControlChanged?.Invoke(this, wkWebView);

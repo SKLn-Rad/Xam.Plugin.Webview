@@ -52,7 +52,6 @@ namespace Xam.Plugin.WebView.iOS
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
-
             SetSource();
 		}
 
@@ -77,13 +76,17 @@ namespace Xam.Plugin.WebView.iOS
                 UserContentController = _contentController
             };
 
+            if (Element.ApplicationNameForUserAgent != null && Element.ApplicationNameForUserAgent.Length > 0)
+            {
+                _configuration.ApplicationNameForUserAgent = Element.ApplicationNameForUserAgent;
+            }
+
             var wkWebView = new WKWebView(Frame, _configuration)
             {
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate
             };
-
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
             SetNativeControl(wkWebView);

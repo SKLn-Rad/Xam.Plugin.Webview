@@ -58,6 +58,11 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty UseWideViewPortProperty = BindableProperty.Create(nameof(UseWideViewPort), typeof(bool), typeof(FormsWebView), false);
 
         /// <summary>
+        /// A bindable property for the ApplicationNameForUserAgent property.
+        /// </summary>
+        public static readonly BindableProperty ApplicationNameForUserAgentProperty = BindableProperty.Create(nameof(ApplicationNameForUserAgent), typeof(string), typeof(FormsWebView), "");
+
+        /// <summary>
         /// A dictionary used to add headers which are used throughout all instances of FormsWebView.
         /// </summary>
         public readonly static Dictionary<string, string> GlobalRegisteredHeaders = new Dictionary<string, string>();
@@ -122,7 +127,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal static string GenerateFunctionScript(string name)
         {
-            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(str)+\"'}}\");}}";
+            return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(encodeURIComponent(str).replace(/%([0-9A-F]{{2}})/g,function (match, p1){{return String.fromCharCode('0x' + p1);}}))+\"'}}\");}}";
         }
     }
 }

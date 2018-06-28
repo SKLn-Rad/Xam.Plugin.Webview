@@ -151,6 +151,12 @@ namespace Xam.Plugin.WebView.Abstractions
             set => SetValue(UseWideViewPortProperty, value);
         }
 
+        public string ApplicationNameForUserAgent
+        {
+            get => (string)GetValue(ApplicationNameForUserAgentProperty);
+            set => SetValue(ApplicationNameForUserAgentProperty, value);
+        }
+
         public FormsWebView()
         {
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
