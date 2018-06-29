@@ -25,13 +25,7 @@ namespace SampleApp
 
         void AddItems()
         {
-            Items.Add(new SelectionItem()
-            {
-                Identifier = 22,
-                Title = "Get/Set Cookie test",
-                Detail = "Set cookie in the web view"
-            });
-
+            
             Items.Add(new SelectionItem()
             {
                 Identifier = 0,
@@ -184,6 +178,13 @@ namespace SampleApp
                 Identifier = 21,
                 Title = "Cookie test",
                 Detail = "Clear cookies in the web view"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 22,
+                Title = "Get/Set Cookie test",
+                Detail = "Set cookie in the web view"
             });
         }
 
