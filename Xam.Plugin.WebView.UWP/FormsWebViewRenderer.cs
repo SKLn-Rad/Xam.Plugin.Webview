@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Certificates;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
+using Windows.Web.Http.Filters;
 using Xam.Plugin.WebView.Abstractions;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.UWP;
 using Xamarin.Forms.Platform.UWP;
+using HttpClient = Windows.Web.Http.HttpClient;
+using HttpMethod = Windows.Web.Http.HttpMethod;
+using HttpRequestMessage = Windows.Web.Http.HttpRequestMessage;
 
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.UWP
@@ -15,7 +22,7 @@ namespace Xam.Plugin.WebView.UWP
     {
 
         public static event EventHandler<Windows.UI.Xaml.Controls.WebView> OnControlChanged;
-        private CookieCollection cookieCollection = new CookieCollection();
+       
         public static string BaseUrl { get; set; } = "ms-appx:///";
         LocalFileStreamResolver _resolver;
 
@@ -133,26 +140,6 @@ namespace Xam.Plugin.WebView.UWP
             if (!args.IsSuccess)
                 Element.HandleNavigationError((int)args.WebErrorStatus);
 
-
-            /* Setting cookies */
-
-
-            var filter = new HttpBaseProtocolFilter();
-            HttpClient client = new HttpClient(filter);
-            HttpCookieCollection httpCookieCollection = filter.CookieManager.GetCookies(navigationEventArgs.Uri);
-            //httpCookieCollection.
-            // Use this, while it comes from an instance, its shared across everything.
-            foreach (var cookie in httpCookieCollection)
-            {
-                cookieCollection.Add(new Cookie
-                {
-                    Domain = cookie.Domain,
-                    Name = cookie.Name,
-                    Value = cookie.Value,
-
-                });
-            }
-
             Element.CanGoBack = Control.CanGoBack;
             Element.CanGoForward = Control.CanGoForward;
 
@@ -196,47 +183,83 @@ namespace Xam.Plugin.WebView.UWP
         private async Task OnClearCookiesRequest()
         {
             if (Control == null) return;
-            var cookie = string.Empty;
-            foreach (Cookie currentCookie in cookieCollection.GetCookies(new Uri(Element.Source)))
-            {
-                cookie += currentCookie.Name + "=" + currentCookie.Value + "; ";
-            }
 
-            if(cookie.Length > 2) {
-                cookie = cookie.Remove(cookie.Length - 2);
-            }
+   
             // This clears all tmp. data. Not only cookies
             await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
         }
 
         private async Task<string> OnGetAllCookieRequestAsync() {
             if (Control == null || Element == null) return string.Empty;
+            var domain = (new Uri(Element.Source)).Host;
+            var cookie = string.Empty;
+            var url = new Uri(Element.Source);
+
+            HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
+            var cookieManager = filter.CookieManager;
+            HttpCookieCollection cookieCollection = cookieManager.GetCookies(url);
+            
+            foreach (HttpCookie currentCookie in cookieCollection)
+            {
+                cookie += currentCookie.Name + "=" + currentCookie.Value + "; ";
+            }
+
+            if (cookie.Length > 2)
+            {
+                cookie = cookie.Remove(cookie.Length - 2);
+            }
+            return cookie;
         }
 
         private async Task<string> OnGetCookieRequestAsync(string key)
         {
-            if (Control == null || Element == null) return;
-
+            if (Control == null || Element == null) return string.Empty;
+            var url = new Uri(Element.Source);
+            var domain = (new Uri(Element.Source)).Host;
             var cookie = string.Empty;
-            foreach(Cookie currentCookie in cookieCollection.GetCookies(new Uri(Element.Source))) {
-                if (currentCookie.Name == key)
+
+            HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
+            var cookieManager = filter.CookieManager;
+            HttpCookieCollection cookieCollection = cookieManager.GetCookies(url);
+
+            foreach (HttpCookie currentCookie in cookieCollection)
+            {
+                if (key == currentCookie.Name)
                 {
                     cookie = currentCookie.Value;
                     break;
                 }
             }
-            // This clears all tmp. data. Not only cookies
-            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
+            
             return cookie;
         }
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
-            if (Control == null) return;
+            if (Control == null || Element == null) return string.Empty;
+            var url = new Uri(Element.Source);
+            var newCookie = new HttpCookie(cookie.Name, cookie.Domain, cookie.Path);
+            newCookie.Value = cookie.Value;
+            newCookie.HttpOnly = cookie.HttpOnly;
+            newCookie.Secure = cookie.Secure;
+            newCookie.Expires = cookie.Expires;
 
-            // This clears all tmp. data. Not only cookies
-            //await Windows.UI.Xaml.Controls.WebView.ClearTemporaryWebDataAsync();
-            throw new NotImplementedException();
+            List<HttpCookie> cookieCollection = new List<HttpCookie>();
+            HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
+            HttpClient httpClient;
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);//Allow untrusted CA's 
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Expired);
+            // add known cookies to request (needed for authentication)
+            foreach (HttpCookie knownCookie in cookieCollection)
+            {
+                filter.CookieManager.SetCookie(knownCookie);
+            }
+
+            filter.CookieManager.SetCookie(newCookie);
+            httpClient = new HttpClient(filter);
+
+            return await OnGetCookieRequestAsync(cookie.Name);
+           
         }
 
         async Task<string> OnJavascriptInjectionRequestAsync(string js)
@@ -316,3 +339,4 @@ namespace Xam.Plugin.WebView.UWP
         }
     }
 }
+

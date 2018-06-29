@@ -31,12 +31,14 @@ namespace SampleApp.Samples
             cookie.Expires = expiresDate;
             cookie.Path = "/";
 
+
+            /* This cookie will be expire 30 seconds after it is set */
             Cookie cookie2 = new Cookie();
             cookie2.Name = "testCookie1";
             cookie2.Value = "testCookieValue1";
             cookie2.Domain = (new Uri(localContent.Source)).Host;
             cookie2.Expired = false;
-            cookie2.Expires = DateTime.Now;
+            cookie2.Expires = DateTime.Now.AddSeconds(30);
 
             var str = await localContent.SetCookieAsync(cookie);
             var str2 = await localContent.SetCookieAsync(cookie2);
@@ -47,11 +49,11 @@ namespace SampleApp.Samples
         private async void GetCookieClicked(object sender, EventArgs e)
         {
             
-            var str = await localContent.GetCookieAsync("data");
+            var str = await localContent.GetCookieAsync("testCookie");
 
             Debug.WriteLine($"Cookie is {str}");
 
-            var str2 = await localContent.GetCookieAsync("dataOther");
+            var str2 = await localContent.GetCookieAsync("testCookie1");
 
             Debug.WriteLine($"Cookie is {str2}");
         }
