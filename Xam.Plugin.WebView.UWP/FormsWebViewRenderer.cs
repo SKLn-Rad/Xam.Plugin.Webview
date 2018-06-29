@@ -247,9 +247,8 @@ namespace Xam.Plugin.WebView.UWP
             List<HttpCookie> cookieCollection = new List<HttpCookie>();
             HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
             HttpClient httpClient;
-            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);//Allow untrusted CA's 
+            filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);
             filter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Expired);
-            // add known cookies to request (needed for authentication)
             foreach (HttpCookie knownCookie in cookieCollection)
             {
                 filter.CookieManager.SetCookie(knownCookie);

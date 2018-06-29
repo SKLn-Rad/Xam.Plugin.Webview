@@ -127,8 +127,6 @@ namespace Xam.Plugin.WebView.MacOS
                 await store.DeleteCookieAsync(c);
             }
 
-            /* Delete shared-storage for url also */
-
             var url = new Uri(Element.Source);
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
@@ -137,12 +135,6 @@ namespace Xam.Plugin.WebView.MacOS
             }
 
         }
-
-        /* 
-         * Sets cookievalue based on cookiename. 
-         * If duration is set to 0 or less, the cookie is deleted.
-         * If duration isn't specified, the cookie is marked as sessioncookie. 
-        */
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
@@ -154,8 +146,6 @@ namespace Xam.Plugin.WebView.MacOS
                 var domain = url.Host;
                 var newCookie = new NSHttpCookie(cookie);
 
-                // Adding cookie to Shared cookie storage, and WebsiteDataStore
-
                 NSHttpCookieStorage.SharedStorage.SetCookie(newCookie);
 
                 var store = _configuration.WebsiteDataStore.HttpCookieStore;
@@ -164,15 +154,9 @@ namespace Xam.Plugin.WebView.MacOS
                 toReturn = await OnGetCookieRequestAsync(cookie.Name);
 
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("We had a crash " + e);
-                toReturn = string.Empty;
-            }
+            catch (Exception e) { }
             return toReturn;
         }
-
-        /* gets all cookies on current page */
 
         private async Task<string> OnGetAllCookiesRequestAsync()
         {
@@ -208,11 +192,6 @@ namespace Xam.Plugin.WebView.MacOS
             }
             return cookieCollection;
         }
-
-        /* gets cookie based on cookiekey. 
-         * Fetches from WebsiteDataStore first, and if doesn't find the cookie 
-         * there, it searches through the sharedstorage on the current domain.
-         */
 
         private async Task<string> OnGetCookieRequestAsync(string key)
         {

@@ -126,8 +126,6 @@ namespace Xam.Plugin.WebView.iOS
                 await store.DeleteCookieAsync(c);
             }
 
-            /* Delete shared-storage for url also */
-
             var url = new Uri(Element.Source);
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach(NSHttpCookie c in sharedCookies) {
@@ -135,13 +133,6 @@ namespace Xam.Plugin.WebView.iOS
             }
 
         }
-
-        /* 
-          * Sets cookievalue based on cookiename. 
-          * If the cookie has specified an expirationdate now or earlier than 
-          * now, the cookie will be deleted. To create a sessioncookie don't
-          * specify any expirationdate
-         */
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
@@ -152,8 +143,6 @@ namespace Xam.Plugin.WebView.iOS
                 var url = new Uri(Element.Source);
                 var domain = url.Host;
                 var newCookie = new NSHttpCookie(cookie);
-
-                // Adding cookie to Shared cookie storage, and WebsiteDataStore
 
                 NSHttpCookieStorage.SharedStorage.SetCookie(newCookie);
 
@@ -170,8 +159,6 @@ namespace Xam.Plugin.WebView.iOS
             }
             return toReturn;
         }
-
-        /* gets all cookies on current page */
 
         private async Task<string> OnGetAllCookiesRequestAsync() {
             if (Control == null || Element == null)
@@ -205,11 +192,6 @@ namespace Xam.Plugin.WebView.iOS
             }
             return cookieCollection;
         }
-
-        /* gets cookie based on cookiekey. 
-         * Fetches from WebsiteDataStore first, and if doesn't find the cookie 
-         * there, it searches through the sharedstorage on the current domain.
-         */
 
         private async Task<string> OnGetCookieRequestAsync(string key)
         {

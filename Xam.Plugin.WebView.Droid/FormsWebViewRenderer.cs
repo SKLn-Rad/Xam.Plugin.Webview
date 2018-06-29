@@ -173,7 +173,6 @@ namespace Xam.Plugin.WebView.Droid
             }
         }
 
-        /* Returns all cookies for the current page */
 
         private async Task<string> OnGetAllCookieRequestAsync() {
             if (Control == null || Element == null) return string.Empty;
@@ -190,7 +189,6 @@ namespace Xam.Plugin.WebView.Droid
                     }
                     else
                     {
-                        //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
                         CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
                         cookieSyncMngr.StartSync();
                         CookieManager cookieManager = CookieManager.Instance;
@@ -203,18 +201,14 @@ namespace Xam.Plugin.WebView.Droid
             return cookies;
         }
 
-        /* Sets cookie value based on cookiename. */
-
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
-            //var _cookie = string.Empty;
-            // wait!
+           
             await Task.Run(() =>
             {
                 if (Control != null && Element != null)
                 {
                     var url = Element.Source;
-                    //Console.WriteLine(Control.)
                     if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
                     {
                         
@@ -238,13 +232,13 @@ namespace Xam.Plugin.WebView.Droid
             return toReturn;
         }
 
-        /* Gets cookie value based on cookiename. */
+
 
         private async Task<string> OnGetCookieRequestAsync(string key)
         {
 
             var cookie = default(string);
-            // wait!
+
             await Task.Run(() =>
             {
                 if (Control != null && Element != null)
@@ -279,9 +273,7 @@ namespace Xam.Plugin.WebView.Droid
                                 break;
                             }
                         }
-                    } catch(Exception e) {
-                        Console.WriteLine("We had an error " + e);
-                    }
+                    } catch(Exception e) { }
                 }
 
             });

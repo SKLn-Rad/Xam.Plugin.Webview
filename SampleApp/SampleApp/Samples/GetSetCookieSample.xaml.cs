@@ -23,6 +23,7 @@ namespace SampleApp.Samples
             var expiresDate = DateTime.Now;
             expiresDate = expiresDate.AddDays(10);
 
+            // This cookie will expire after 10 days
             Cookie cookie = new Cookie();
             cookie.Name = "testCookie";
             cookie.Value = "testCookieValue";
@@ -32,7 +33,7 @@ namespace SampleApp.Samples
             cookie.Path = "/";
 
 
-            /* This cookie will be expire 30 seconds after it is set */
+            // This cookie will expire 30 seconds after it is set
             Cookie cookie2 = new Cookie();
             cookie2.Name = "testCookie1";
             cookie2.Value = "testCookieValue1";
@@ -43,25 +44,16 @@ namespace SampleApp.Samples
             var str = await localContent.SetCookieAsync(cookie);
             var str2 = await localContent.SetCookieAsync(cookie2);
 
-            Debug.WriteLine($"Cookie is {str} and {str2}");
         }
 
         private async void GetCookieClicked(object sender, EventArgs e)
         {
-            
             var str = await localContent.GetCookieAsync("testCookie");
-
-            Debug.WriteLine($"Cookie is {str}");
-
             var str2 = await localContent.GetCookieAsync("testCookie1");
-
-            Debug.WriteLine($"Cookie is {str2}");
         }
 
         private async void GetAllCookiesClicked(object sender, EventArgs e) {
             var str = await localContent.GetAllCookiesAsync();
-
-            Debug.WriteLine($"All cookies {str}");
         }
 
         void OnRefreshPageClicked(object sender, EventArgs e)
