@@ -137,10 +137,11 @@ namespace Xam.Plugin.WebView.iOS
         }
 
         /* 
-         * Sets cookievalue based on cookiename. 
-         * If duration is set to 0 or less, the cookie is deleted.
-         * If duration isn't specified, the cookie is marked as sessioncookie. 
-        */
+          * Sets cookievalue based on cookiename. 
+          * If the cookie has specified an expirationdate now or earlier than 
+          * now, the cookie will be deleted. To create a sessioncookie don't
+          * specify any expirationdate
+         */
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
