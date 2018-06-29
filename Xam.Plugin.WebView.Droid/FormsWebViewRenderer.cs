@@ -18,10 +18,6 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
     {
-void Element_OnSetCookieValueRequested(string key, string value, string url)
-        {
-        }
-
 
         public static string MimeType = "text/html";
 
