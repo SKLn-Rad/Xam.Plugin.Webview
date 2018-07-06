@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormsWebViewBridge.cs" />
+    <Compile Include="IFormsWebViewMainActivity.cs" />
     <Compile Include="FormsWebViewChromeClient.cs" />
     <Compile Include="FormsWebViewClient.cs" />
     <Compile Include="FormsWebViewRenderer.cs" />
