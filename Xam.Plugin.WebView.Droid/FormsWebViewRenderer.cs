@@ -61,9 +61,9 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
-            element.OnGetCookieRequested += OnGetCookieRequestAsync;
-            element.OnGetAllCookiesRequested += OnGetAllCookieRequestAsync;
-            element.OnSetCookieRequested += OnSetCookieRequestAsync;
+            element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
+            element.OnGetAllCookiesRequestedAsync += OnGetAllCookieRequestAsync;
+            element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
@@ -77,9 +77,9 @@ namespace Xam.Plugin.WebView.Droid
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
-            element.OnGetAllCookiesRequested -= OnGetAllCookieRequest;
-            element.OnGetCookieRequested -= OnGetCookieRequest;
-            element.OnSetCookieRequested -= OnSetCookieRequest;
+            element.OnGetAllCookiesRequestedAsync -= OnGetAllCookieRequestAsync;
+            element.OnGetCookieRequestedAsync -= OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync -= OnSetCookieRequestAsync;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
