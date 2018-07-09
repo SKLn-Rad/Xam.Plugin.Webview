@@ -54,7 +54,6 @@ namespace Xam.Plugin.WebView.MacOS
             element.OnBackRequested += OnBackRequested;
 			element.OnForwardRequested += OnForwardRequested;
 			element.OnRefreshRequested += OnRefreshRequested;
-            element.OnNavigationStarted += SetCurrentUrl;
 
             SetSource();
 		}
@@ -67,7 +66,6 @@ namespace Xam.Plugin.WebView.MacOS
             element.OnBackRequested -= OnBackRequested;
 			element.OnForwardRequested -= OnForwardRequested;
 			element.OnRefreshRequested -= OnRefreshRequested;
-            element.OnNavigationStarted -= SetCurrentUrl;
 
             element.Dispose();
 		}
@@ -240,13 +238,5 @@ namespace Xam.Plugin.WebView.MacOS
 			if (Control.CanGoBack)
 				Control.GoBack();
 		}
-
-        private void SetCurrentUrl(object sender, DecisionHandlerDelegate e)
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                Element.CurrentUrl = Control.Url.ToString();
-            });
-        }
     }
 }
