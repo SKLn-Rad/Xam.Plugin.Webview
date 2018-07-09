@@ -10,6 +10,7 @@ using Xam.Plugin.WebView.iOS;
 using Xamarin.Forms.Platform.iOS;
 using UIKit;
 using System.Net;
+using System.Threading;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS
@@ -29,6 +30,7 @@ namespace Xam.Plugin.WebView.iOS
 
         public static void Initialize() {
             var dt = DateTime.Now;
+        
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
@@ -85,11 +87,12 @@ namespace Xam.Plugin.WebView.iOS
                 UserContentController = _contentController
             };
 
+
             var wkWebView = new WKWebView(Frame, _configuration)
             {
                 Opaque = false,
                 UIDelegate = this,
-                NavigationDelegate = _navigationDelegate
+                NavigationDelegate = _navigationDelegate,
             };
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
@@ -140,8 +143,7 @@ namespace Xam.Plugin.WebView.iOS
             var toReturn = string.Empty;
             try
             {
-                var url = new Uri(Element.Source);
-                var domain = url.Host;
+                var domain = Control.Url.Host;
                 var newCookie = new NSHttpCookie(cookie);
 
                 NSHttpCookieStorage.SharedStorage.SetCookie(newCookie);
@@ -160,13 +162,13 @@ namespace Xam.Plugin.WebView.iOS
             return toReturn;
         }
 
-        private async Task<string> OnGetAllCookiesRequestAsync() {
+        async Task<string> OnGetAllCookiesRequestAsync() {
             if (Control == null || Element == null)
             {
                 return string.Empty;
             }
             var cookieCollection = string.Empty;
-            var url = new Uri(Element.Source);
+            var url = Control.Url;
 
             NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
             foreach (NSHttpCookie c in sharedCookies)
@@ -180,23 +182,26 @@ namespace Xam.Plugin.WebView.iOS
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
 
             var cookies = await store.GetAllCookiesAsync();
+
             foreach (var c in cookies)
             {
-                if (c.Domain == url.Host)
+                if (url.Host.Contains(c.Domain))
                 {
                     cookieCollection += c.Name + "=" + c.Value + "; ";
                 }
             }
+
             if(cookieCollection.Length > 0) {
                 cookieCollection = cookieCollection.Remove(cookieCollection.Length - 2);
             }
+
             return cookieCollection;
         }
 
         private async Task<string> OnGetCookieRequestAsync(string key)
         {
             if (Control == null || Element == null) return string.Empty;
-            var url = new Uri(Element.Source);
+            var url = Control.Url;
             var toReturn = string.Empty;
 
             var store = _configuration.WebsiteDataStore.HttpCookieStore;

@@ -181,7 +181,7 @@ namespace Xam.Plugin.WebView.Droid
             {
                 if (Control != null && Element != null)
                 {
-                    var url = Element.Source;
+                    var url = new Uri(Control.Url).Host;
                     if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
                     {
                         CookieManager.Instance.Flush();
@@ -207,8 +207,8 @@ namespace Xam.Plugin.WebView.Droid
             await Task.Run(() =>
             {
                 if (Control != null && Element != null)
-                {
-                    var url = Element.Source;
+                { 
+                    var url = new Uri(Control.Url).Host;
                     if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
                     {
                         
@@ -243,7 +243,7 @@ namespace Xam.Plugin.WebView.Droid
             {
                 if (Control != null && Element != null)
                 {
-                    var url = Element.Source;
+                    var url = new Uri(Control.Url).Host;
                     string cookieCollectionString;
                     string[] cookieCollection;
 
