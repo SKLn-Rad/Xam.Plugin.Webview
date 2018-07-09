@@ -9,6 +9,8 @@ using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.iOS;
 using Xamarin.Forms.Platform.iOS;
 using UIKit;
+using Xam.Plugin.WebView.Abstractions.Delegates;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS

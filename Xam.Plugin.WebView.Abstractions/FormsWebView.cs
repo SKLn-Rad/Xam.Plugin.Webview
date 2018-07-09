@@ -83,7 +83,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public string Source
         {
-            get => (string) GetValue(SourceProperty);
+            get => (string)GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
         }
 
@@ -100,12 +100,18 @@ namespace Xam.Plugin.WebView.Abstractions
             set { SetValue(BaseUrlProperty, value); }
         }
 
+        public string CurrentUrl
+        {
+            get { return (string)GetValue(CurrentUrlProperty); }
+            set { SetValue(CurrentUrlProperty, value); }
+        }
+
         /// <summary>
         /// Opt in and out of global callbacks
         /// </summary>
         public bool EnableGlobalCallbacks
         {
-            get => (bool) GetValue(EnableGlobalCallbacksProperty);
+            get => (bool)GetValue(EnableGlobalCallbacksProperty);
             set => SetValue(EnableGlobalCallbacksProperty, value);
         }
 
@@ -114,7 +120,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool EnableGlobalHeaders
         {
-            get => (bool) GetValue(EnableGlobalHeadersProperty);
+            get => (bool)GetValue(EnableGlobalHeadersProperty);
             set => SetValue(EnableGlobalHeadersProperty, value);
         }
 
@@ -132,7 +138,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool CanGoBack
         {
-            get => (bool) GetValue(CanGoBackProperty);
+            get => (bool)GetValue(CanGoBackProperty);
             internal set => SetValue(CanGoBackProperty, value);
         }
 
@@ -141,13 +147,13 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public bool CanGoForward
         {
-            get => (bool) GetValue(CanGoForwardProperty);
+            get => (bool)GetValue(CanGoForwardProperty);
             internal set => SetValue(CanGoForwardProperty, value);
         }
 
         public bool UseWideViewPort
         {
-            get => (bool) GetValue(UseWideViewPortProperty);
+            get => (bool)GetValue(UseWideViewPortProperty);
             set => SetValue(UseWideViewPortProperty, value);
         }
 
@@ -186,7 +192,8 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Clearing all cookies.
         /// For UWP, all temporary browser data will be cleared.
         /// </summary>
-        public async Task ClearCookiesAsync() {
+        public async Task ClearCookiesAsync()
+        {
             if (OnClearCookiesRequested != null)
                 await OnClearCookiesRequested.Invoke();
         }
@@ -260,7 +267,7 @@ namespace Xam.Plugin.WebView.Abstractions
             // By default, we only attempt to offload valid Uris with none http/s schemes
             bool validUri = Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult);
             bool validScheme = false;
-            
+
             if (validUri)
                 validScheme = uriResult.Scheme.StartsWith("http") || uriResult.Scheme.StartsWith("file");
 
@@ -292,7 +299,7 @@ namespace Xam.Plugin.WebView.Abstractions
         internal void HandleScriptReceived(string data)
         {
             if (string.IsNullOrWhiteSpace(data)) return;
-            
+
             var action = JsonConvert.DeserializeObject<ActionEvent>(data);
 
             // Decode
