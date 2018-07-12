@@ -36,6 +36,7 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +57,7 @@
     </HttpClientHandler>
     <XamMacArch>
     </XamMacArch>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -69,9 +71,6 @@
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.4.0.280\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.4.0.280\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Platform.macOS, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.4.0.280\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
     </Reference>
@@ -79,6 +78,9 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.4.0.280\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.4.0.280\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -121,7 +123,7 @@
       <Name>Xam.Plugin.WebView.MacOS</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{F690DD01-F04C-498B-B574-B870C8A7702C}</Project>
+      <Project>{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}</Project>
       <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>

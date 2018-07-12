@@ -1,8 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SelectedDevice>Device</SelectedDevice>
-    <DefaultDevice>iPhone X iOS 11.0</DefaultDevice>
     <TargetiOSDevice>&lt;%3fxml version="1.0" encoding="UTF-8"%3f&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
 &lt;plist version="1.0"&gt;

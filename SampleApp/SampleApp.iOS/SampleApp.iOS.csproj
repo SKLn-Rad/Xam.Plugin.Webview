@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\packages\Xamarin.Forms.2.4.0.280\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\..\packages\Xamarin.Forms.2.4.0.280\build\netstandard1.0\Xamarin.Forms.props')" />
   <PropertyGroup>
@@ -161,7 +161,7 @@
       <Name>SampleApp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{F690DD01-F04C-498B-B574-B870C8A7702C}</Project>
+      <Project>{EB503BE7-2AB2-4F15-B86B-67F86CFDBA1F}</Project>
       <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xam.Plugin.WebView.iOS\Xam.Plugin.WebView.iOS.csproj">
