@@ -177,55 +177,54 @@ namespace Xam.Plugin.WebView.Droid
         private async Task<string> OnGetAllCookieRequestAsync() {
             if (Control == null || Element == null) return string.Empty;
             var cookies = string.Empty;
-            await Task.Run(() =>
+
+            if (Control != null && Element != null)
             {
-                if (Control != null && Element != null)
+                string url = string.Empty;
+                try
                 {
-                    var url = new Uri(Control.Url).Host;
-                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
-                    {
-                        CookieManager.Instance.Flush();
-                        cookies = CookieManager.Instance.GetCookie(url);
-                    }
-                    else
-                    {
-                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
-                        cookieSyncMngr.StartSync();
-                        CookieManager cookieManager = CookieManager.Instance;
-                        cookies = cookieManager.GetCookie(url);
-                    }
+                    url = Control.Url;
+                }catch(Exception e)
+                {
+                    url = Element.BaseUrl;
                 }
-
-            });
-
+                if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                {
+                    CookieManager.Instance.Flush();
+                    cookies = CookieManager.Instance.GetCookie(url);
+                }
+                else
+                {
+                    CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                    cookieSyncMngr.StartSync();
+                    CookieManager cookieManager = CookieManager.Instance;
+                    cookies = cookieManager.GetCookie(url);
+                }
+            }
+                
             return cookies;
         }
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
-           
-            await Task.Run(() =>
-            {
-                if (Control != null && Element != null)
-                { 
-                    var url = new Uri(Control.Url).Host;
-                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
-                    {
+            if (Control != null && Element != null)
+            { 
+                var url = new Uri(Control.Url).Host;
+                if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                {
                         
-                        CookieManager.Instance.SetCookie(url, cookie.ToString());
-                        CookieManager.Instance.Flush();
-                    }
-                    else
-                    {
-                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
-                        cookieSyncMngr.StartSync();
-                        CookieManager cookieManager = CookieManager.Instance;
-                        cookieManager.SetCookie(url, cookie.ToString());
-                        cookieManager.Flush();
-                    }
+                    CookieManager.Instance.SetCookie(url, cookie.ToString());
+                    CookieManager.Instance.Flush();
                 }
-
-            });
+                else
+                {
+                    CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                    cookieSyncMngr.StartSync();
+                    CookieManager cookieManager = CookieManager.Instance;
+                    cookieManager.SetCookie(url, cookie.ToString());
+                    cookieManager.Flush();
+                }
+            }
 
             var toReturn = await OnGetCookieRequestAsync(cookie.Name);
 
@@ -239,44 +238,49 @@ namespace Xam.Plugin.WebView.Droid
 
             var cookie = default(string);
 
-            await Task.Run(() =>
+            if (Control != null && Element != null)
             {
-                if (Control != null && Element != null)
+                string url = string.Empty;
+                try
                 {
-                    var url = new Uri(Control.Url).Host;
-                    string cookieCollectionString;
-                    string[] cookieCollection;
-
-                    try
-                    {
-                        if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
-                        {
-                            CookieManager.Instance.Flush();
-                            cookieCollectionString = CookieManager.Instance.GetCookie(url);
-
-                        }
-                        else
-                        {
-                            CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
-                            cookieSyncMngr.StartSync();
-                            CookieManager cookieManager = CookieManager.Instance;
-                            cookieCollectionString = cookieManager.GetCookie(url);
-                        }
-                        cookieCollection = cookieCollectionString.Split(new string[] { "; " }, StringSplitOptions.None);
-
-                        foreach (var c in cookieCollection)
-                        {
-                            var keyValue = c.Split(new[] { '=' }, 2);
-                            if (keyValue.Length > 1 && keyValue[0] == key)
-                            {
-                                cookie = keyValue[1];
-                                break;
-                            }
-                        }
-                    } catch(Exception e) { }
+                    url = Control.Url;
                 }
+                catch (Exception e)
+                {
+                    url = Element.BaseUrl;
+                }
+                string cookieCollectionString;
+                string[] cookieCollection;
 
-            });
+                try
+                {
+                    if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+                    {
+                        CookieManager.Instance.Flush();
+                        cookieCollectionString = CookieManager.Instance.GetCookie(url);
+
+                    }
+                    else
+                    {
+                        CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                        cookieSyncMngr.StartSync();
+                        CookieManager cookieManager = CookieManager.Instance;
+                        cookieCollectionString = cookieManager.GetCookie(url);
+                    }
+                    cookieCollection = cookieCollectionString.Split(new string[] { "; " }, StringSplitOptions.None);
+
+                    foreach (var c in cookieCollection)
+                    {
+                        var keyValue = c.Split(new[] { '=' }, 2);
+                        if (keyValue.Length > 1 && keyValue[0] == key)
+                        {
+                            cookie = keyValue[1];
+                            break;
+                        }
+                    }
+                } catch(Exception e) { }
+            }
+
 
             return cookie;
         }
