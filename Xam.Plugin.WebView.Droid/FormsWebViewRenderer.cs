@@ -132,8 +132,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Control == null) return;
 
-            Control.LoadUrl("about:blank");
-            SetSource();
+            Control.Reload();
         }
 
         void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -176,6 +175,7 @@ namespace Xam.Plugin.WebView.Droid
             _callback.Reset();
 
             var response = string.Empty;
+            
             Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, _callback));
 
             // wait!
