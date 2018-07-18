@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions;
+using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.Droid;
 using Xamarin.Forms;
@@ -64,6 +65,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
+            element.OnNavigationStarted += SetCurrentUrl;
 
             SetSource();
         }
@@ -76,6 +78,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnNavigationStarted -= SetCurrentUrl;
 
             element.Dispose();
         }
@@ -97,7 +100,6 @@ namespace Xam.Plugin.WebView.Droid
             webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
-
             SetNativeControl(webView);
             OnControlChanged?.Invoke(this, webView);
         }
@@ -264,6 +266,15 @@ namespace Xam.Plugin.WebView.Droid
             }
 
             Control.LoadUrl(Element.Source, headers);
+        }
+
+
+        private void SetCurrentUrl(object sender, DecisionHandlerDelegate e)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Element.CurrentUrl = Control.Url;
+            });
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
 using Xam.Plugin.WebView.Abstractions;
+using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.UWP;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
 
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
@@ -73,6 +76,7 @@ namespace Xam.Plugin.WebView.UWP
             Control.NavigationCompleted += OnNavigationCompleted;
             Control.DOMContentLoaded += OnDOMContentLoaded;
             Control.ScriptNotify += OnScriptNotify;
+            Control.LoadCompleted += SetCurrentUrl;
             Control.DefaultBackgroundColor = Windows.UI.Colors.Transparent;
 
             OnControlChanged?.Invoke(this, control);
@@ -248,5 +252,14 @@ namespace Xam.Plugin.WebView.UWP
 
             return Windows.UI.Color.FromArgb(Convert.ToByte(color.A * 255), Convert.ToByte(color.R * 255), Convert.ToByte(color.G * 255), Convert.ToByte(color.B * 255));
         }
+        private void SetCurrentUrl(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Element.CurrentUrl = e.Uri.ToString();
+            });
+        }
+
+
     }
 }
