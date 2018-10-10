@@ -35,7 +35,7 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            renderer.Element.HandleNavigationError((int) error.ErrorCode);
+            renderer.Element.HandleNavigationError((int)error.ErrorCode);
             renderer.Element.HandleNavigationCompleted(request.Url.ToString());
             renderer.Element.Navigating = false;
         }
@@ -76,32 +76,46 @@ namespace Xam.Plugin.WebView.Droid
                 });
             }
 
-            EndShouldInterceptRequest:
+        EndShouldInterceptRequest:
             return base.ShouldInterceptRequest(view, url);
         }
 
+
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
         {
-            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) goto EndShouldInterceptRequest;
-            if (renderer.Element == null) goto EndShouldInterceptRequest;
-
-            string url = request.Url.ToString();
-            var response = renderer.Element.HandleNavigationStartRequest(url);
-
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    if (response.OffloadOntoDevice)
-                        AttemptToHandleCustomUrlScheme(view, url);
-
-                    view.StopLoading();
-                });
+            if (DoesComponentWantToOverrideUrlLoading(view, request.Url.ToString()))
                 return true;
-            }
 
-            EndShouldInterceptRequest:
             return base.ShouldOverrideUrlLoading(view, request);
+        }
+
+        public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, string url)
+        {
+            if (DoesComponentWantToOverrideUrlLoading(view, url))
+                return true;
+
+            return base.ShouldOverrideUrlLoading(view, url);
+        }
+
+        private bool DoesComponentWantToOverrideUrlLoading(Android.Webkit.WebView view, string url)
+        {
+            if (Reference != null && Reference.TryGetTarget(out FormsWebViewRenderer renderer) && renderer.Element != null)
+            {
+                var response = renderer.Element.HandleNavigationStartRequest(url);
+
+                if (response.Cancel || response.OffloadOntoDevice)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (response.OffloadOntoDevice)
+                            AttemptToHandleCustomUrlScheme(view, url);
+
+                        view.StopLoading();
+                    });
+                    return true;
+                }
+            }
+            return false;
         }
 
         void CheckResponseValidity(Android.Webkit.WebView view, string url)
