@@ -174,7 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{423E3172-9EFB-4495-A3C4-771BD8CDB510}</Project>
+      <Project>{E0DFB122-B224-4E69-B6E9-9FBDC9CD0A24}</Project>
       <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
