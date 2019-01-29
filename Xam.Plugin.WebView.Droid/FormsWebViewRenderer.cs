@@ -50,8 +50,7 @@ namespace Xam.Plugin.WebView.Droid
             if (e.OldElement != null)
                 DestroyElement(e.OldElement);
 
-            if (Element.UseWideViewPort)
-            {
+            if (Element.UseWideViewPort) {
                 Control.Settings.LoadWithOverviewMode = true;
                 Control.Settings.UseWideViewPort = true;
             }
@@ -61,6 +60,7 @@ namespace Xam.Plugin.WebView.Droid
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnAddCookieRequested += OnAddCookieRequested;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -68,11 +68,13 @@ namespace Xam.Plugin.WebView.Droid
             SetSource();
         }
 
+
         void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
+            element.OnAddCookieRequested -= OnAddCookieRequested;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -135,8 +137,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
-            {
+            switch (e.PropertyName) {
                 case "Source":
                     SetSource();
                     break;
@@ -147,13 +148,10 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Control == null) return;
 
-            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
-            {
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
                 CookieManager.Instance.RemoveAllCookies(null);
                 CookieManager.Instance.Flush();
-            }
-            else
-            {
+            } else {
                 //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
                 CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
                 cookieSyncMngr.StartSync();
@@ -165,6 +163,33 @@ namespace Xam.Plugin.WebView.Droid
             }
         }
 
+        private void OnAddCookieRequested(System.Net.Cookie cookie)
+        {
+            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name)) return;
+
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
+                SetCookie(cookie);
+                CookieManager.Instance.Flush();
+            } else {
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.StartSync();
+                SetCookie(cookie);
+                cookieSyncMngr.StopSync();
+                cookieSyncMngr.Sync();
+            }
+        }
+
+        private void SetCookie(System.Net.Cookie cookie)
+        {
+            var cookieDomain = cookie.Domain.Remove(0);
+            var url = $"{cookieDomain}";
+            var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}"
+
+            CookieManager cookieManager = CookieManager.Instance;
+            CookieManager.Instance.SetAcceptCookie(true);
+            CookieManager.Instance.SetCookie(url, cookieString)
+        }
+
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
             if (Element == null || Control == null) return string.Empty;
@@ -173,17 +198,15 @@ namespace Xam.Plugin.WebView.Droid
             _callback.Reset();
 
             var response = string.Empty;
-            
+
             Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, _callback));
 
             // wait!
-            await Task.Run(() =>
-            {
+            await Task.Run(() => {
                 while (_callback.Value == null) { }
 
                 // Get the string and strip off the quotes
-                if (_callback.Value is Java.Lang.String)
-                {
+                if (_callback.Value is Java.Lang.String) {
                     // Unescape that damn Unicode Java bull.
                     response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
                     response = Regex.Unescape(response);
@@ -205,8 +228,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
 
-            switch (Element.ContentType)
-            {
+            switch (Element.ContentType) {
                 case WebViewContentType.Internet:
                     LoadFromInternet();
                     break;
@@ -247,17 +269,14 @@ namespace Xam.Plugin.WebView.Droid
             var headers = new Dictionary<string, string>();
 
             // Add Local Headers
-            foreach (var header in Element.LocalRegisteredHeaders)
-            {
+            foreach (var header in Element.LocalRegisteredHeaders) {
                 if (!headers.ContainsKey(header.Key))
                     headers.Add(header.Key, header.Value);
             }
 
             // Add Global Headers
-            if (Element.EnableGlobalHeaders)
-            {
-                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-                {
+            if (Element.EnableGlobalHeaders) {
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders) {
                     if (!headers.ContainsKey(header.Key))
                         headers.Add(header.Key, header.Value);
                 }

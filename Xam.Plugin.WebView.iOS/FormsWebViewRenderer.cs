@@ -26,7 +26,8 @@ namespace Xam.Plugin.WebView.iOS
 
         WKUserContentController _contentController;
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             var dt = DateTime.Now;
         }
 
@@ -44,23 +45,25 @@ namespace Xam.Plugin.WebView.iOS
                 DestroyElement(e.OldElement);
         }
 
-		void SetupElement(FormsWebView element)
-		{
+        void SetupElement(FormsWebView element)
+        {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnAddCookieRequested += OnAddCookieRequested;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
 
             SetSource();
-		}
+        }
 
         void DestroyElement(FormsWebView element)
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
             element.OnClearCookiesRequested -= OnClearCookiesRequest;
+            element.OnAddCookieRequested -= OnAddCookieRequested;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -77,8 +80,7 @@ namespace Xam.Plugin.WebView.iOS
                 UserContentController = _contentController
             };
 
-            var wkWebView = new WKWebView(Frame, _configuration)
-            {
+            var wkWebView = new WKWebView(Frame, _configuration) {
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate
@@ -99,13 +101,13 @@ namespace Xam.Plugin.WebView.iOS
         }
 
         void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
+        {
             switch (e.PropertyName) {
                 case "Source":
                     SetSource();
                     break;
             }
-		}
+        }
 
         private async Task OnClearCookiesRequest()
         {
@@ -120,22 +122,28 @@ namespace Xam.Plugin.WebView.iOS
 
         }
 
+        private async Task OnAddCookieRequested(System.Net.Cookie cookie)
+        {
+            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name)) return;
+
+            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+            var nsCookie = new NSHttpCookie(cookie);
+            await store.SetCookieAsync(nsCookie);
+        }
+
         internal async Task<string> OnJavascriptInjectionRequest(string js)
-		{
+        {
             if (Control == null || Element == null) return string.Empty;
 
             var response = string.Empty;
 
-            try
-            {
+            try {
                 var obj = await Control.EvaluateJavaScriptAsync(js).ConfigureAwait(true);
                 if (obj != null)
                     response = obj.ToString();
-            }
-
-            catch (Exception) { /* The Webview might not be ready... */ }
+            } catch (Exception) { /* The Webview might not be ready... */ }
             return response;
-		}
+        }
 
         void SetSource()
         {
@@ -181,17 +189,14 @@ namespace Xam.Plugin.WebView.iOS
 
             var headers = new NSMutableDictionary();
 
-            foreach (var header in Element.LocalRegisteredHeaders)
-            {
+            foreach (var header in Element.LocalRegisteredHeaders) {
                 var key = new NSString(header.Key);
                 if (!headers.ContainsKey(key))
                     headers.Add(key, new NSString(header.Value));
             }
 
-            if (Element.EnableGlobalHeaders)
-            {
-                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-                {
+            if (Element.EnableGlobalHeaders) {
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders) {
                     var key = new NSString(header.Key);
                     if (!headers.ContainsKey(key))
                         headers.Add(key, new NSString(header.Value));
@@ -199,8 +204,7 @@ namespace Xam.Plugin.WebView.iOS
             }
 
             var url = new NSUrl(Element.Source);
-            var request = new NSMutableUrlRequest(url)
-            {
+            var request = new NSMutableUrlRequest(url) {
                 Headers = headers
             };
 
@@ -245,7 +249,7 @@ namespace Xam.Plugin.WebView.iOS
             var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
-            
+
             completionHandler();
         }
 
@@ -255,19 +259,19 @@ namespace Xam.Plugin.WebView.iOS
         public void RunJavaScriptConfirmPanel(WKWebView webView, string message, WKFrameInfo frame, Action<bool> completionHandler)
         {
             var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
-            
+
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
 
                 completionHandler(true);
 
             }));
-            
+
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
 
                 completionHandler(false);
 
             }));
-            
+
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
         }
 
@@ -277,19 +281,19 @@ namespace Xam.Plugin.WebView.iOS
         public void RunJavaScriptTextInputPanel(WKWebView webView, string prompt, string defaultText, WebKit.WKFrameInfo frame, System.Action<string> completionHandler)
         {
             var alertController = UIAlertController.Create(null, prompt, UIAlertControllerStyle.Alert);
-            
+
             UITextField alertTextField = null;
             alertController.AddTextField(textField => {
                 textField.Placeholder = defaultText;
                 alertTextField = textField;
             });
-            
+
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
 
                 completionHandler(alertTextField.Text);
 
             }));
-            
+
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
 
                 completionHandler(null);

@@ -31,6 +31,8 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public delegate Task ClearCookiesRequestDelegate();
 
+        public delegate Task AddCookieDelegate(System.Net.Cookie cookie);
+
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
         /// </summary>
@@ -62,6 +64,8 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal event ClearCookiesRequestDelegate OnClearCookiesRequested;
 
+        internal event AddCookieDelegate OnAddCookieRequested;
+
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
 
         /// <summary>
@@ -72,8 +76,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// The content type to attempt to load. By default this is Internet.
         /// </summary>
-        public WebViewContentType ContentType
-        {
+        public WebViewContentType ContentType {
             get => (WebViewContentType)GetValue(ContentTypeProperty);
             set => SetValue(ContentTypeProperty, value);
         }
@@ -81,9 +84,8 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// The source data. This can either be a valid URL, a path to a local file, or a HTML string.
         /// </summary>
-        public string Source
-        {
-            get => (string) GetValue(SourceProperty);
+        public string Source {
+            get => (string)GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
         }
 
@@ -94,8 +96,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// iOS and MacOS) Resources folder with BundleResource build property
         /// UWP) Project folder with content build property
         /// </summary>
-        public string BaseUrl
-        {
+        public string BaseUrl {
             get { return (string)GetValue(BaseUrlProperty); }
             set { SetValue(BaseUrlProperty, value); }
         }
@@ -103,26 +104,23 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// Opt in and out of global callbacks
         /// </summary>
-        public bool EnableGlobalCallbacks
-        {
-            get => (bool) GetValue(EnableGlobalCallbacksProperty);
+        public bool EnableGlobalCallbacks {
+            get => (bool)GetValue(EnableGlobalCallbacksProperty);
             set => SetValue(EnableGlobalCallbacksProperty, value);
         }
 
         /// <summary>
         /// Opt in and out of global headers
         /// </summary>
-        public bool EnableGlobalHeaders
-        {
-            get => (bool) GetValue(EnableGlobalHeadersProperty);
+        public bool EnableGlobalHeaders {
+            get => (bool)GetValue(EnableGlobalHeadersProperty);
             set => SetValue(EnableGlobalHeadersProperty, value);
         }
 
         /// <summary>
         /// Bindable property which is true when the page is currently navigating.
         /// </summary>
-        public bool Navigating
-        {
+        public bool Navigating {
             get => (bool)GetValue(NavigatingProperty);
             internal set => SetValue(NavigatingProperty, value);
         }
@@ -130,24 +128,21 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// Bindable property which is true when the webview can go back a page.
         /// </summary>
-        public bool CanGoBack
-        {
-            get => (bool) GetValue(CanGoBackProperty);
+        public bool CanGoBack {
+            get => (bool)GetValue(CanGoBackProperty);
             internal set => SetValue(CanGoBackProperty, value);
         }
 
         /// <summary>
         /// Bindable property which is true when the webview can go forward a page.
         /// </summary>
-        public bool CanGoForward
-        {
-            get => (bool) GetValue(CanGoForwardProperty);
+        public bool CanGoForward {
+            get => (bool)GetValue(CanGoForwardProperty);
             internal set => SetValue(CanGoForwardProperty, value);
         }
 
-        public bool UseWideViewPort
-        {
-            get => (bool) GetValue(UseWideViewPortProperty);
+        public bool UseWideViewPort {
+            get => (bool)GetValue(UseWideViewPortProperty);
             set => SetValue(UseWideViewPortProperty, value);
         }
 
@@ -186,9 +181,16 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Clearing all cookies.
         /// For UWP, all temporary browser data will be cleared.
         /// </summary>
-        public async Task ClearCookiesAsync() {
+        public async Task ClearCookiesAsync()
+        {
             if (OnClearCookiesRequested != null)
                 await OnClearCookiesRequested.Invoke();
+        }
+
+        public async Task AddCookieAsync(System.Net.Cookie cookie)
+        {
+            if (OnAddCookieRequested != null)
+                await OnAddCookieRequested.Invoke(cookie);
         }
 
         /// <summary>
@@ -243,6 +245,7 @@ namespace Xam.Plugin.WebView.Abstractions
             LocalRegisteredCallbacks.Clear();
         }
 
+
         /// <summary>
         /// Dispose of the WebView
         /// </summary>
@@ -260,12 +263,11 @@ namespace Xam.Plugin.WebView.Abstractions
             // By default, we only attempt to offload valid Uris with none http/s schemes
             bool validUri = Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult);
             bool validScheme = false;
-            
+
             if (validUri)
                 validScheme = uriResult.Scheme.StartsWith("http") || uriResult.Scheme.StartsWith("file");
 
-            var handler = new DecisionHandlerDelegate()
-            {
+            var handler = new DecisionHandlerDelegate() {
                 Uri = uri,
                 OffloadOntoDevice = validUri && !validScheme
             };
@@ -292,7 +294,7 @@ namespace Xam.Plugin.WebView.Abstractions
         internal void HandleScriptReceived(string data)
         {
             if (string.IsNullOrWhiteSpace(data)) return;
-            
+
             var action = JsonConvert.DeserializeObject<ActionEvent>(data);
 
             // Decode
