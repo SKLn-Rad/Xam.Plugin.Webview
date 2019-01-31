@@ -29,21 +29,28 @@ namespace Xam.Plugin.WebView.iOS
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
-            
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+
+#if DEBUG
+            webView.Configuration.WebsiteDataStore.HttpCookieStore.GetAllCookies((NSHttpCookie[] obj) => {
+                System.Diagnostics.Debug.WriteLine("*** DecidePolicy webView.Configuration.WebsiteDataStore");
+                for (var i = 0; i < obj.Length; i++) {
+                    var nsCookie = obj[i];
+                    var domain = nsCookie.Domain;
+                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie.Domain}; Name={nsCookie.Name}; Value={nsCookie.Value};");
+                }
+            });
+#endif
+
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
-            
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
+
+            if (response.Cancel || response.OffloadOntoDevice) {
                 if (response.OffloadOntoDevice)
                     AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
 
                 decisionHandler(WKNavigationActionPolicy.Cancel);
-            }
-
-            else
-            {
+            } else {
                 decisionHandler(WKNavigationActionPolicy.Allow);
                 renderer.Element.Navigating = true;
             }
@@ -51,14 +58,14 @@ namespace Xam.Plugin.WebView.iOS
 
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
 
             if (navigationResponse.Response is NSHttpUrlResponse) {
                 var code = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
                 if (code >= 400) {
                     renderer.Element.Navigating = false;
-                    renderer.Element.HandleNavigationError((int) code);
+                    renderer.Element.HandleNavigationError((int)code);
                     decisionHandler(WKNavigationResponsePolicy.Cancel);
                     return;
                 }
@@ -70,15 +77,15 @@ namespace Xam.Plugin.WebView.iOS
         [Export("webView:didFinishNavigation:")]
         public async override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationCompleted(webView.Url.ToString());
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
             if (renderer.Element.EnableGlobalCallbacks)
                 foreach (var function in FormsWebView.GlobalRegisteredCallbacks)
-    				await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
+                    await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
 
             foreach (var function in renderer.Element.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));

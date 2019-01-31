@@ -33,6 +33,8 @@ namespace Xam.Plugin.WebView.Abstractions
 
         public delegate Task AddCookieDelegate(System.Net.Cookie cookie);
 
+        public delegate Task PrintCookiesRequestDelegate();
+
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
         /// </summary>
@@ -65,6 +67,8 @@ namespace Xam.Plugin.WebView.Abstractions
         internal event ClearCookiesRequestDelegate OnClearCookiesRequested;
 
         internal event AddCookieDelegate OnAddCookieRequested;
+
+        internal event PrintCookiesRequestDelegate OnPrintCookiesRequested;
 
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
 
@@ -253,6 +257,11 @@ namespace Xam.Plugin.WebView.Abstractions
         {
             LocalRegisteredCallbacks.Clear();
             LocalRegisteredHeaders.Clear();
+        }
+
+        public async Task PrintCookiesAsync()
+        {
+            await this.OnPrintCookiesRequested?.Invoke();
         }
 
         // All code which should be hidden from the end user goes here
