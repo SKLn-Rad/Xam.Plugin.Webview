@@ -26,14 +26,27 @@ namespace Xam.Plugin.WebView.iOS
             return false;
         }
 
+        [Export("webView:didStartProvisionalNavigation:")]
+        public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
+        {
+
+        }
+
+        
+
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
-            
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+
+            System.Console.WriteLine("DecidePolicy" + navigationAction.Request.Url?.Host);
+            System.Console.WriteLine("DecidePolicy" + renderer.Element.BaseUrl);
+            System.Console.WriteLine($"DecidePolicy {navigationAction.Request.Url.Host} {navigationAction.Request is NSMutableUrlRequest}");
+
+
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
-            
+
             if (response.Cancel || response.OffloadOntoDevice)
             {
                 if (response.OffloadOntoDevice)
@@ -41,24 +54,74 @@ namespace Xam.Plugin.WebView.iOS
 
                 decisionHandler(WKNavigationActionPolicy.Cancel);
             }
+            //else
+            //{
+            //    var request = navigationAction.Request.Copy();
+            //    System.Console.WriteLine(navigationAction.Request.Url?.Host);
+            //    System.Console.WriteLine(renderer.Element.BaseUrl);
+            //    bool _headerIsSet = false;
+            //    // check if the header is set and if not, create a muteable copy of the original request
+            //    if (/*navigationAction.Request.Url.Host == "192.168.1.51" &&*/ request is NSMutableUrlRequest mutableRequest)
+            //    {
+            //        // set the headers of the new request to the created dict
+            //        if (renderer.Element.EnableGlobalHeaders)
+            //        {
+            //            var keys = new object[FormsWebView.GlobalRegisteredHeaders.Count];
+            //            var values = new object[FormsWebView.GlobalRegisteredHeaders.Count];
+            //            int index = 0;
+            //            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+            //            {
+            //                keys[index] = header.Key;
+            //                values[index] = header.Value;
 
-            else
-            {
-                decisionHandler(WKNavigationActionPolicy.Allow);
-                renderer.Element.Navigating = true;
+            //                //if (!mutableRequest.Headers.ContainsKey(new NSString(header.Key)))
+            //                //    mutableRequest.Headers.SetValueForKey(new NSString(header.Value), new NSString(header.Key));
+            //            }
+            //            var headerDict = NSDictionary.FromObjectsAndKeys(values, keys);
+            //            mutableRequest.Headers = headerDict;
+
+            //            _headerIsSet = true;
+            //        }
+
+            //        if (_headerIsSet)
+            //        {
+            //            // attempt to load the newly created request
+            //            webView.LoadRequest(mutableRequest);
+            //            // abort the old one
+            //            decisionHandler(WKNavigationActionPolicy.Cancel);
+            //            // exit this whole method
+            //            return;
+            //        }
+            //        else
+            //        {
+            //            _headerIsSet = false;
+            //            decisionHandler(WKNavigationActionPolicy.Allow);
+            //            renderer.Element.Navigating = true;
+            //        }
+            //    }
+                else
+                {
+                    //_headerIsSet = false;
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                    renderer.Element.Navigating = true;
+                }
             }
         }
 
         public override void DecidePolicy(WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
 
-            if (navigationResponse.Response is NSHttpUrlResponse) {
+            System.Console.WriteLine("DecidePolicy Response" + renderer.Element.BaseUrl);
+
+            if (navigationResponse.Response is NSHttpUrlResponse)
+            {
                 var code = ((NSHttpUrlResponse)navigationResponse.Response).StatusCode;
-                if (code >= 400) {
+                if (code >= 400)
+                {
                     renderer.Element.Navigating = false;
-                    renderer.Element.HandleNavigationError((int) code);
+                    renderer.Element.HandleNavigationError((int)code);
                     decisionHandler(WKNavigationResponsePolicy.Cancel);
                     return;
                 }
@@ -70,15 +133,15 @@ namespace Xam.Plugin.WebView.iOS
         [Export("webView:didFinishNavigation:")]
         public async override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
-			if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-			if (renderer.Element == null) return;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
 
             renderer.Element.HandleNavigationCompleted(webView.Url.ToString());
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
             if (renderer.Element.EnableGlobalCallbacks)
                 foreach (var function in FormsWebView.GlobalRegisteredCallbacks)
-    				await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
+                    await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));
 
             foreach (var function in renderer.Element.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(function.Key));

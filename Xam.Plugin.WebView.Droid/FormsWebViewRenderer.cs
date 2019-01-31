@@ -1,4 +1,5 @@
-﻿using Android.Webkit;
+﻿using Android.OS;
+using Android.Webkit;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,7 +15,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.Droid
 {
-    public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
+    public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WebViewEx>
     {
 
         public static string MimeType = "text/html";
@@ -28,8 +29,6 @@ namespace Xam.Plugin.WebView.Droid
         public static bool IgnoreSSLGlobally { get; set; }
 
         public static event EventHandler<Android.Webkit.WebView> OnControlChanged;
-
-        JavascriptValueCallback _callback;
 
         public static void Initialize()
         {
@@ -59,6 +58,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested += OnClearCookiesRequest;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -70,6 +70,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested -= OnClearCookiesRequest;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -79,8 +80,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void SetupControl()
         {
-            var webView = new Android.Webkit.WebView(Forms.Context);
-            _callback = new JavascriptValueCallback(this);
+            var webView = new WebViewEx(Forms.Context);
 
             // https://github.com/SKLn-Rad/Xam.Plugin.WebView.Webview/issues/11
             webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
@@ -140,36 +140,62 @@ namespace Xam.Plugin.WebView.Droid
             }
         }
 
+        private async Task OnClearCookiesRequest()
+        {
+            if (Control == null) return;
+
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
+            {
+                CookieManager.Instance.RemoveAllCookies(null);
+                CookieManager.Instance.Flush();
+            }
+            else
+            {
+                //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.StartSync();
+                CookieManager cookieManager = CookieManager.Instance;
+                cookieManager.RemoveAllCookie();
+                cookieManager.RemoveSessionCookie();
+                cookieSyncMngr.StopSync();
+                cookieSyncMngr.Sync();
+            }
+        }
+
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
             if (Element == null || Control == null) return string.Empty;
 
-            // fire!
-            _callback.Reset();
+            var callback = new JavascriptValueCallback(this);
 
             var response = string.Empty;
-            
-            Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, _callback));
+
+            Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, callback));
 
             // wait!
             await Task.Run(() =>
             {
-                while (_callback.Value == null) { }
+                while (callback.Value == null) { }
 
-                // Get the string and strip off the quotes
-                if (_callback.Value is Java.Lang.String)
+                using (callback)
                 {
-                    // Unescape that damn Unicode Java bull.
-                    response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char) ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
-                    response = Regex.Unescape(response);
+                    // Get the string and strip off the quotes
+                    if (callback.Value is Java.Lang.String)
+                    {
+                        // Unescape that damn Unicode Java bull.
+                        response = Regex.Replace(
+                            callback.Value.ToString(),
+                            @"\\[Uu]([0-9A-Fa-f]{4})",
+                            m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+                        response = Regex.Unescape(response);
 
-                    if (response.Equals("\"null\""))
-                        response = null;
+                        if (response.Equals("\"null\""))
+                            response = null;
 
-                    else if (response.StartsWith("\"") && response.EndsWith("\""))
-                        response = response.Substring(1, response.Length - 2);
+                        else if (response.StartsWith("\"") && response.EndsWith("\""))
+                            response = response.Substring(1, response.Length - 2);
+                    }
                 }
-
             });
 
             // return
@@ -237,7 +263,7 @@ namespace Xam.Plugin.WebView.Droid
                         headers.Add(header.Key, header.Value);
                 }
             }
-            
+
             Control.LoadUrl(Element.Source, headers);
         }
     }
