@@ -25,6 +25,7 @@ namespace SampleApp
 
         void AddItems()
         {
+            
             Items.Add(new SelectionItem()
             {
                 Identifier = 0,
@@ -171,6 +172,20 @@ namespace SampleApp
                 Title = "Scroll test",
                 Detail = "Loads a long webview with buttons to scroll to the top and bottom"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 21,
+                Title = "Cookie test",
+                Detail = "Clear cookies in the web view"
+            });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 22,
+                Title = "Get/Set Cookie test",
+                Detail = "Set cookie in the web view"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -261,6 +276,14 @@ namespace SampleApp
 
                 case 20:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new ScrollToSample());
+                    break;
+
+                case 21:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new ClearCookieSample());
+                    break;
+
+                case 22:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new GetSetCookieSample());
                     break;
 
                 default:

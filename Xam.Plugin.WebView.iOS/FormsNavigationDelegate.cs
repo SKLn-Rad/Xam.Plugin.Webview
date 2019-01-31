@@ -99,12 +99,11 @@ namespace Xam.Plugin.WebView.iOS
             //            renderer.Element.Navigating = true;
             //        }
             //    }
-                else
-                {
-                    //_headerIsSet = false;
-                    decisionHandler(WKNavigationActionPolicy.Allow);
-                    renderer.Element.Navigating = true;
-                }
+            else
+            {
+                //_headerIsSet = false;
+                decisionHandler(WKNavigationActionPolicy.Allow);
+                renderer.Element.Navigating = true;
             }
         }
 

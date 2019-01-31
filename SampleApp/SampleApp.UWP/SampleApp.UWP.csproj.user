@@ -5,5 +5,7 @@
     </DebugEngines>
     <BackgroundTaskDebugEngines>
     </BackgroundTaskDebugEngines>
+    <RemoteDebugEnabled>true</RemoteDebugEnabled>
+    <RemoteDebugMachine>Localhost</RemoteDebugMachine>
   </PropertyGroup>
 </Project>

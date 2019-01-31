@@ -9,6 +9,8 @@ using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.iOS;
 using Xamarin.Forms.Platform.iOS;
 using UIKit;
+using System.Net;
+using System.Threading;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS
@@ -28,6 +30,7 @@ namespace Xam.Plugin.WebView.iOS
 
         public static void Initialize() {
             var dt = DateTime.Now;
+        
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
@@ -46,8 +49,13 @@ namespace Xam.Plugin.WebView.iOS
 
 		void SetupElement(FormsWebView element)
 		{
+            NSHttpCookieStorage.SharedStorage.AcceptPolicy = NSHttpCookieAcceptPolicy.Always;
             element.PropertyChanged += OnPropertyChanged;
             element.OnJavascriptInjectionRequest += OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnGetAllCookiesRequestedAsync += OnGetAllCookiesRequestAsync;
+            element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
@@ -59,6 +67,10 @@ namespace Xam.Plugin.WebView.iOS
         {
             element.PropertyChanged -= OnPropertyChanged;
             element.OnJavascriptInjectionRequest -= OnJavascriptInjectionRequest;
+            element.OnClearCookiesRequested -= OnClearCookiesRequest;
+            element.OnGetAllCookiesRequestedAsync += OnGetAllCookiesRequestAsync;
+            element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
+            element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
@@ -75,11 +87,12 @@ namespace Xam.Plugin.WebView.iOS
                 UserContentController = _contentController
             };
 
+
             var wkWebView = new WKWebView(Frame, _configuration)
             {
                 Opaque = false,
                 UIDelegate = this,
-                NavigationDelegate = _navigationDelegate
+                NavigationDelegate = _navigationDelegate,
             };
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
@@ -105,7 +118,114 @@ namespace Xam.Plugin.WebView.iOS
             }
 		}
 
-		internal async Task<string> OnJavascriptInjectionRequest(string js)
+        private async Task OnClearCookiesRequest()
+        {
+            if (Control == null) return;
+
+            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+
+            var cookies = await store.GetAllCookiesAsync();
+            foreach (var c in cookies) {
+                await store.DeleteCookieAsync(c);
+            }
+
+            var url = new Uri(Element.Source);
+            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
+            foreach(NSHttpCookie c in sharedCookies) {
+                NSHttpCookieStorage.SharedStorage.DeleteCookie(c);
+            }
+
+        }
+
+        private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
+        {
+            if (Control == null) return string.Empty;
+            var toReturn = string.Empty;
+            try
+            {
+                var domain = Control.Url.Host;
+                var newCookie = new NSHttpCookie(cookie);
+
+                NSHttpCookieStorage.SharedStorage.SetCookie(newCookie);
+
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
+                store.SetCookie(newCookie, () => {});
+
+                toReturn = await OnGetCookieRequestAsync(cookie.Name);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("We had a crash " + e);
+                toReturn = string.Empty;
+            }
+            return toReturn;
+        }
+
+        async Task<string> OnGetAllCookiesRequestAsync() {
+            if (Control == null || Element == null)
+            {
+                return string.Empty;
+            }
+            var cookieCollection = string.Empty;
+            var url = Control.Url;
+
+            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
+            foreach (NSHttpCookie c in sharedCookies)
+            {
+                if (c.Domain == url.Host)
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
+            }
+
+            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+
+            var cookies = await store.GetAllCookiesAsync();
+
+            foreach (var c in cookies)
+            {
+                if (url.Host.Contains(c.Domain))
+                {
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
+            }
+
+            if(cookieCollection.Length > 0) {
+                cookieCollection = cookieCollection.Remove(cookieCollection.Length - 2);
+            }
+
+            return cookieCollection;
+        }
+
+        private async Task<string> OnGetCookieRequestAsync(string key)
+        {
+            if (Control == null || Element == null) return string.Empty;
+            var url = Control.Url;
+            var toReturn = string.Empty;
+
+            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+
+            var cookies = await store.GetAllCookiesAsync();
+            foreach (var c in cookies)
+            {
+                if (c.Name == key && c.Domain == url.Host)
+                    return c.Value;
+            }
+
+            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
+            foreach (NSHttpCookie c in sharedCookies)
+            {
+                if (c.Name == key && c.Domain == url.Host)
+                {
+                    return c.Value;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        internal async Task<string> OnJavascriptInjectionRequest(string js)
 		{
             if (Control == null || Element == null) return string.Empty;
 

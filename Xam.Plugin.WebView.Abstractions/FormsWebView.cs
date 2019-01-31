@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -34,6 +36,22 @@ namespace Xam.Plugin.WebView.Abstractions
         /// </summary>
         public delegate Task ClearCookiesRequestDelegate();
 
+
+        /// <summary>
+        ///  Delegate to await getting all cookies. Returns string or string.Empty
+        /// </summary>
+        public delegate Task<string> GetAllCookiesDelegate();
+
+        /// <summary>
+        ///  Delegate to await getting specified cookie from cookiename. Returns string or string.Empty
+        /// </summary>
+        public delegate Task<string> GetCookieDelegate(string key);
+
+        /// <summary>
+        ///  Delegate to await setting cookie Cookie object. Returns cookievalue or string.Empty if something failed
+        /// </summary>
+        public delegate Task<string> SetCookieDelegate(Cookie cookie);
+
         /// <summary>
         /// Fired when navigation begins, for example when the source is set.
         /// </summary>
@@ -56,6 +74,12 @@ namespace Xam.Plugin.WebView.Abstractions
         public event EventHandler OnContentLoaded;
 
         internal event EventHandler OnBackRequested;
+
+        internal event GetAllCookiesDelegate OnGetAllCookiesRequestedAsync;
+
+        internal event GetCookieDelegate OnGetCookieRequestedAsync;
+
+        internal event SetCookieDelegate OnSetCookieRequestedAsync;
 
         internal event EventHandler OnForwardRequested;
 
@@ -234,11 +258,48 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Clearing all cookies.
         /// For UWP, all temporary browser data will be cleared.
         /// </summary>
-        public async Task ClearCookiesAsync()
-        {
+        public async Task ClearCookiesAsync() {
             if (OnClearCookiesRequested != null)
                 await OnClearCookiesRequested.Invoke();
         }
+
+        /// <summary>
+        /// Getting all cookies from the current domain from shared storage
+        /// </summary>
+        /// <returns>All cookies found for the current website. Returned on regular format "KEY=VALUE; KEY2=VALUE2". If no cookies where found, returns string.Empty</returns>
+        public async Task<string> GetAllCookiesAsync() {
+            if (OnGetAllCookiesRequestedAsync != null)
+                return await OnGetAllCookiesRequestedAsync.Invoke();
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Getting a cookie value by cookiename
+        /// </summary>
+        /// <paramref name="key">Cookie name to fetch</paramref>
+        /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
+        public async Task<string> GetCookieAsync(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) return string.Empty;
+            if (OnGetCookieRequestedAsync != null)
+                return await OnGetCookieRequestedAsync.Invoke(key);
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Setting a cookie value by cookiename
+        /// </summary>
+        /// <param name="cookie">Cookie object to set as cookie</param>
+        /// <param name="duration">Expiration of cookie in seconds. If set to 0 or lower, the cookie is deleted. If not specified the cookie is set as sessioncookie and removed on app-close (Only works with iOS/macOS for now)</param>
+        /// <returns>A string with the cookievalue. is string.Empty if there is no cookie with that name</returns>
+        public async Task<string> SetCookieAsync(Cookie cookie)
+        {
+            if (cookie == null) return string.Empty;
+            if (OnGetCookieRequestedAsync != null)
+                return await OnSetCookieRequestedAsync.Invoke(cookie);
+            return string.Empty;
+        }
+
 
         /// <summary>
         /// Inject some javascript, returning a string result if the resulting Javascript resolves to a string on the DOM.
