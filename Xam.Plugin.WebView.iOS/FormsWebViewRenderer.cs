@@ -150,21 +150,24 @@ namespace Xam.Plugin.WebView.iOS
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("*** Control.Configuration.WebsiteDataStore ***");
-            cookies = await Control?.Configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
-            if (cookies != null) {
-                foreach (var nsCookie2 in cookies) {
-                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+            if (_configuration != Control?.Configuration) {
+                System.Diagnostics.Debug.WriteLine("*** _configuration.WebsiteDataStore ***");
+                cookies = await _configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
+                if (cookies != null) {
+                    foreach (var nsCookie2 in cookies) {
+                        System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                    }
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("*** _configuration.WebsiteDataStore ***");
-            cookies = await _configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
-            if (cookies != null) {
-                foreach (var nsCookie2 in cookies) {
-                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+            Control?.Configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookies((NSHttpCookie[] cookieArray) => {
+                System.Diagnostics.Debug.WriteLine("*** Control.Configuration.WebsiteDataStore ***");
+                if (cookieArray != null) {
+                    foreach (var nsCookie2 in cookieArray) {
+                        System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                    }
                 }
-            }
+            });
 #endif
         }
 
@@ -175,7 +178,9 @@ namespace Xam.Plugin.WebView.iOS
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
             var nsCookie = new NSHttpCookie(cookie);
             await store.SetCookieAsync(nsCookie);
-            //_configuration.ProcessPool = new WKProcessPool(); // https://stackoverflow.com/questions/33156567/getting-all-cookies-from-wkwebview
+#if DEBUG
+            await OnPrintCookiesRequested();
+#endif
         }
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
