@@ -26,7 +26,7 @@ namespace Xam.Plugin.WebView.iOS
 
         WKUserContentController _contentController;
 
-        public static WKProcessPool _processPool;
+        private static WKProcessPool _processPool;
 
         public static void Initialize()
         {
