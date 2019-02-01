@@ -211,7 +211,7 @@ namespace Xam.Plugin.WebView.Droid
 
         private void SetCookie(System.Net.Cookie cookie)
         {
-            var cookieDomain = cookie.Domain.Remove(0);
+            var cookieDomain = cookie.Domain;
             var url = $"{cookieDomain}";
             var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}";
 
