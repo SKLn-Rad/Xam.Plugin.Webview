@@ -46,5 +46,6 @@ namespace Xam.Plugin.WebView.Abstractions
 
         void RemoveAllLocalCallbacks();
         Task ClearCookiesAsync();
+        Task AddCookieAsync(System.Net.Cookie cookie);
     }
 }

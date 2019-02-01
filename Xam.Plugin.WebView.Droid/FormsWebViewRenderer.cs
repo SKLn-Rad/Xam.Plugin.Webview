@@ -64,6 +64,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
+            element.OnPrintCookiesRequested += OnPrintCookiesRequested;
 
             SetSource();
         }
@@ -78,6 +79,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnPrintCookiesRequested -= OnPrintCookiesRequested;
 
             element.Dispose();
         }
@@ -144,14 +146,15 @@ namespace Xam.Plugin.WebView.Droid
             }
         }
 
-        private async Task OnClearCookiesRequest()
+        private Task OnClearCookiesRequest()
         {
-            if (Control == null) return;
+            if (Control == null) return Task.CompletedTask;
 
             if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
                 CookieManager.Instance.RemoveAllCookies(null);
                 CookieManager.Instance.Flush();
             } else {
+#pragma warning disable CS0618
                 //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
                 CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
                 cookieSyncMngr.StartSync();
@@ -160,34 +163,61 @@ namespace Xam.Plugin.WebView.Droid
                 cookieManager.RemoveSessionCookie();
                 cookieSyncMngr.StopSync();
                 cookieSyncMngr.Sync();
+#pragma warning restore CS0618
             }
+            return Task.CompletedTask;
         }
 
-        private void OnAddCookieRequested(System.Net.Cookie cookie)
+        private Task OnAddCookieRequested(System.Net.Cookie cookie)
         {
-            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name)) return;
+            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name))
+                return Task.CompletedTask;
 
             if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
                 SetCookie(cookie);
                 CookieManager.Instance.Flush();
             } else {
+#pragma warning disable CS0618
                 CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
                 cookieSyncMngr.StartSync();
                 SetCookie(cookie);
                 cookieSyncMngr.StopSync();
                 cookieSyncMngr.Sync();
+#pragma warning restore CS0618
             }
+            return Task.CompletedTask;
+        }
+
+        private Task OnPrintCookiesRequested(IEnumerable<string> urls = null)
+        {
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
+                CookieManager.Instance.Flush();
+            } else {
+#pragma warning disable CS0618
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.Sync();
+#pragma warning restore CS0618
+            }
+            if (!CookieManager.Instance.HasCookies)
+                return Task.CompletedTask;
+            if (urls == null)
+                System.Diagnostics.Debug.WriteLine("Android must be given the cookie urls to iterate over");
+            foreach (var url in urls) {
+                var cookie = CookieManager.Instance.GetCookie(url);
+                System.Diagnostics.Debug.WriteLine($"Cookie for {url}: {cookie}");
+            }
+            return Task.CompletedTask;
         }
 
         private void SetCookie(System.Net.Cookie cookie)
         {
             var cookieDomain = cookie.Domain.Remove(0);
             var url = $"{cookieDomain}";
-            var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}"
+            var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}";
 
             CookieManager cookieManager = CookieManager.Instance;
             CookieManager.Instance.SetAcceptCookie(true);
-            CookieManager.Instance.SetCookie(url, cookieString)
+            CookieManager.Instance.SetCookie(url, cookieString);
         }
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)

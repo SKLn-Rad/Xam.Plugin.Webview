@@ -9,6 +9,7 @@ using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.iOS;
 using Xamarin.Forms.Platform.iOS;
 using UIKit;
+using System.Collections.Generic;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS
@@ -129,7 +130,7 @@ namespace Xam.Plugin.WebView.iOS
 #endif
         }
 
-        private async Task OnPrintCookiesRequested()
+        private async Task OnPrintCookiesRequested(IEnumerable<string> urls = null)
         {
 #if DEBUG
             NSHttpCookie[] cookies;
