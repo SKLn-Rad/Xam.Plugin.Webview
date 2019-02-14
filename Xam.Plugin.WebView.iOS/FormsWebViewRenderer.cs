@@ -72,6 +72,7 @@ namespace Xam.Plugin.WebView.iOS
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnPrintCookiesRequested -= OnPrintCookiesRequested;
 
             element.Dispose();
         }
