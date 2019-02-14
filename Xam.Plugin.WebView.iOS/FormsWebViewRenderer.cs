@@ -83,15 +83,40 @@ namespace Xam.Plugin.WebView.iOS
             _contentController = new WKUserContentController();
             _contentController.AddScriptMessageHandler(this, "invokeAction");
             _configuration = new WKWebViewConfiguration {
-                UserContentController = _contentController
+                UserContentController = _contentController,
             };
             _configuration.ProcessPool = _processPool;
 
-            var wkWebView = new WKWebView(Frame, _configuration) {
+            var wkWebView = new WKWebView(Frame,  _configuration) {
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate
             };
+
+            /*
+            string jScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);";
+
+            WKUserScript wkUScript = new WKUserScript((NSString)jScript, WKUserScriptInjectionTime.AtDocumentStart, true);
+            _contentController.AddUserScript(wkUScript);
+            */
+
+            //Totally disables scroll feature
+            /*
+            if(wkWebView.ScrollView != null)
+                wkWebView.ScrollView.ScrollEnabled = false;
+            */
+
+
+            wkWebView.ContentMode = UIViewContentMode.ScaleToFill;
+            if(wkWebView.ScrollView != null) {
+                wkWebView.ScrollView.Bounces = false;
+                /*
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+                    wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.ScrollableAxes;
+                */                      
+            }
+
+
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
