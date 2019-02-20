@@ -1,4 +1,5 @@
-﻿using Android.OS;
+﻿using Android.Content;
+using Android.OS;
 using Android.Webkit;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,10 @@ namespace Xam.Plugin.WebView.Droid
         public static event EventHandler<Android.Webkit.WebView> OnControlChanged;
 
         JavascriptValueCallback _callback;
+
+        public FormsWebViewRenderer(Context context) : base(context)
+        {
+        }
 
         public static void Initialize()
         {
