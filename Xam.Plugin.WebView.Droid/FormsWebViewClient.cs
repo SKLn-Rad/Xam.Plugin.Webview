@@ -35,7 +35,7 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            renderer.Element.HandleNavigationError((int) error.ErrorCode);
+            renderer.Element.HandleNavigationError((int)error.ErrorCode);
             renderer.Element.HandleNavigationCompleted(request.Url.ToString());
             renderer.Element.Navigating = false;
         }
@@ -54,53 +54,47 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.Navigating = false;
         }
 
-        //For Android < 5.0
         [Obsolete]
-        public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, string url)
+        public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, string url)
         {
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Lollipop) goto EndShouldInterceptRequest;
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+                return base.ShouldOverrideUrlLoading(view, url);
 
-            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) goto EndShouldInterceptRequest;
-            if (renderer.Element == null) goto EndShouldInterceptRequest;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer))
+                return base.ShouldOverrideUrlLoading(view, url);
+            if (renderer.Element == null)
+                return base.ShouldOverrideUrlLoading(view, url);
 
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    if (response.OffloadOntoDevice)
-                        AttemptToHandleCustomUrlScheme(view, url);
-
-                    view.StopLoading();
-                });
+            if (response.Cancel || response.OffloadOntoDevice) {
+                if (response.OffloadOntoDevice)
+                    AttemptToHandleCustomUrlScheme(view, url);
+                view.StopLoading();
+                return true;
             }
 
-            EndShouldInterceptRequest:
-            return base.ShouldInterceptRequest(view, url);
+            return base.ShouldOverrideUrlLoading(view, url);
         }
 
-        public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, IWebResourceRequest request)
+        public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
         {
-            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) goto EndShouldInterceptRequest;
-            if (renderer.Element == null) goto EndShouldInterceptRequest;
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer))
+                return base.ShouldOverrideUrlLoading(view, request);
+            if (renderer.Element == null)
+                return base.ShouldOverrideUrlLoading(view, request);
 
             string url = request.Url.ToString();
+
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    if (response.OffloadOntoDevice)
-                        AttemptToHandleCustomUrlScheme(view, url);
-
-                    view.StopLoading();
-                });
+            if (response.Cancel || response.OffloadOntoDevice) {
+                if (response.OffloadOntoDevice)
+                    AttemptToHandleCustomUrlScheme(view, url);
+                view.StopLoading();
+                return true;
             }
-
-            EndShouldInterceptRequest:
-            return base.ShouldInterceptRequest(view, request);
+            return base.ShouldOverrideUrlLoading(view, request);
         }
 
         void CheckResponseValidity(Android.Webkit.WebView view, string url)
@@ -110,10 +104,8 @@ namespace Xam.Plugin.WebView.Droid
 
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
+            if (response.Cancel || response.OffloadOntoDevice) {
+                Device.BeginInvokeOnMainThread(() => {
                     if (response.OffloadOntoDevice)
                         AttemptToHandleCustomUrlScheme(view, url);
 
@@ -132,8 +124,7 @@ namespace Xam.Plugin.WebView.Droid
 
         bool AttemptToHandleCustomUrlScheme(Android.Webkit.WebView view, string url)
         {
-            if (url.StartsWith("mailto"))
-            {
+            if (url.StartsWith("mailto")) {
                 Android.Net.MailTo emailData = Android.Net.MailTo.Parse(url);
 
                 Intent email = new Intent(Intent.ActionSendto);
@@ -150,8 +141,7 @@ namespace Xam.Plugin.WebView.Droid
                 return true;
             }
 
-            if (url.StartsWith("http"))
-            {
+            if (url.StartsWith("http")) {
                 Intent webPage = new Intent(Intent.ActionView, Android.Net.Uri.Parse(url));
                 if (webPage.ResolveActivity(Forms.Context.PackageManager) != null)
                     Forms.Context.StartActivity(webPage);
@@ -167,13 +157,9 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            if (FormsWebViewRenderer.IgnoreSSLGlobally)
-            {
+            if (FormsWebViewRenderer.IgnoreSSLGlobally) {
                 handler.Proceed();
-            }
-
-            else
-            {
+            } else {
                 handler.Cancel();
                 renderer.Element.Navigating = false;
             }
