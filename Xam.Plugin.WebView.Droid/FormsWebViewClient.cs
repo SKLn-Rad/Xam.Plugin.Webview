@@ -174,20 +174,23 @@ namespace Xam.Plugin.WebView.Droid
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
             // Add Global Callbacks
-            if (renderer.Element.EnableGlobalCallbacks)
-                foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+            if(renderer != null && renderer.Element != null)
+            {
+                if (renderer.Element.EnableGlobalCallbacks)
+                    foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+                        await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
+
+                // Add Local Callbacks
+                foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
                     await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
 
-            // Add Local Callbacks
-            foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
-                await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
+                renderer.Element.CanGoBack = view.CanGoBack();
+                renderer.Element.CanGoForward = view.CanGoForward();
+                renderer.Element.Navigating = false;
 
-            renderer.Element.CanGoBack = view.CanGoBack();
-            renderer.Element.CanGoForward = view.CanGoForward();
-            renderer.Element.Navigating = false;
-
-            renderer.Element.HandleNavigationCompleted(url);
-            renderer.Element.HandleContentLoaded();
+                renderer.Element.HandleNavigationCompleted(url);
+                renderer.Element.HandleContentLoaded();
+            }
         }
     }
 }
