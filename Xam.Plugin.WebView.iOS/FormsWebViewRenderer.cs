@@ -94,7 +94,8 @@ namespace Xam.Plugin.WebView.iOS
             };
             if(wkWebView.ScrollView != null) {
                 wkWebView.ScrollView.Bounces = false;
-                wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
+                if(UIDevice.CurrentDevice.CheckSystemVersion(11,0))
+                    wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
             }
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
