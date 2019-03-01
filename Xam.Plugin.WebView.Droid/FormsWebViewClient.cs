@@ -7,11 +7,28 @@ using Xam.Plugin.WebView.Abstractions;
 using Android.Runtime;
 using Android.Content;
 using Xamarin.Forms;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewClient : WebViewClient
     {
+
+        //************************************************************************************************************************
+
+        public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, IWebResourceRequest request)
+        {
+            return base.ShouldInterceptRequest(view, request);
+        }
+
+        //************************************************************************************************************************
+
 
         readonly WeakReference<FormsWebViewRenderer> Reference;
 

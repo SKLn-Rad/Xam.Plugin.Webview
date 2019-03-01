@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ReleaseVersion>0.1.5</ReleaseVersion>
+    <ReleaseVersion>0.1.7</ReleaseVersion>
   </PropertyGroup>
   
     <ItemGroup>
