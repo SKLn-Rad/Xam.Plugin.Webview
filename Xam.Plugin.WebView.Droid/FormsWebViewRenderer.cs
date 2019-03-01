@@ -89,6 +89,7 @@ namespace Xam.Plugin.WebView.Droid
             webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
             // Defaults
+            if (webView.Settings == null) return;
             webView.Settings.JavaScriptEnabled = true;
             webView.Settings.DomStorageEnabled = true;
             webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");

@@ -252,6 +252,33 @@ namespace Xam.Plugin.WebView.Abstractions
             LocalRegisteredHeaders.Clear();
         }
 
+        /// <summary>
+        /// Ignore the SSL errors generated from the WebView
+        /// </summary>
+        public bool IgnoreSSLErrors
+        {
+            get => (bool)GetValue(IgnoreSSLErrorsProperty);
+            set => SetValue(IgnoreSSLErrorsProperty, value);
+        }
+
+        /// <summary>
+        /// Specifies the Username for basic authentication if required by the server
+        /// </summary>
+        public string Username
+        {
+            get => (string)GetValue(UsernameProperty);
+            set => SetValue(UsernameProperty, value);
+        }
+
+        /// <summary>
+        /// Specifies the Password for basic authentication if required by the server
+        /// </summary>
+        public string Password
+        {
+            get => (string)GetValue(PasswordProperty);
+            set => SetValue(PasswordProperty, value);
+        }
+
         // All code which should be hidden from the end user goes here
         #region Internals
 

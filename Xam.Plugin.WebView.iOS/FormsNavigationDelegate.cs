@@ -88,5 +88,37 @@ namespace Xam.Plugin.WebView.iOS
             renderer.Element.Navigating = false;
             renderer.Element.HandleContentLoaded();
         }
+
+        [Export("webView:didReceiveAuthenticationChallenge:completionHandler:")]
+        public override void DidReceiveAuthenticationChallenge(WKWebView webView, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+            if (challenge == null || challenge.ProtectionSpace == null || challenge.ProtectionSpace.AuthenticationMethod == null) return;
+
+            if (challenge.ProtectionSpace.AuthenticationMethod == "NSURLAuthenticationMethodServerTrust")
+            {
+                if (renderer.Element.IgnoreSSLErrors)
+                {
+                    using (var cred = NSUrlCredential.FromTrust(challenge.ProtectionSpace.ServerSecTrust))
+                    {
+                        completionHandler.Invoke(NSUrlSessionAuthChallengeDisposition.UseCredential, cred);
+                    }
+                }
+                else
+                {
+                    completionHandler.Invoke(NSUrlSessionAuthChallengeDisposition.PerformDefaultHandling, null);
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(renderer.Element.Username) && !string.IsNullOrEmpty(renderer.Element.Password))
+                {
+                    var crendential = new NSUrlCredential(renderer.Element.Username, renderer.Element.Password, NSUrlCredentialPersistence.ForSession);
+
+                    completionHandler(NSUrlSessionAuthChallengeDisposition.UseCredential, crendential);
+                }
+            }
+        }
     }
 }
