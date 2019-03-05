@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
@@ -18,14 +17,12 @@ namespace Xam.Plugin.WebView.Abstractions
 {
     public partial class FormsWebView : View, IFormsWebView, IDisposable
     {
-
         /// <summary>
         /// A delegate which takes valid javascript and returns the response from it, if the response is a string.
         /// </summary>
         /// <param name="js">The valid JS to inject</param>
         /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
-
 
         /// <summary>
         /// Delegate to await clearing cookies. Will remove all temporary data on UWP
@@ -51,6 +48,11 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Fires when navigation fires an error. By default this uses the native systems error codes.
         /// </summary>
         public event EventHandler<int> OnNavigationError;
+
+        /// <summary>
+        /// Fires when an content type is loaded.
+        /// </summary>
+        public event EventHandler<DecisionHandlerDelegate> OnContentTypeLoaded;
 
         /// <summary>
         /// Fires when the content on the DOM is ready. All your calls to Javascript using C# should be performed after this is fired.
@@ -299,6 +301,16 @@ namespace Xam.Plugin.WebView.Abstractions
         internal void HandleContentLoaded()
         {
             OnContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal DecisionHandlerDelegate HandleContentTypeLoaded(string uri, string contentType) {
+            var handler = new DecisionHandlerDelegate()
+            {
+                Uri = uri,
+                ContentType = contentType
+            };
+            OnContentTypeLoaded?.Invoke(this, handler);
+            return handler;
         }
 
         internal void HandleScriptReceived(string data)

@@ -16,6 +16,8 @@ namespace Xam.Plugin.WebView.Abstractions
 
         event EventHandler OnContentLoaded;
 
+        event EventHandler<DecisionHandlerDelegate> OnContentTypeLoaded;
+
         WebViewContentType ContentType { get; set; }
 
         string Source { get; set; }

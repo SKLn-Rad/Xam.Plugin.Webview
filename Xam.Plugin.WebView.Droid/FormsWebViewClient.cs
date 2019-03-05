@@ -7,13 +7,8 @@ using Xam.Plugin.WebView.Abstractions;
 using Android.Runtime;
 using Android.Content;
 using Xamarin.Forms;
-using System.IO;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Xam.Plugin.WebView.Droid
 {
@@ -21,9 +16,43 @@ namespace Xam.Plugin.WebView.Droid
     {
 
         //************************************************************************************************************************
-
+        /// <summary>
+        /// Shoulds the intercept request. Raise OnContentTypeLoaded to webview with content type
+        /// </summary>
+        /// <returns>The intercept request.</returns>
+        /// <param name="view">View.</param>
+        /// <param name="request">Request.</param>
         public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, IWebResourceRequest request)
         {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return null;
+            if (renderer.Element == null) return null;
+
+            if (request == null || request.Url == null)
+                return null;
+
+            using (var client = new HttpClient()) {
+                try
+                {
+                    var result = client.GetAsync(request.Url.ToString()).Result;
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var encoding = result.Content.Headers.ContentEncoding.GetEnumerator().Current;
+
+                        string contentType = result?.Content?.Headers?.ContentType?.ToString();
+
+                        if (!string.IsNullOrEmpty(contentType))
+                        {
+                            renderer.Element.HandleContentTypeLoaded(request.Url.ToString(), contentType);
+                            //renderer.Element.Navigating = false;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"FormsWebViewClient - Exception Message: {ex.Message}");
+                }
+            }
+
             return base.ShouldInterceptRequest(view, request);
         }
 
