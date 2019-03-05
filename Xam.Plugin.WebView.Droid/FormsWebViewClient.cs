@@ -226,6 +226,8 @@ namespace Xam.Plugin.WebView.Droid
             // Add Injection Function
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
+            if (renderer?.Element == null) return;
+
             // Add Global Callbacks
             if (renderer.Element.EnableGlobalCallbacks)
                 foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)

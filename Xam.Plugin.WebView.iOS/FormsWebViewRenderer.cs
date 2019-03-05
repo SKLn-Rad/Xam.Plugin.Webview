@@ -11,6 +11,7 @@ using Xamarin.Forms.Platform.iOS;
 using UIKit;
 using System.Net;
 using System.Threading;
+using System.Collections.Generic;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS
@@ -170,14 +171,7 @@ namespace Xam.Plugin.WebView.iOS
             var cookieCollection = string.Empty;
             var url = Control.Url;
 
-            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
-            foreach (NSHttpCookie c in sharedCookies)
-            {
-                if (c.Domain == url.Host)
-                {
-                    cookieCollection += c.Name + "=" + c.Value + "; ";
-                }
-            }
+            var listCookies = new List<string>();
 
             var store = _configuration.WebsiteDataStore.HttpCookieStore;
 
@@ -186,6 +180,17 @@ namespace Xam.Plugin.WebView.iOS
             foreach (var c in cookies)
             {
                 if (url.Host.Contains(c.Domain))
+                {
+                    listCookies.Add(c.Name.ToLower());
+
+                    cookieCollection += c.Name + "=" + c.Value + "; ";
+                }
+            }
+
+            NSHttpCookie[] sharedCookies = NSHttpCookieStorage.SharedStorage.CookiesForUrl(url);
+            foreach (NSHttpCookie c in sharedCookies)
+            {
+                if (!listCookies.Contains(c.Name.ToLower()) && c.Domain == url.Host)
                 {
                     cookieCollection += c.Name + "=" + c.Value + "; ";
                 }
