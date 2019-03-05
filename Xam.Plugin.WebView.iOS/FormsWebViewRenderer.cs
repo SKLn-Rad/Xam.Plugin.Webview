@@ -95,30 +95,11 @@ namespace Xam.Plugin.WebView.iOS
                 NavigationDelegate = _navigationDelegate
             };
 
-            /*
-            string jScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);";
-
-            WKUserScript wkUScript = new WKUserScript((NSString)jScript, WKUserScriptInjectionTime.AtDocumentStart, true);
-            _contentController.AddUserScript(wkUScript);
-            */
-
-            //Totally disables scroll feature
-            /*
-            if(wkWebView.ScrollView != null)
-                wkWebView.ScrollView.ScrollEnabled = false;
-            */
-
-
-            wkWebView.ContentMode = UIViewContentMode.ScaleToFill;
             if (wkWebView.ScrollView != null) {
                 wkWebView.ScrollView.Bounces = false;
-                /*
                 if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                    wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.ScrollableAxes;
-                */
+                    wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
             }
-
-
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
 

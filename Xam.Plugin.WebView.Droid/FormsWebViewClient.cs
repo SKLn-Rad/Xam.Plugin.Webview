@@ -7,11 +7,28 @@ using Xam.Plugin.WebView.Abstractions;
 using Android.Runtime;
 using Android.Content;
 using Xamarin.Forms;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewClient : WebViewClient
     {
+
+        //************************************************************************************************************************
+
+        public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, IWebResourceRequest request)
+        {
+            return base.ShouldInterceptRequest(view, request);
+        }
+
+        //************************************************************************************************************************
+
 
         readonly WeakReference<FormsWebViewRenderer> Reference;
 
@@ -174,20 +191,23 @@ namespace Xam.Plugin.WebView.Droid
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
             // Add Global Callbacks
-            if (renderer.Element.EnableGlobalCallbacks)
-                foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+            if(renderer != null && renderer.Element != null)
+            {
+                if (renderer.Element.EnableGlobalCallbacks)
+                    foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
+                        await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
+
+                // Add Local Callbacks
+                foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
                     await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
 
-            // Add Local Callbacks
-            foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
-                await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
+                renderer.Element.CanGoBack = view.CanGoBack();
+                renderer.Element.CanGoForward = view.CanGoForward();
+                renderer.Element.Navigating = false;
 
-            renderer.Element.CanGoBack = view.CanGoBack();
-            renderer.Element.CanGoForward = view.CanGoForward();
-            renderer.Element.Navigating = false;
-
-            renderer.Element.HandleNavigationCompleted(url);
-            renderer.Element.HandleContentLoaded();
+                renderer.Element.HandleNavigationCompleted(url);
+                renderer.Element.HandleContentLoaded();
+            }
         }
     }
 }

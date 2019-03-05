@@ -1,4 +1,6 @@
-﻿using Android.OS;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
 using Android.Webkit;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,6 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, Android.Webkit.WebView>
     {
-
         public static string MimeType = "text/html";
 
         public static string EncodingType = "UTF-8";
@@ -33,6 +34,10 @@ namespace Xam.Plugin.WebView.Droid
         JavascriptValueCallback _callback;
 
         private Dictionary<string, int> _cookieDomains = new Dictionary<string, int>();
+
+        public FormsWebViewRenderer(Context context) : base(context)
+        {
+        }
 
         public static void Initialize()
         {
@@ -86,6 +91,8 @@ namespace Xam.Plugin.WebView.Droid
             element.Dispose();
         }
 
+        IValueCallback mUploadMessage;
+        public static int FILECHOOSER_RESULTCODE = 1;
         void SetupControl()
         {
             var webView = new Android.Webkit.WebView(Forms.Context);
@@ -97,9 +104,12 @@ namespace Xam.Plugin.WebView.Droid
             // Defaults
             webView.Settings.JavaScriptEnabled = true;
             webView.Settings.DomStorageEnabled = true;
+            webView.Settings.AllowFileAccess = true;
+            webView.Settings.AllowUniversalAccessFromFileURLs = true;
+            webView.Settings.AllowFileAccessFromFileURLs = true;
             webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
             webView.SetWebViewClient(new FormsWebViewClient(this));
-            webView.SetWebChromeClient(new FormsWebViewChromeClient(this));
+            webView.SetWebChromeClient(new FormsWebViewChromeClient(this, (Activity)Forms.Context));
             webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
@@ -237,7 +247,10 @@ namespace Xam.Plugin.WebView.Droid
 
             var response = string.Empty;
 
-            Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, _callback));
+            Device.BeginInvokeOnMainThread(() => {
+                if (Control != null)
+                    Control.EvaluateJavascript(js, _callback);
+            });
 
             // wait!
             await Task.Run(() => {

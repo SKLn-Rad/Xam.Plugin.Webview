@@ -17,6 +17,7 @@
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ReleaseVersion>0.1.7</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,7 +48,7 @@
     <Reference Include="System.Xml" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Xamarin.Forms">
-      <Version>3.5.0.129452</Version>
+      <Version>3.5.0.169047</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Annotations">
       <Version>28.0.0.1</Version>
@@ -171,6 +172,8 @@
     <Compile Include="FormsWebViewRenderer.cs" />
     <Compile Include="JavascriptValueCallback.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ActivityResultCallbackRegistry.cs" />
+    <Compile Include="IWebViewChromeClientActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
