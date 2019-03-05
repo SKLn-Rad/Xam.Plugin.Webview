@@ -32,6 +32,8 @@ namespace Xam.Plugin.WebView.Droid
 
         JavascriptValueCallback _callback;
 
+        private Dictionary<string, int> _cookieDomains = new Dictionary<string, int>();
+
         public static void Initialize()
         {
             var dt = DateTime.Now;
@@ -165,6 +167,7 @@ namespace Xam.Plugin.WebView.Droid
                 cookieSyncMngr.Sync();
 #pragma warning restore CS0618
             }
+            _cookieDomains.Clear();
             return Task.CompletedTask;
         }
 
@@ -218,6 +221,11 @@ namespace Xam.Plugin.WebView.Droid
             CookieManager cookieManager = CookieManager.Instance;
             CookieManager.Instance.SetAcceptCookie(true);
             CookieManager.Instance.SetCookie(url, cookieString);
+
+            if (!_cookieDomains.ContainsKey(cookie.Domain)) {
+                _cookieDomains[cookie.Domain] = 0;
+            }
+            _cookieDomains[cookie.Domain] = _cookieDomains[cookie.Domain] + 1;
         }
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)

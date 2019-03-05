@@ -33,16 +33,24 @@ namespace Xam.Plugin.WebView.iOS
             if (renderer.Element == null) return;
 
 #if DEBUG
-            webView.Configuration.WebsiteDataStore.HttpCookieStore.GetAllCookies((NSHttpCookie[] obj) => {
-                System.Diagnostics.Debug.WriteLine("*** DecidePolicy webView.Configuration.WebsiteDataStore");
-                for (var i = 0; i < obj.Length; i++) {
-                    var nsCookie = obj[i];
-                    var domain = nsCookie.Domain;
-                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie.Domain}; Name={nsCookie.Name}; Value={nsCookie.Value};");
-                }
-            });
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                webView.Configuration.WebsiteDataStore.HttpCookieStore.GetAllCookies((NSHttpCookie[] obj) => {
+                    System.Diagnostics.Debug.WriteLine("*** DecidePolicy webView.Configuration.WebsiteDataStore");
+                    for (var i = 0; i < obj.Length; i++) {
+                        var nsCookie = obj[i];
+                        var domain = nsCookie.Domain;
+                        System.Diagnostics.Debug.WriteLine($"Domain={nsCookie.Domain}; Name={nsCookie.Name}; Value={nsCookie.Value};");
+                    }
+                });
+            }
 #endif
-
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var headers = navigationAction.Request.Headers as NSMutableDictionary;
+                var cookieDictionary = NSHttpCookie.RequestHeaderFieldsWithCookies(NSHttpCookieStorage.SharedStorage.Cookies);
+                foreach (var item in cookieDictionary) {
+                    headers.SetValueForKey(item.Value, new NSString(item.Key.ToString()));
+                }
+            }
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
 
             if (response.Cancel || response.OffloadOntoDevice) {
