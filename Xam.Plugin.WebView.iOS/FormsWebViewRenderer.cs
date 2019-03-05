@@ -27,17 +27,19 @@ namespace Xam.Plugin.WebView.iOS
 
         WKUserContentController _contentController;
 
-        private static WKProcessPool _processPool;
+        private static WKProcessPool _processPool = null;
+
+        private Dictionary<string, int> _cookieDomains = new Dictionary<string, int>();
 
         public static void Initialize()
         {
             var dt = DateTime.Now;
             _processPool = new WKProcessPool();
         }
-       
+
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
         {
-            base.OnElementChanged(e);           
+            base.OnElementChanged(e);
 
             if (Control == null && Element != null)
                 SetupControl();
@@ -87,14 +89,15 @@ namespace Xam.Plugin.WebView.iOS
             };
             _configuration.ProcessPool = _processPool;
 
-            var wkWebView = new WKWebView(Frame,  _configuration) {
+            var wkWebView = new WKWebView(Frame, _configuration) {
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate
             };
-            if(wkWebView.ScrollView != null) {
+
+            if (wkWebView.ScrollView != null) {
                 wkWebView.ScrollView.Bounces = false;
-                if(UIDevice.CurrentDevice.CheckSystemVersion(11,0))
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                     wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
             }
 
@@ -125,11 +128,20 @@ namespace Xam.Plugin.WebView.iOS
         {
             if (Control == null) return;
 
-            var store = _configuration.WebsiteDataStore.HttpCookieStore;
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
 
-            var cookies = await store.GetAllCookiesAsync();
-            foreach (var c in cookies) {
-                await store.DeleteCookieAsync(c);
+                var cookies = await store.GetAllCookiesAsync();
+                foreach (var c in cookies) {
+                    await store.DeleteCookieAsync(c);
+                }
+            }
+            foreach (var domain in _cookieDomains) {
+                var domainUrl = NSUrl.FromString(domain.Key);
+                foreach (var cookie in NSHttpCookieStorage.SharedStorage.CookiesForUrl(domainUrl)) {
+                    NSHttpCookieStorage.SharedStorage.DeleteCookie(cookie);
+                    _cookieDomains[domain.Key] = domain.Value - 1;
+                }
             }
 #if DEBUG
             await OnPrintCookiesRequested();
@@ -149,32 +161,34 @@ namespace Xam.Plugin.WebView.iOS
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("*** WKWebsiteDataStore.DefaultDataStore ***");
-            cookies = await WKWebsiteDataStore.DefaultDataStore?.HttpCookieStore.GetAllCookiesAsync();
-            if (cookies != null) {
-                foreach (var nsCookie2 in cookies) {
-                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
-                }
-            }
-
-            if (_configuration != Control?.Configuration) {
-                System.Diagnostics.Debug.WriteLine("*** _configuration.WebsiteDataStore ***");
-                cookies = await _configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                System.Diagnostics.Debug.WriteLine("*** WKWebsiteDataStore.DefaultDataStore ***");
+                cookies = await WKWebsiteDataStore.DefaultDataStore?.HttpCookieStore.GetAllCookiesAsync();
                 if (cookies != null) {
                     foreach (var nsCookie2 in cookies) {
                         System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
                     }
                 }
-            }
 
-            Control?.Configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookies((NSHttpCookie[] cookieArray) => {
-                System.Diagnostics.Debug.WriteLine("*** Control.Configuration.WebsiteDataStore ***");
-                if (cookieArray != null) {
-                    foreach (var nsCookie2 in cookieArray) {
-                        System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                if (_configuration != Control?.Configuration) {
+                    System.Diagnostics.Debug.WriteLine("*** _configuration.WebsiteDataStore ***");
+                    cookies = await _configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
+                    if (cookies != null) {
+                        foreach (var nsCookie2 in cookies) {
+                            System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                        }
                     }
                 }
-            });
+
+                Control?.Configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookies((NSHttpCookie[] cookieArray) => {
+                    System.Diagnostics.Debug.WriteLine("*** Control.Configuration.WebsiteDataStore ***");
+                    if (cookieArray != null) {
+                        foreach (var nsCookie2 in cookieArray) {
+                            System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                        }
+                    }
+                });
+            }
 #endif
         }
 
@@ -182,9 +196,20 @@ namespace Xam.Plugin.WebView.iOS
         {
             if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name)) return;
 
-            var store = _configuration.WebsiteDataStore.HttpCookieStore;
             var nsCookie = new NSHttpCookie(cookie);
-            await store.SetCookieAsync(nsCookie);
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
+                await store.SetCookieAsync(nsCookie);
+            }
+            NSHttpCookieStorage.SharedStorage.SetCookie(nsCookie);
+            foreach (var cookies in NSHttpCookieStorage.SharedStorage.Cookies) {
+                System.Diagnostics.Debug.WriteLine(cookie.ToString());
+            }
+
+            if (!_cookieDomains.ContainsKey(cookie.Domain)) {
+                _cookieDomains[cookie.Domain] = 0;
+            }
+            _cookieDomains[cookie.Domain] = _cookieDomains[cookie.Domain] + 1;
 #if DEBUG
             await OnPrintCookiesRequested();
 #endif
@@ -259,6 +284,13 @@ namespace Xam.Plugin.WebView.iOS
                     var key = new NSString(header.Key);
                     if (!headers.ContainsKey(key))
                         headers.Add(key, new NSString(header.Value));
+                }
+            }
+
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var cookieDictionary = NSHttpCookie.RequestHeaderFieldsWithCookies(NSHttpCookieStorage.SharedStorage.Cookies);
+                foreach (var item in cookieDictionary) {
+                    headers.SetValueForKey(item.Value, new NSString(item.Key.ToString()));
                 }
             }
 
@@ -364,3 +396,5 @@ namespace Xam.Plugin.WebView.iOS
 
     }
 }
+
+
