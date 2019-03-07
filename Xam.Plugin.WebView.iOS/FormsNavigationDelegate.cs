@@ -103,5 +103,6 @@ namespace Xam.Plugin.WebView.iOS
             renderer.Element.Navigating = false;
             renderer.Element.HandleContentLoaded();
         }
+
     }
 }

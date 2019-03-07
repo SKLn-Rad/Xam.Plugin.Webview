@@ -16,6 +16,7 @@ namespace Xam.Plugin.WebView.Droid
     {
 
         //************************************************************************************************************************
+        // ADDED TO DECIDE AND HANDLE CONTENTTYPE (application/pdf) BY LOADING CONTENT IN SEPARATE HTTPCLIENT BEFORE SHOWING IN WEBVIEW
         /// <summary>
         /// Shoulds the intercept request. Raise OnContentTypeLoaded to webview with content type
         /// </summary>
@@ -30,6 +31,7 @@ namespace Xam.Plugin.WebView.Droid
             if (request == null || request.Url == null)
                 return null;
 
+            //TODO: REVIEW TO SEE IF IT HAS MAJOR IMPACT ON PERFORMANCE
             using (var client = new HttpClient()) {
                 try
                 {
@@ -43,7 +45,7 @@ namespace Xam.Plugin.WebView.Droid
                         if (!string.IsNullOrEmpty(contentType))
                         {
                             renderer.Element.HandleContentTypeLoaded(request.Url.ToString(), contentType);
-                            //renderer.Element.Navigating = false;
+                            renderer.Element.Navigating = false;
                         }
                     }
                 }
@@ -55,7 +57,6 @@ namespace Xam.Plugin.WebView.Droid
 
             return base.ShouldInterceptRequest(view, request);
         }
-
         //************************************************************************************************************************
 
 
