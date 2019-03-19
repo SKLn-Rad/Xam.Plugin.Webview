@@ -2,10 +2,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <ReleaseVersion>0.1.8</ReleaseVersion>
+        <ReleaseVersion>0.2.0</ReleaseVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Xamarin.iOS">
+        <HintPath>..\..\..\..\..\..\..\..\Library\Frameworks\Xamarin.iOS.framework\Versions\12.2.1.15\lib\mono\Xamarin.iOS\Xamarin.iOS.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

@@ -21,11 +21,5 @@
         /// Note: This is only supported in iOS and Android currently.
         /// </summary>
         public bool OffloadOntoDevice { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of the content.
-        /// </summary>
-        /// <value>The type of the content.</value>
-        public string ContentType { get; set; }
     }
 }

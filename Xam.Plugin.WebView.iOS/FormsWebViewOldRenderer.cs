@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Foundation;
 using UIKit;
@@ -16,8 +14,6 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewOldRenderer))]
 namespace Xam.Plugin.WebView.iOS
 {
-
-
     public class FormsWebViewOldRenderer : ViewRenderer<FormsWebView, UIWebView>
     {
         public FormsWebViewOldRenderer()
@@ -181,6 +177,7 @@ namespace Xam.Plugin.WebView.iOS
         void SetupControl()
         {
             var uiWebView = new UIWebView(Frame);
+            uiWebView.BackgroundColor = UIColor.Black;
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
@@ -279,20 +276,7 @@ namespace Xam.Plugin.WebView.iOS
         {
             if (this.Element == null) return false;
 
-            //*****************************************************************************************************************************
-            //ADDED TO DECIDE AND HANDLE CONTENTTYPE (application/pdf) BY LOADING CONTENT IN SEPARATE HTTPCLIENT BEFORE SHOWING IN WEBVIEW
-            //TODO: REVIEW TO SEE IF IT HAS MAJOR IMPACT ON PERFORMANCE
-            var ct = GetContentType(request);
-            DecisionHandlerDelegate dh = null;
-            if(ct != null && ct.Equals("application/pdf")) {
-                dh = this.Element.HandleContentTypeLoaded(request.Url.ToString(), ct);
-                dh.Cancel = true;
-            }
-            else { 
-                dh = this.Element.HandleNavigationStartRequest(request.Url.ToString());
-            }
-            //*****************************************************************************************************************************
-
+            var dh = this.Element.HandleNavigationStartRequest(request.Url.ToString());
             if (dh.Cancel) {
                 this.Control.StopLoading();
                 return false;
@@ -307,46 +291,10 @@ namespace Xam.Plugin.WebView.iOS
 
         void UiWebView_LoadFinished(object sender, EventArgs e)
         {
-            if (this.Element == null) return;
+            if (this.Element == null) return; 
+
             this.Element.HandleNavigationCompleted(this.Control.Request.Url.ToString());
             this.Element.HandleContentLoaded();
-        }
-
-        //*****************************************************************************************************************************
-        //ADDED TO DECIDE AND HANDLE CONTENTTYPE (application/pdf) BY LOADING CONTENT IN SEPARATE HTTPCLIENT BEFORE SHOWING IN WEBVIEW
-        /// <summary>
-        /// Gets the type ContentType to the response of the request
-        /// </summary>
-        /// <returns>The content type.</returns>
-        /// <param name="request">Request.</param>
-        string GetContentType(NSUrlRequest request) {
-            if (request == null || request.Url == null)
-                return null;
-
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    var result = client.GetAsync(request.Url.ToString()).Result;
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        var encoding = result.Content.Headers.ContentEncoding.GetEnumerator().Current;
-
-                        string contentType = result?.Content?.Headers?.ContentType?.ToString();
-
-                        if (!string.IsNullOrEmpty(contentType))
-                        {
-                            return contentType;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"FormsWebViewOldRenderer - Exception Message: {ex.Message}");
-                }
-            }
-
-            return null;
         }
     }
 }

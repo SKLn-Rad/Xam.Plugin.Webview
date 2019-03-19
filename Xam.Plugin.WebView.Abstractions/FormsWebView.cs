@@ -50,11 +50,6 @@ namespace Xam.Plugin.WebView.Abstractions
         public event EventHandler<int> OnNavigationError;
 
         /// <summary>
-        /// Fires when an content type is loaded.
-        /// </summary>
-        public event EventHandler<DecisionHandlerDelegate> OnContentTypeLoaded;
-
-        /// <summary>
         /// Fires when the content on the DOM is ready. All your calls to Javascript using C# should be performed after this is fired.
         /// </summary>
         public event EventHandler OnContentLoaded;
@@ -301,16 +296,6 @@ namespace Xam.Plugin.WebView.Abstractions
         internal void HandleContentLoaded()
         {
             OnContentLoaded?.Invoke(this, EventArgs.Empty);
-        }
-
-        internal DecisionHandlerDelegate HandleContentTypeLoaded(string uri, string contentType) {
-            var handler = new DecisionHandlerDelegate()
-            {
-                Uri = uri,
-                ContentType = contentType
-            };
-            OnContentTypeLoaded?.Invoke(this, handler);
-            return handler;
         }
 
         internal void HandleScriptReceived(string data)

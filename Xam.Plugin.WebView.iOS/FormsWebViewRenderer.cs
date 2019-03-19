@@ -92,14 +92,16 @@ namespace Xam.Plugin.WebView.iOS
             var wkWebView = new WKWebView(Frame, _configuration) {
                 Opaque = false,
                 UIDelegate = this,
-                NavigationDelegate = _navigationDelegate
+                NavigationDelegate = _navigationDelegate,
             };
 
+            /*
             if (wkWebView.ScrollView != null) {
                 wkWebView.ScrollView.Bounces = false;
                 if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                     wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
             }
+            */
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
 

@@ -31,28 +31,9 @@ namespace Xam.Plugin.WebView.Droid
             if (request == null || request.Url == null)
                 return null;
 
-            //TODO: REVIEW TO SEE IF IT HAS MAJOR IMPACT ON PERFORMANCE
-            using (var client = new HttpClient()) {
-                try
-                {
-                    var result = client.GetAsync(request.Url.ToString()).Result;
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        var encoding = result.Content.Headers.ContentEncoding.GetEnumerator().Current;
-
-                        string contentType = result?.Content?.Headers?.ContentType?.ToString();
-
-                        if (!string.IsNullOrEmpty(contentType))
-                        {
-                            renderer.Element.HandleContentTypeLoaded(request.Url.ToString(), contentType);
-                            renderer.Element.Navigating = false;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"FormsWebViewClient - Exception Message: {ex.Message}");
-                }
+            //It seems that post methods doesn't get captured by webviews OnPageStarted method. Needs to handle this manually to raise WhenNavigationStarted in WebViewPage
+            if (!string.IsNullOrEmpty(request.Method) && request.Method.Equals("POST")) {
+                renderer.Element.HandleNavigationStartRequest(request.Url.ToString());
             }
 
             return base.ShouldInterceptRequest(view, request);
