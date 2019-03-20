@@ -9,6 +9,7 @@ using Xam.Plugin.WebView.Abstractions;
 using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.iOS;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewOldRenderer))]
@@ -186,8 +187,21 @@ namespace Xam.Plugin.WebView.iOS
             uiWebView.LoadFinished += UiWebView_LoadFinished;
             uiWebView.ShouldStartLoad += UiWebView_ShouldStartLoad;
 
+            if(uiWebView.ScrollView != null) {
+                uiWebView.ScrollView.Bounces = false;
+            }
+
+            uiWebView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            uiWebView.AutoresizingMask = UIViewAutoresizing.All;
+            uiWebView.ScalesPageToFit = true;
+
             SetNativeControl(uiWebView);
             OnControlChanged?.Invoke(this, uiWebView);
+        }
+
+        public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
+        {
+            return new SizeRequest(Size.Zero, Size.Zero);
         }
 
         void SetSource()

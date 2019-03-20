@@ -11,7 +11,7 @@
         <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
         <NuGetPackageImportStamp>
         </NuGetPackageImportStamp>
-        <ReleaseVersion>0.2.0</ReleaseVersion>
+        <ReleaseVersion>0.2.4</ReleaseVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
@@ -46,6 +46,33 @@
         <MtouchHttpClientHandler>
         </MtouchHttpClientHandler>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|iPhone' ">
+      <Optimize>false</Optimize>
+      <OutputPath>bin\iPhone\HockeyApp</OutputPath>
+      <WarningLevel>4</WarningLevel>
+      <CodesignKey>iPhone Developer</CodesignKey>
+      <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+      <MtouchFloat32>true</MtouchFloat32>
+      <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+      <MtouchLink>SdkOnly</MtouchLink>
+      <MtouchArch>ARM64</MtouchArch>
+      <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|AnyCPU' ">
+        <Optimize>true</Optimize>
+        <OutputPath>bin\HockeyApp</OutputPath>
+        <DefineConstants>
+        </DefineConstants>
+        <WarningLevel>4</WarningLevel>
+        <CodesignKey>iPhone Developer</CodesignKey>
+        <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+        <MtouchLink>SdkOnly</MtouchLink>
+        <MtouchHttpClientHandler>
+        </MtouchHttpClientHandler>
+        <DebugType>pdbonly</DebugType>
+        <ErrorReport>prompt</ErrorReport>
+        <MtouchVerbosity>2</MtouchVerbosity>
+    </PropertyGroup>
     <ItemGroup>
         <Reference Include="System" />
         <Reference Include="System.Xml" />
@@ -58,7 +85,7 @@
             <Version>12.0.1</Version>
         </PackageReference>
         <PackageReference Include="Xamarin.Forms">
-            <Version>3.6.0.220655</Version>
+            <Version>3.6.0.264807</Version>
         </PackageReference>
     </ItemGroup>
     <ItemGroup>

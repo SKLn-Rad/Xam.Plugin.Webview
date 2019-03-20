@@ -93,17 +93,24 @@ namespace Xam.Plugin.WebView.iOS
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate,
-            };
-
-            /*
-            if (wkWebView.ScrollView != null) {
-                wkWebView.ScrollView.Bounces = false;
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                    wkWebView.ScrollView.ContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.Never;
-            }
-            */
+            };        
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
+
+            try
+            {
+                //Autoresize after rotation. Wrapped in try catch with no handling since untested
+                wkWebView.ContentMode = UIViewContentMode.ScaleAspectFit;
+                wkWebView.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+                wkWebView.SizeToFit();
+
+                if (wkWebView.ScrollView != null)
+                {
+                    wkWebView.ScrollView.Bounces = false;
+                }
+            }
+            catch { /*Do nothing right now*/}
+
 
             SetNativeControl(wkWebView);
             OnControlChanged?.Invoke(this, wkWebView);
