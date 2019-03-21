@@ -95,7 +95,7 @@ FormsWebView WebView = new FormsWebView() {
 FormsWebView WebView = new FormsWebView() {
     ContentType = WebContentType.Internet,
     Source = "http://www.somewebsite.com",
-    UserName = "basicAuthUser",
+    Username = "basicAuthUser",
     Password = "basicAuthPassword"
 }
 ```

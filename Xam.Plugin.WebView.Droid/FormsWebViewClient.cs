@@ -25,10 +25,10 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer?.Element == null) return;
 
-            if ((!string.IsNullOrWhiteSpace(renderer.Element.UserName)) 
+            if ((!string.IsNullOrWhiteSpace(renderer.Element.Username)) 
                 && (!string.IsNullOrWhiteSpace(renderer.Element.Password)))
             {
-                handler.Proceed(renderer.Element.UserName, renderer.Element.Password);
+                handler.Proceed(renderer.Element.Username, renderer.Element.Password);
             }
         }
 

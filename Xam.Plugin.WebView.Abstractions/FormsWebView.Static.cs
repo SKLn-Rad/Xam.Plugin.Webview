@@ -24,7 +24,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// A bindable property for the Basic Auth Username property.
         /// </summary>
-        public static readonly BindableProperty UsernameProperty = BindableProperty.Create(nameof(UserName), typeof(string), typeof(FormsWebView));
+        public static readonly BindableProperty UsernameProperty = BindableProperty.Create(nameof(Username), typeof(string), typeof(FormsWebView));
 
         /// <summary>
         /// A bindable property for the Basic Auth Password property.

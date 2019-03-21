@@ -38,7 +38,7 @@ namespace Xam.Plugin.WebView.iOS
                 return;
             }
 
-            if ((!string.IsNullOrWhiteSpace(renderer.Element.UserName))
+            if ((!string.IsNullOrWhiteSpace(renderer.Element.Username))
                 && (!string.IsNullOrWhiteSpace(renderer.Element.Password)))
             {
                 if (challenge.PreviousFailureCount > 5) //cancel autorization in case of 5 failing requests
@@ -46,7 +46,7 @@ namespace Xam.Plugin.WebView.iOS
                     completionHandler(NSUrlSessionAuthChallengeDisposition.CancelAuthenticationChallenge, null);
                     return;
                 }
-                completionHandler(NSUrlSessionAuthChallengeDisposition.UseCredential, new NSUrlCredential(renderer.Element.UserName, renderer.Element.Password, NSUrlCredentialPersistence.ForSession));
+                completionHandler(NSUrlSessionAuthChallengeDisposition.UseCredential, new NSUrlCredential(renderer.Element.Username, renderer.Element.Password, NSUrlCredentialPersistence.ForSession));
             }
             else
             {

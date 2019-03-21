@@ -22,7 +22,7 @@ namespace Xam.Plugin.WebView.Abstractions
 
         string BaseUrl { get; set; }
 
-        string UserName { get; set; }
+        string Username { get; set; }
 
         string Password { get; set; }
 
