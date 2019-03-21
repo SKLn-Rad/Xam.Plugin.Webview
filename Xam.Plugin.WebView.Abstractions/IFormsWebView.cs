@@ -22,6 +22,10 @@ namespace Xam.Plugin.WebView.Abstractions
 
         string BaseUrl { get; set; }
 
+        string Username { get; set; }
+
+        string Password { get; set; }
+
         bool EnableGlobalCallbacks { get; set; }
 
         bool EnableGlobalHeaders { get; set; }

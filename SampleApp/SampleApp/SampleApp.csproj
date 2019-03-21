@@ -107,6 +107,9 @@
     <Compile Include="Samples\EmailDataSample.xaml.cs">
       <DependentUpon>EmailDataSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\BasicAuthSample.xaml.cs">
+      <DependentUpon>BasicAuthSample.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -131,6 +134,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Samples\EmailDataSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Samples\BasicAuthSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

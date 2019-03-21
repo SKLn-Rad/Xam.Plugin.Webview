@@ -20,6 +20,10 @@ namespace Xam.Plugin.WebView.iOS
 
         public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
 
+        public static string UserName { get; set; }
+
+        public static string Password { get; set; }
+
         FormsNavigationDelegate _navigationDelegate;
 
         WKWebViewConfiguration _configuration;
