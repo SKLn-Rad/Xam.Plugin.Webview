@@ -20,6 +20,18 @@ namespace Xam.Plugin.WebView.Droid
             Reference = new WeakReference<FormsWebViewRenderer>(renderer);
         }
 
+        public override void OnReceivedHttpAuthRequest(Android.Webkit.WebView view, HttpAuthHandler handler, string host, string realm)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer?.Element == null) return;
+
+            if ((!string.IsNullOrWhiteSpace(renderer.Element.UserName)) 
+                && (!string.IsNullOrWhiteSpace(renderer.Element.Password)))
+            {
+                handler.Proceed(renderer.Element.UserName, renderer.Element.Password);
+            }
+        }
+
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
@@ -187,15 +199,18 @@ namespace Xam.Plugin.WebView.Droid
             // Add Injection Function
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
+            // Render.Element can be null after long async operations (in case of -> Back button click)
+            if (renderer.Element == null) return;
+
             // Add Global Callbacks
             if (renderer.Element.EnableGlobalCallbacks)
                 foreach (var callback in FormsWebView.GlobalRegisteredCallbacks)
                     await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
 
             // Add Local Callbacks
-            foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
+            foreach (var callback in renderer.Element?.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
-
+                
             renderer.Element.CanGoBack = view.CanGoBack();
             renderer.Element.CanGoForward = view.CanGoForward();
             renderer.Element.Navigating = false;

@@ -26,6 +26,34 @@ namespace Xam.Plugin.WebView.iOS
             return false;
         }
 
+        public override void DidReceiveAuthenticationChallenge(WKWebView webView, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) 
+            {
+                completionHandler(NSUrlSessionAuthChallengeDisposition.PerformDefaultHandling, null);
+                return;
+            }
+            if (renderer?.Element == null) {
+                completionHandler(NSUrlSessionAuthChallengeDisposition.PerformDefaultHandling, null);
+                return;
+            }
+
+            if ((!string.IsNullOrWhiteSpace(renderer.Element.UserName))
+                && (!string.IsNullOrWhiteSpace(renderer.Element.Password)))
+            {
+                if (challenge.PreviousFailureCount > 5) //cancel autorization in case of 5 failing requests
+                {
+                    completionHandler(NSUrlSessionAuthChallengeDisposition.CancelAuthenticationChallenge, null);
+                    return;
+                }
+                completionHandler(NSUrlSessionAuthChallengeDisposition.UseCredential, new NSUrlCredential(renderer.Element.UserName, renderer.Element.Password, NSUrlCredentialPersistence.ForSession));
+            }
+            else
+            {
+                completionHandler(NSUrlSessionAuthChallengeDisposition.PerformDefaultHandling, null); 
+            }
+        }
+
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {

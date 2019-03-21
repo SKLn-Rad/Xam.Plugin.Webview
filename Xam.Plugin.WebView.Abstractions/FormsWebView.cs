@@ -88,6 +88,24 @@ namespace Xam.Plugin.WebView.Abstractions
         }
 
         /// <summary>
+        /// The source data. This can either be a valid URL, a path to a local file, or a HTML string.
+        /// </summary>
+        public string UserName
+        {
+            get => (string)GetValue(UsernameProperty);
+            set => SetValue(UsernameProperty, value);
+        }
+
+        /// <summary>
+        /// The source data. This can either be a valid URL, a path to a local file, or a HTML string.
+        /// </summary>
+        public string Password
+        {
+            get => (string)GetValue(PasswordProperty);
+            set => SetValue(PasswordProperty, value);
+        }
+
+        /// <summary>
         /// Override the BaseURL in the renderer with this property.
         /// By default, the BaseUrls are the following:
         /// Android) Assets folder with AndroidAsset build property
