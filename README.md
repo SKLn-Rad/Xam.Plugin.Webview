@@ -90,6 +90,18 @@ FormsWebView WebView = new FormsWebView() {
 
 ```c#
 /// <summary>
+/// Initialize the WebView, With Basic Auth.
+/// </summary>
+FormsWebView WebView = new FormsWebView() {
+    ContentType = WebContentType.Internet,
+    Source = "http://www.somewebsite.com",
+    UserName = "basicAuthUser",
+    Password = "basicAuthPassword"
+}
+```
+
+```c#
+/// <summary>
 /// If you wish to further modify the native control, then you can bind to these events in your platform specific code.
 /// These events will be called when the control is preparing and ready.
 /// </summary>
