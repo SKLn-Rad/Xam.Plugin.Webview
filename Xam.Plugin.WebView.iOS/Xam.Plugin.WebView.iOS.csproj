@@ -84,9 +84,7 @@
         <PackageReference Include="Newtonsoft.Json">
             <Version>12.0.1</Version>
         </PackageReference>
-        <PackageReference Include="Xamarin.Forms">
-            <Version>3.6.0.264807</Version>
-        </PackageReference>
+        <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Resources\" />
