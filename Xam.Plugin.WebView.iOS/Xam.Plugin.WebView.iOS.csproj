@@ -11,7 +11,7 @@
         <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
         <NuGetPackageImportStamp>
         </NuGetPackageImportStamp>
-        <ReleaseVersion>0.2.4</ReleaseVersion>
+        <ReleaseVersion>1.0.0</ReleaseVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>

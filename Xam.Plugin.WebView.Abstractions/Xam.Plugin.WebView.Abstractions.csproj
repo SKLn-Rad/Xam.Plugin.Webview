@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <ReleaseVersion>0.2.4</ReleaseVersion>
+        <ReleaseVersion>1.0.0</ReleaseVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|iPhone' ">
       <Optimize>false</Optimize>
