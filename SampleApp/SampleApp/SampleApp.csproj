@@ -107,6 +107,9 @@
     <Compile Include="Samples\EmailDataSample.xaml.cs">
       <DependentUpon>EmailDataSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\UploadSample.xaml.cs">
+      <DependentUpon>UploadSample.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -263,6 +266,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\ClearCookieSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\UploadSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

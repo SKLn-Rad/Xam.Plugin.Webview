@@ -30,7 +30,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -127,6 +127,7 @@
     <Compile Include="FormsWebViewChromeClient.cs" />
     <Compile Include="FormsWebViewClient.cs" />
     <Compile Include="FormsWebViewRenderer.cs" />
+    <Compile Include="IFormsWebViewMainActivity.cs" />
     <Compile Include="JavascriptValueCallback.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
