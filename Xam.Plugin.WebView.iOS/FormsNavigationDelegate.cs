@@ -33,19 +33,24 @@ namespace Xam.Plugin.WebView.iOS
 			if (renderer.Element == null) return;
             
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
-            
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                if (response.OffloadOntoDevice)
-                    AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+            var url = navigationAction.Request.Url.ToString();
 
-                decisionHandler(WKNavigationActionPolicy.Cancel);
-            }
-
-            else
-            {
+            if (url == "about:blank")
                 decisionHandler(WKNavigationActionPolicy.Allow);
-                renderer.Element.Navigating = true;
+            else
+            { 
+                if (response.Cancel || response.OffloadOntoDevice)
+                {
+                    if (response.OffloadOntoDevice)
+                        AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+
+                    decisionHandler(WKNavigationActionPolicy.Cancel);
+                }
+                else
+                {
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                    renderer.Element.Navigating = true;
+                }
             }
         }
 
@@ -87,6 +92,38 @@ namespace Xam.Plugin.WebView.iOS
             renderer.Element.CanGoForward = webView.CanGoForward;
             renderer.Element.Navigating = false;
             renderer.Element.HandleContentLoaded();
+        }
+
+        [Export("webView:didReceiveAuthenticationChallenge:completionHandler:")]
+        public override void DidReceiveAuthenticationChallenge(WKWebView webView, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+            if (challenge == null || challenge.ProtectionSpace == null || challenge.ProtectionSpace.AuthenticationMethod == null) return;
+
+            if (challenge.ProtectionSpace.AuthenticationMethod == "NSURLAuthenticationMethodServerTrust")
+            {
+                if (renderer.Element.IgnoreSSLErrors)
+                {
+                    using (var cred = NSUrlCredential.FromTrust(challenge.ProtectionSpace.ServerSecTrust))
+                    {
+                        completionHandler.Invoke(NSUrlSessionAuthChallengeDisposition.UseCredential, cred);
+                    }
+                }
+                else
+                {
+                    completionHandler.Invoke(NSUrlSessionAuthChallengeDisposition.PerformDefaultHandling, null);
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(renderer.Element.Username) && !string.IsNullOrEmpty(renderer.Element.Password))
+                {
+                    var crendential = new NSUrlCredential(renderer.Element.Username, renderer.Element.Password, NSUrlCredentialPersistence.ForSession);
+
+                    completionHandler(NSUrlSessionAuthChallengeDisposition.UseCredential, crendential);
+                }
+            }
         }
     }
 }

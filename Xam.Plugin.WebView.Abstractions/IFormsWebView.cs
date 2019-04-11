@@ -46,5 +46,11 @@ namespace Xam.Plugin.WebView.Abstractions
 
         void RemoveAllLocalCallbacks();
         Task ClearCookiesAsync();
+
+        bool IgnoreSSLErrors { get; set; }
+
+        string Username { get; set; }
+
+        string Password { get; set; }
     }
 }

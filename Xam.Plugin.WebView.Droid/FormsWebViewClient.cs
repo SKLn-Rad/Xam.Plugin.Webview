@@ -167,11 +167,10 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            if (FormsWebViewRenderer.IgnoreSSLGlobally)
+            if (renderer.Element.IgnoreSSLErrors)
             {
                 handler.Proceed();
             }
-
             else
             {
                 handler.Cancel();
@@ -203,5 +202,17 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.HandleNavigationCompleted(url);
             renderer.Element.HandleContentLoaded();
         }
+
+        public override void OnReceivedHttpAuthRequest(Android.Webkit.WebView view, HttpAuthHandler handler, string host, string realm)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+
+            if (!string.IsNullOrEmpty(renderer.Element.Username) && !string.IsNullOrEmpty(renderer.Element.Password))
+            { 
+                handler.Proceed(renderer.Element.Username, renderer.Element.Password);
+            }
+        }
+
     }
 }

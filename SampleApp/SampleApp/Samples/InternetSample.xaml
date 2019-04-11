@@ -6,6 +6,6 @@
              Title="Internet">
 
     <webview:FormsWebView x:Name="internetContent" ContentType="Internet"
-                      Source="https://www.xamarin.com" />
+                      Source="https://192.168.0.89:8891/?back_url=%2Fmobileginet%2F" />
 
 </ContentPage>

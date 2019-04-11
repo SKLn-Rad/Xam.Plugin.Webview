@@ -124,5 +124,20 @@ namespace Xam.Plugin.WebView.Abstractions
         {
             return $"function {name}(str){{csharp(\"{{'action':'{name}','data':'\"+window.btoa(str)+\"'}}\");}}";
         }
+
+        /// <summary>
+        /// A bindable property for the IgnoreSSLErrors property.
+        /// </summary>
+        public static readonly BindableProperty IgnoreSSLErrorsProperty = BindableProperty.Create(nameof(IgnoreSSLErrors), typeof(bool), typeof(FormsWebView), false);
+
+        /// <summary>
+        /// A bindable property for the Username property.
+        /// </summary>
+        public static readonly BindableProperty UsernameProperty = BindableProperty.Create(nameof(Username), typeof(string), typeof(FormsWebView), "");
+
+        /// <summary>
+        /// A bindable property for the Username property.
+        /// </summary>
+        public static readonly BindableProperty PasswordProperty = BindableProperty.Create(nameof(Password), typeof(string), typeof(FormsWebView), "");
     }
 }

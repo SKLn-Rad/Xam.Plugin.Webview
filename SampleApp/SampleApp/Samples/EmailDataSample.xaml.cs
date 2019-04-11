@@ -17,7 +17,8 @@ namespace SampleApp.Samples
         <a href='mailto:someone@example.com'>Click here to mail someone - only to address</a> <br />
         <a href='mailto:someone@example.com?subject=This%20is%20the%20subject&cc=someone_else@example.com&body=This%20is%20the%20body'>Click here to mail someone</a> <br />
         <a href='https://www.bbc.co.uk'>Click here to offload onto the browser</a> <br />
-        <a href='https://www.google.co.uk'>Click here to navigate browser</a> 
+        <a href='https://www.google.co.uk'>Click here to navigate browser</a> <br />
+        <a href='about:blank'>Click here to open about:blank</a> 
     </body>
 </html>
             ";
