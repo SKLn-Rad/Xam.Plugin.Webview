@@ -33,19 +33,24 @@ namespace Xam.Plugin.WebView.iOS
 			if (renderer.Element == null) return;
             
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
-            
-            if (response.Cancel || response.OffloadOntoDevice)
-            {
-                if (response.OffloadOntoDevice)
-                    AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+            var url = navigationAction.Request.Url.ToString();
 
-                decisionHandler(WKNavigationActionPolicy.Cancel);
-            }
-
-            else
-            {
+            if (url == "about:blank")
                 decisionHandler(WKNavigationActionPolicy.Allow);
-                renderer.Element.Navigating = true;
+            else
+            { 
+                if (response.Cancel || response.OffloadOntoDevice)
+                {
+                    if (response.OffloadOntoDevice)
+                        AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+
+                    decisionHandler(WKNavigationActionPolicy.Cancel);
+                }
+                else
+                {
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                    renderer.Element.Navigating = true;
+                }
             }
         }
 

@@ -161,8 +161,8 @@ namespace SampleApp
             Items.Add(new SelectionItem()
             {
                 Identifier = 19,
-                Title = "Email data",
-                Detail = "Load a WebView using string data as the source with a mailto: link"
+                Title = "Email data & about:blank",
+                Detail = "Load a WebView using string data as the source with a mailto: link and a link to about:blank"
             });
 
             Items.Add(new SelectionItem()
