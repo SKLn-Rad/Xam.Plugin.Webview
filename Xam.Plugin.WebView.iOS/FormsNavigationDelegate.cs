@@ -27,14 +27,6 @@ namespace Xam.Plugin.WebView.iOS
             return false;
         }
 
-        [Export("webView:didStartProvisionalNavigation:")]
-        public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
-        {
-
-        }
-
-        
-
         [Export("webView:decidePolicyForNavigationAction:decisionHandler:")]
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
         {
@@ -48,63 +40,75 @@ namespace Xam.Plugin.WebView.iOS
 
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
 
-            if (response.Cancel || response.OffloadOntoDevice)
+
+            var url = navigationAction.Request.Url.ToString();
+
+
+
+            if (url == "about:blank")
             {
-                if (response.OffloadOntoDevice)
-                    AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
-
-                decisionHandler(WKNavigationActionPolicy.Cancel);
+                decisionHandler(WKNavigationActionPolicy.Allow);
             }
-            //else
-            //{
-            //    var request = navigationAction.Request.Copy();
-            //    System.Console.WriteLine(navigationAction.Request.Url?.Host);
-            //    System.Console.WriteLine(renderer.Element.BaseUrl);
-            //    bool _headerIsSet = false;
-            //    // check if the header is set and if not, create a muteable copy of the original request
-            //    if (/*navigationAction.Request.Url.Host == "192.168.1.51" &&*/ request is NSMutableUrlRequest mutableRequest)
-            //    {
-            //        // set the headers of the new request to the created dict
-            //        if (renderer.Element.EnableGlobalHeaders)
-            //        {
-            //            var keys = new object[FormsWebView.GlobalRegisteredHeaders.Count];
-            //            var values = new object[FormsWebView.GlobalRegisteredHeaders.Count];
-            //            int index = 0;
-            //            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-            //            {
-            //                keys[index] = header.Key;
-            //                values[index] = header.Value;
-
-            //                //if (!mutableRequest.Headers.ContainsKey(new NSString(header.Key)))
-            //                //    mutableRequest.Headers.SetValueForKey(new NSString(header.Value), new NSString(header.Key));
-            //            }
-            //            var headerDict = NSDictionary.FromObjectsAndKeys(values, keys);
-            //            mutableRequest.Headers = headerDict;
-
-            //            _headerIsSet = true;
-            //        }
-
-            //        if (_headerIsSet)
-            //        {
-            //            // attempt to load the newly created request
-            //            webView.LoadRequest(mutableRequest);
-            //            // abort the old one
-            //            decisionHandler(WKNavigationActionPolicy.Cancel);
-            //            // exit this whole method
-            //            return;
-            //        }
-            //        else
-            //        {
-            //            _headerIsSet = false;
-            //            decisionHandler(WKNavigationActionPolicy.Allow);
-            //            renderer.Element.Navigating = true;
-            //        }
-            //    }
             else
             {
-                //_headerIsSet = false;
-                decisionHandler(WKNavigationActionPolicy.Allow);
-                renderer.Element.Navigating = true;
+                if (response.Cancel || response.OffloadOntoDevice)
+                {
+                    if (response.OffloadOntoDevice)
+                        AttemptOpenCustomUrlScheme(navigationAction.Request.Url);
+
+                    decisionHandler(WKNavigationActionPolicy.Cancel);
+                }
+                //else
+                //{
+                //    var request = navigationAction.Request.Copy();
+                //    System.Console.WriteLine(navigationAction.Request.Url?.Host);
+                //    System.Console.WriteLine(renderer.Element.BaseUrl);
+                //    bool _headerIsSet = false;
+                //    // check if the header is set and if not, create a muteable copy of the original request
+                //    if (/*navigationAction.Request.Url.Host == "192.168.1.51" &&*/ request is NSMutableUrlRequest mutableRequest)
+                //    {
+                //        // set the headers of the new request to the created dict
+                //        if (renderer.Element.EnableGlobalHeaders)
+                //        {
+                //            var keys = new object[FormsWebView.GlobalRegisteredHeaders.Count];
+                //            var values = new object[FormsWebView.GlobalRegisteredHeaders.Count];
+                //            int index = 0;
+                //            foreach (var header in FormsWebView.GlobalRegisteredHeaders)
+                //            {
+                //                keys[index] = header.Key;
+                //                values[index] = header.Value;
+
+                //                //if (!mutableRequest.Headers.ContainsKey(new NSString(header.Key)))
+                //                //    mutableRequest.Headers.SetValueForKey(new NSString(header.Value), new NSString(header.Key));
+                //            }
+                //            var headerDict = NSDictionary.FromObjectsAndKeys(values, keys);
+                //            mutableRequest.Headers = headerDict;
+
+                //            _headerIsSet = true;
+                //        }
+
+                //        if (_headerIsSet)
+                //        {
+                //            // attempt to load the newly created request
+                //            webView.LoadRequest(mutableRequest);
+                //            // abort the old one
+                //            decisionHandler(WKNavigationActionPolicy.Cancel);
+                //            // exit this whole method
+                //            return;
+                //        }
+                //        else
+                //        {
+                //            _headerIsSet = false;
+                //            decisionHandler(WKNavigationActionPolicy.Allow);
+                //            renderer.Element.Navigating = true;
+                //        }
+                //    }
+                else
+                {
+                    //_headerIsSet = false;
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                    renderer.Element.Navigating = true;
+                }
             }
         }
 

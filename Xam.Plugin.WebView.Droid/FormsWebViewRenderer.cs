@@ -41,7 +41,7 @@ namespace Xam.Plugin.WebView.Droid
         {
             base.OnElementChanged(e);
 
-            if (Control == null && Element != null)
+            if ((Control == null || Control.Disposed) && Element != null)
                 SetupControl();
 
             if (e.NewElement != null)
@@ -118,7 +118,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void OnForwardRequested(object sender, EventArgs e)
         {
-            if (Control == null) return;
+            if (Control == null || Control.Disposed) return;
 
             if (Control.CanGoForward())
                 Control.GoForward();
@@ -126,7 +126,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void OnBackRequested(object sender, EventArgs e)
         {
-            if (Control == null) return;
+            if (Control == null || Control.Disposed) return;
 
             if (Control.CanGoBack())
                 Control.GoBack();
@@ -134,7 +134,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void OnRefreshRequested(object sender, EventArgs e)
         {
-            if (Control == null) return;
+            if (Control == null || Control.Disposed) return;
 
             Control.Reload();
         }
@@ -151,7 +151,7 @@ namespace Xam.Plugin.WebView.Droid
 
         private async Task OnClearCookiesRequest()
         {
-            if (Control == null) return;
+            if (Control == null || Control.Disposed) return;
 
             if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
             {
@@ -174,10 +174,10 @@ namespace Xam.Plugin.WebView.Droid
 
         private async Task<string> OnGetAllCookieRequestAsync()
         {
-            if (Control == null || Element == null) return string.Empty;
+            if (Control == null || Element == null || Control.Disposed) return string.Empty;
             var cookies = string.Empty;
 
-            if (Control != null && Element != null)
+            if (Control != null && Element != null && !Control.Disposed)
             {
                 string url = string.Empty;
                 try
@@ -207,7 +207,7 @@ namespace Xam.Plugin.WebView.Droid
 
         private async Task<string> OnSetCookieRequestAsync(Cookie cookie)
         {
-            if (Control != null && Element != null)
+            if (Control != null && Element != null && !Control.Disposed)
             {
                 var url = new Uri(Control.Url).Host;
                 if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
@@ -238,7 +238,7 @@ namespace Xam.Plugin.WebView.Droid
 
             var cookie = default(string);
 
-            if (Control != null && Element != null)
+            if (Control != null && Element != null && !Control.Disposed)
             {
                 string url = string.Empty;
                 try
@@ -289,7 +289,7 @@ namespace Xam.Plugin.WebView.Droid
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
-            if (Element == null || Control == null) return string.Empty;
+            if (Element == null || Control == null || Control.Disposed) return string.Empty;
 
             var callback = new JavascriptValueCallback(this);
 
@@ -329,7 +329,7 @@ namespace Xam.Plugin.WebView.Droid
 
         internal void SetSource()
         {
-            if (Element == null || Control == null || string.IsNullOrWhiteSpace(Element.Source)) return;
+            if (Element == null || Control == null || Control.Disposed || string.IsNullOrWhiteSpace(Element.Source)) return;
 
             switch (Element.ContentType)
             {
@@ -349,7 +349,7 @@ namespace Xam.Plugin.WebView.Droid
 
         void LoadFromString()
         {
-            if (Element == null || Control == null || Element.Source == null) return;
+            if (Element == null || Control == null || Control.Disposed || Element.Source == null) return;
 
             // Check cancellation
             var handler = Element.HandleNavigationStartRequest(Element.Source);
@@ -361,14 +361,14 @@ namespace Xam.Plugin.WebView.Droid
 
         void LoadFromFile()
         {
-            if (Element == null || Control == null || Element.Source == null) return;
+            if (Element == null || Control == null || Control.Disposed || Element.Source == null) return;
 
             Control.LoadUrl(Path.Combine(Element.BaseUrl ?? BaseUrl, Element.Source));
         }
 
         void LoadFromInternet()
         {
-            if (Element == null || Control == null || Element.Source == null) return;
+            if (Element == null || Control == null || Control.Disposed || Element.Source == null) return;
 
             var headers = new Dictionary<string, string>();
 
@@ -395,6 +395,8 @@ namespace Xam.Plugin.WebView.Droid
 
         private void SetCurrentUrl(object sender, DecisionHandlerDelegate e)
         {
+            if (Element == null || Control == null || Control.Disposed) return;
+
             Device.BeginInvokeOnMainThread(() =>
             {
                 Element.CurrentUrl = Control.Url;

@@ -69,7 +69,8 @@ namespace Xam.Plugin.WebView.Droid
         // NOTE: pulled fix from this unmerged PR - https://github.com/SKLn-Rad/Xam.Plugin.Webview/pull/104
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
         {
-            CheckResponseValidity(view, request.Url.ToString());
+            if (!CheckResponseValidity(view, request.Url.ToString()))
+                return true;
 
             if (FormsWebView.GlobalRegisteredHeaders.Count == 0)
                 return base.ShouldOverrideUrlLoading(view, request);
@@ -112,30 +113,30 @@ namespace Xam.Plugin.WebView.Droid
             //return base.ShouldOverrideUrlLoading(view, request);
         }
 
-        void CheckResponseValidity(Android.Webkit.WebView view, string url)
+        bool CheckResponseValidity(Android.Webkit.WebView view, string url)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer))
             {
-                return;
+                return true;
             }
 
             if (renderer.Element == null)
             {
-                return;
+                return true;
             }
 
             var response = renderer.Element.HandleNavigationStartRequest(url);
 
-            HandleDecisionHandlerDelegateResponse(view, url, response);
+            return HandleDecisionHandlerDelegateResponse(view, url, response);
         }
 
-        private void HandleDecisionHandlerDelegateResponse(Android.Webkit.WebView view, string url, Abstractions.Delegates.DecisionHandlerDelegate response)
+        private bool HandleDecisionHandlerDelegateResponse(Android.Webkit.WebView view, string url, Abstractions.Delegates.DecisionHandlerDelegate response)
         {
             if (!response.Cancel && !response.OffloadOntoDevice)
             {
-                return;
+                return true;
             }
-
+            var continueLoading = true;
             var finishedManualResetEvent = new ManualResetEvent(false);
             void CancelOrOffloadOntoDevice()
             {
@@ -147,6 +148,7 @@ namespace Xam.Plugin.WebView.Droid
                 view.StopLoading();
 
                 finishedManualResetEvent.Set();
+                continueLoading = false;
             }
 
             if (Device.IsInvokeRequired)
@@ -159,6 +161,8 @@ namespace Xam.Plugin.WebView.Droid
             }
 
             finishedManualResetEvent.WaitOne();
+
+            return continueLoading;
         }
 
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)

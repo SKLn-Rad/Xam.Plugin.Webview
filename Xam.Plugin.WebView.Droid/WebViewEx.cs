@@ -17,6 +17,7 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class WebViewEx : Android.Webkit.WebView
     {
+        public bool Disposed { get; set; }
         protected WebViewEx(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
@@ -79,5 +80,10 @@ namespace Xam.Plugin.WebView.Droid
             return null;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Disposed = true;
+            base.Dispose(disposing);
+        }
     }
 }
