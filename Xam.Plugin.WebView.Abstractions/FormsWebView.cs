@@ -127,6 +127,12 @@ namespace Xam.Plugin.WebView.Abstractions
             set { SetValue(BaseUrlProperty, value); }
         }
 
+        public string CurrentUrl
+        {
+            get { return (string)GetValue(CurrentUrlProperty); }
+            set { SetValue(CurrentUrlProperty, value); }
+        }
+
         /// <summary>
         /// Opt in and out of global callbacks
         /// </summary>
@@ -258,7 +264,8 @@ namespace Xam.Plugin.WebView.Abstractions
         /// Clearing all cookies.
         /// For UWP, all temporary browser data will be cleared.
         /// </summary>
-        public async Task ClearCookiesAsync() {
+        public async Task ClearCookiesAsync()
+        {
             if (OnClearCookiesRequested != null)
                 await OnClearCookiesRequested.Invoke();
         }

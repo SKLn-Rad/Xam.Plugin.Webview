@@ -45,6 +45,9 @@
     <Compile Include="Samples\BackgroundColorSample.xaml.cs">
       <DependentUpon>BackgroundColorSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\CurrentUrlSample.xaml.cs">
+      <DependentUpon>CurrentUrlSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\ClearCookieSample.xaml.cs">
       <DependentUpon>ClearCookieSample.xaml</DependentUpon>
     </Compile>
@@ -271,6 +274,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Samples\ClearCookieSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\CurrentUrlSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

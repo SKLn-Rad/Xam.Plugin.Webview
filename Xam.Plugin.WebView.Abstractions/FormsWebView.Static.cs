@@ -32,6 +32,11 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView));
 
         /// <summary>
+        /// A bindable property cor the CurrentUrl property.
+        /// </summary>
+        public static readonly BindableProperty CurrentUrlProperty = BindableProperty.Create(nameof(CurrentUrl), typeof(string), typeof(FormsWebView));
+
+        /// <summary>
         /// A bindable property for the CanGoBack property.
         /// </summary>
         public static readonly BindableProperty CanGoBackProperty = BindableProperty.Create(nameof(CanGoBack), typeof(bool), typeof(FormsWebView), false);

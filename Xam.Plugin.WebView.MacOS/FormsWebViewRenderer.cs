@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Foundation;
 using WebKit;
 using Xam.Plugin.WebView.Abstractions;
+using Xam.Plugin.WebView.Abstractions.Delegates;
 using Xam.Plugin.WebView.Abstractions.Enumerations;
 using Xam.Plugin.WebView.MacOS;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
@@ -57,7 +59,7 @@ namespace Xam.Plugin.WebView.MacOS
 			element.OnForwardRequested += OnForwardRequested;
 			element.OnRefreshRequested += OnRefreshRequested;
 
-			SetSource();
+            SetSource();
 		}
 
         void DestroyElement(FormsWebView element)
@@ -72,7 +74,7 @@ namespace Xam.Plugin.WebView.MacOS
 			element.OnForwardRequested -= OnForwardRequested;
 			element.OnRefreshRequested -= OnRefreshRequested;
 
-			element.Dispose();
+            element.Dispose();
 		}
 
 		void SetupControl()

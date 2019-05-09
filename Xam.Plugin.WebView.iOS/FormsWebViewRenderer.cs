@@ -12,6 +12,8 @@ using UIKit;
 using System.Net;
 using System.Threading;
 using System.Collections.Generic;
+using Xam.Plugin.WebView.Abstractions.Delegates;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(FormsWebView), typeof(FormsWebViewRenderer))]
 namespace Xam.Plugin.WebView.iOS
@@ -31,7 +33,6 @@ namespace Xam.Plugin.WebView.iOS
 
         public static void Initialize() {
             var dt = DateTime.Now;
-        
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
