@@ -93,29 +93,30 @@ namespace Xam.Plugin.WebView.Droid
 
         IValueCallback mUploadMessage;
         public static int FILECHOOSER_RESULTCODE = 1;
+        Android.Webkit.WebView _webView = null;
         void SetupControl()
         {
-            var webView = new Android.Webkit.WebView(Forms.Context);
+            _webView = new Android.Webkit.WebView(Forms.Context);
             _callback = new JavascriptValueCallback(this);
 
             // https://github.com/SKLn-Rad/Xam.Plugin.WebView.Webview/issues/11
-            webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+            _webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
             // Defaults
-            webView.Settings.JavaScriptEnabled = true;
-            webView.Settings.DomStorageEnabled = true;
-            webView.Settings.AllowFileAccess = true;
-            webView.Settings.AllowUniversalAccessFromFileURLs = true;
-            webView.Settings.AllowFileAccessFromFileURLs = true;
-            webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
-            webView.SetWebViewClient(new FormsWebViewClient(this));
-            webView.SetWebChromeClient(new FormsWebViewChromeClient(this, (Activity)Forms.Context));
-            webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+            _webView.Settings.JavaScriptEnabled = true;
+            _webView.Settings.DomStorageEnabled = true;
+            _webView.Settings.AllowFileAccess = true;
+            _webView.Settings.AllowUniversalAccessFromFileURLs = true;
+            _webView.Settings.AllowFileAccessFromFileURLs = true;
+            _webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
+            _webView.SetWebViewClient(new FormsWebViewClient(this));
+            _webView.SetWebChromeClient(new FormsWebViewChromeClient(this, (Activity)Forms.Context));
+            _webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
-            SetNativeControl(webView);
-            OnControlChanged?.Invoke(this, webView);
+            SetNativeControl(_webView);
+            OnControlChanged?.Invoke(this, _webView);
         }
 
         async void OnCallbackAdded(object sender, string e)
@@ -185,7 +186,6 @@ namespace Xam.Plugin.WebView.Droid
         {
             if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name))
                 return Task.CompletedTask;
-
             if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
                 SetCookie(cookie);
                 CookieManager.Instance.Flush();
@@ -228,9 +228,13 @@ namespace Xam.Plugin.WebView.Droid
             var url = $"{cookieDomain}";
             var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}";
 
+            //CookieSyncManager cookieSyncManager = CookieSyncManager.CreateInstance(_webView.Context);
             CookieManager cookieManager = CookieManager.Instance;
             CookieManager.Instance.SetAcceptCookie(true);
+            CookieManager.Instance.RemoveAllCookie();
+            System.Threading.Thread.Sleep(500);
             CookieManager.Instance.SetCookie(url, cookieString);
+            //cookieSyncManager.Sync();
 
             if (!_cookieDomains.ContainsKey(cookie.Domain)) {
                 _cookieDomains[cookie.Domain] = 0;
