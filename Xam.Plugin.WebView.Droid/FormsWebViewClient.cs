@@ -24,7 +24,13 @@ namespace Xam.Plugin.WebView.Droid
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-            if (renderer.Element == null) return;
+            if (renderer.Element == null || (view as WebViewEx).Disposed) return;
+
+            if (!request.IsForMainFrame || request.Url.ToString() != renderer.Control.Url.ToString())
+            {
+                base.OnReceivedHttpError(view, request, errorResponse);
+                return;
+            }
 
             renderer.Element.HandleNavigationError(errorResponse.StatusCode);
             renderer.Element.HandleNavigationCompleted(request.Url.ToString());
@@ -34,7 +40,13 @@ namespace Xam.Plugin.WebView.Droid
         public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-            if (renderer.Element == null) return;
+            if (renderer.Element == null || (view as WebViewEx).Disposed) return;
+
+            if (request?.Url == null || renderer?.Control?.Url == null || error?.ErrorCode == null || !request.IsForMainFrame || request.Url.ToString() != renderer.Control.Url.ToString())
+            {
+                base.OnReceivedError(view, request, error);
+                return;
+            }
 
             renderer.Element.HandleNavigationError((int)error.ErrorCode);
             renderer.Element.HandleNavigationCompleted(request.Url.ToString());
@@ -48,7 +60,7 @@ namespace Xam.Plugin.WebView.Droid
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Lollipop) return;
 
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-            if (renderer.Element == null) return;
+            if (renderer.Element == null || (view as WebViewEx).Disposed) return;
 
             renderer.Element.HandleNavigationError((int)errorCode);
             renderer.Element.HandleNavigationCompleted(failingUrl.ToString());
@@ -59,6 +71,9 @@ namespace Xam.Plugin.WebView.Droid
         [Obsolete]
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, string url)
         {
+            if ((view as WebViewEx).Disposed)
+                return true;
+
             CheckResponseValidity(view, url);
 
             view.LoadUrl(url, FormsWebView.GlobalRegisteredHeaders);
@@ -69,10 +84,16 @@ namespace Xam.Plugin.WebView.Droid
         // NOTE: pulled fix from this unmerged PR - https://github.com/SKLn-Rad/Xam.Plugin.Webview/pull/104
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
         {
+            if ((view as WebViewEx).Disposed)
+                return base.ShouldOverrideUrlLoading(view, request);
+
             if (!CheckResponseValidity(view, request.Url.ToString()))
                 return true;
 
-            if (FormsWebView.GlobalRegisteredHeaders.Count == 0)
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer) || renderer?.Element?.BaseUrl == null)
+                return base.ShouldOverrideUrlLoading(view, request);
+
+            if (!request.Url.ToString().ToLower().StartsWith(renderer.Element.BaseUrl.ToLower()) || FormsWebView.GlobalRegisteredHeaders.Count == 0)
                 return base.ShouldOverrideUrlLoading(view, request);
 
             if (request.RequestHeaders != null)
@@ -120,7 +141,7 @@ namespace Xam.Plugin.WebView.Droid
                 return true;
             }
 
-            if (renderer.Element == null)
+            if (renderer.Element == null || (view as WebViewEx).Disposed)
             {
                 return true;
             }
@@ -132,6 +153,9 @@ namespace Xam.Plugin.WebView.Droid
 
         private bool HandleDecisionHandlerDelegateResponse(Android.Webkit.WebView view, string url, Abstractions.Delegates.DecisionHandlerDelegate response)
         {
+            if ((view as WebViewEx).Disposed)
+                return true;
+
             if (!response.Cancel && !response.OffloadOntoDevice)
             {
                 return true;
@@ -142,7 +166,11 @@ namespace Xam.Plugin.WebView.Droid
             {
                 if (response.OffloadOntoDevice && !AttemptToHandleCustomUrlScheme(view, url))
                 {
-                    Device.OpenUri(new Uri(url));
+                    try
+                    {
+                        Device.OpenUri(new Uri(url));
+                    }
+                    catch { }
                 }
 
                 view.StopLoading();
@@ -225,12 +253,13 @@ namespace Xam.Plugin.WebView.Droid
         public async override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
-            if (renderer.Element == null) return;
+            if (renderer.Element == null || (view as WebViewEx).Disposed) return;
 
             // Add Injection Function
             await renderer.OnJavascriptInjectionRequest(FormsWebView.InjectedFunction);
 
-            if (renderer?.Element == null) return;
+            if (renderer?.Element == null || (view as WebViewEx).Disposed) return;
+
 
             // Add Global Callbacks
             if (renderer.Element.EnableGlobalCallbacks)
@@ -240,6 +269,8 @@ namespace Xam.Plugin.WebView.Droid
             // Add Local Callbacks
             foreach (var callback in renderer.Element.LocalRegisteredCallbacks)
                 await renderer.OnJavascriptInjectionRequest(FormsWebView.GenerateFunctionScript(callback.Key));
+
+            if (renderer?.Element == null || (view as WebViewEx).Disposed) return;
 
             renderer.Element.CanGoBack = view.CanGoBack();
             renderer.Element.CanGoForward = view.CanGoForward();

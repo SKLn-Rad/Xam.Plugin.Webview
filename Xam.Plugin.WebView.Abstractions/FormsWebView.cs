@@ -218,10 +218,17 @@ namespace Xam.Plugin.WebView.Abstractions
                 return null;
             }
 
-            var selectionRangeBoundingClientDomRect =
-                JsonConvert.DeserializeObject<JObject>(selectionRangeBoundingClientDOMRectJson);
+            JObject selectionRangeBoundingClientDomRect = null;
+            try
+            {
+                selectionRangeBoundingClientDomRect = JsonConvert.DeserializeObject<JObject>(selectionRangeBoundingClientDOMRectJson);
+            }
+            catch
+            {
+                return null;
+            }
 
-            if (selectionRangeBoundingClientDomRect == null)
+            if (selectionRangeBoundingClientDomRect == null || selectionRangeBoundingClientDomRect["left"] == null)
             {
                 return null;
             }

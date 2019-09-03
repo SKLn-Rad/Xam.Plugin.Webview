@@ -68,6 +68,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
             element.OnNavigationStarted += SetCurrentUrl;
+            element.OnNavigationCompleted += OnNavigationCompleted;
 
             SetSource();
         }
@@ -84,6 +85,7 @@ namespace Xam.Plugin.WebView.Droid
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
             element.OnNavigationStarted -= SetCurrentUrl;
+            element.OnNavigationCompleted -= OnNavigationCompleted;
 
             element.Dispose();
         }
@@ -188,6 +190,9 @@ namespace Xam.Plugin.WebView.Droid
                 {
                     url = Element.BaseUrl;
                 }
+                if (string.IsNullOrEmpty(url))
+                    return string.Empty;
+
                 if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
                 {
                     CookieManager.Instance.Flush();
@@ -295,7 +300,11 @@ namespace Xam.Plugin.WebView.Droid
 
             var response = string.Empty;
 
-            Device.BeginInvokeOnMainThread(() => Control.EvaluateJavascript(js, callback));
+            Device.BeginInvokeOnMainThread(() => {
+                if (Control == null || Control.Disposed)
+                    return;
+                Control.EvaluateJavascript(js, callback);
+            });
 
             // wait!
             await Task.Run(() =>
@@ -399,6 +408,20 @@ namespace Xam.Plugin.WebView.Droid
 
             Device.BeginInvokeOnMainThread(() =>
             {
+                if (Element == null || Control == null || Control.Disposed) return;
+
+                Element.CurrentUrl = Control.Url;
+            });
+        }
+
+        private void OnNavigationCompleted(object sender, string e)
+        {
+            if (Element == null || Control == null || Control.Disposed) return;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (Element == null || Control == null || Control.Disposed) return;
+
                 Element.CurrentUrl = Control.Url;
             });
         }
