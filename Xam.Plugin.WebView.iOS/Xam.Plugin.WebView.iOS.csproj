@@ -1,105 +1,105 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{F6331DD7-E1D3-4650-8D9B-36CA729C2B4B}</ProjectGuid>
-        <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-        <OutputType>Library</OutputType>
-        <RootNamespace>Xam.Plugin.WebView.iOS</RootNamespace>
-        <AssemblyName>Xam.Plugin.WebView.iOS</AssemblyName>
-        <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-        <NuGetPackageImportStamp>
-        </NuGetPackageImportStamp>
-        <ReleaseVersion>1.0.1</ReleaseVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug</OutputPath>
-        <DefineConstants>DEBUG;</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <CodesignKey>iPhone Developer</CodesignKey>
-        <MtouchDebug>true</MtouchDebug>
-        <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-        <MtouchFastDev>true</MtouchFastDev>
-        <IOSDebuggerPort>21547</IOSDebuggerPort>
-        <DeviceSpecificBuild>false</DeviceSpecificBuild>
-        <MtouchLink>
-        </MtouchLink>
-        <MtouchHttpClientHandler>
-        </MtouchHttpClientHandler>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release</OutputPath>
-        <DefineConstants>
-        </DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <CodesignKey>iPhone Developer</CodesignKey>
-        <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-        <MtouchLink>SdkOnly</MtouchLink>
-        <MtouchHttpClientHandler>
-        </MtouchHttpClientHandler>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|iPhone' ">
-      <Optimize>false</Optimize>
-      <OutputPath>bin\iPhone\HockeyApp</OutputPath>
-      <WarningLevel>4</WarningLevel>
-      <CodesignKey>iPhone Developer</CodesignKey>
-      <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-      <MtouchFloat32>true</MtouchFloat32>
-      <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-      <MtouchLink>SdkOnly</MtouchLink>
-      <MtouchArch>ARM64</MtouchArch>
-      <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|AnyCPU' ">
-        <Optimize>true</Optimize>
-        <OutputPath>bin\HockeyApp</OutputPath>
-        <DefineConstants>
-        </DefineConstants>
-        <WarningLevel>4</WarningLevel>
-        <CodesignKey>iPhone Developer</CodesignKey>
-        <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-        <MtouchLink>SdkOnly</MtouchLink>
-        <MtouchHttpClientHandler>
-        </MtouchHttpClientHandler>
-        <DebugType>pdbonly</DebugType>
-        <ErrorReport>prompt</ErrorReport>
-        <MtouchVerbosity>2</MtouchVerbosity>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System" />
-        <Reference Include="System.Xml" />
-        <Reference Include="System.Core" />
-        <Reference Include="Xamarin.iOS" />
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.IO.Compression" />
-        <Reference Include="System.Net.Http" />
-        <PackageReference Include="Newtonsoft.Json">
-            <Version>12.0.2</Version>
-        </PackageReference>
-        <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Resources\" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="FormsWebViewRenderer.cs" />
-        <Compile Include="FormsNavigationDelegate.cs" />
-        <Compile Include="FormsWebViewOldRenderer.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-            <Project>{E0DFB122-B224-4E69-B6E9-9FBDC9CD0A24}</Project>
-            <Name>Xam.Plugin.WebView.Abstractions</Name>
-        </ProjectReference>
-    </ItemGroup>
-    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F6331DD7-E1D3-4650-8D9B-36CA729C2B4B}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Xam.Plugin.WebView.iOS</RootNamespace>
+    <AssemblyName>Xam.Plugin.WebView.iOS</AssemblyName>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <ReleaseVersion>1.0.1</ReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchFastDev>true</MtouchFastDev>
+    <IOSDebuggerPort>21547</IOSDebuggerPort>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <MtouchLink>
+    </MtouchLink>
+    <MtouchHttpClientHandler>
+    </MtouchHttpClientHandler>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchHttpClientHandler>
+    </MtouchHttpClientHandler>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|iPhone' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\HockeyApp</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchFloat32>true</MtouchFloat32>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARM64</MtouchArch>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'HockeyApp|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\HockeyApp</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchHttpClientHandler>
+    </MtouchHttpClientHandler>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <MtouchVerbosity>2</MtouchVerbosity>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms" Version="4.3.0.947036" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FormsWebViewRenderer.cs" />
+    <Compile Include="FormsNavigationDelegate.cs" />
+    <Compile Include="FormsWebViewOldRenderer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
+      <Project>{E0DFB122-B224-4E69-B6E9-9FBDC9CD0A24}</Project>
+      <Name>Xam.Plugin.WebView.Abstractions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -113,13 +113,17 @@ namespace Xam.Plugin.WebView.Droid
 
             view.LoadUrl(url, FormsWebView.GlobalRegisteredHeaders);
 
-            if (response.Cancel || response.OffloadOntoDevice) {
+            var response = renderer.Element.HandleNavigationStartRequest(url);
+
+            if (response.Cancel || response.OffloadOntoDevice)
+            {
                 if (response.OffloadOntoDevice)
                     AttemptToHandleCustomUrlScheme(view, url);
                 view.StopLoading();
                 return true;
-                return base.ShouldOverrideUrlLoading(view, url);
             }
+            return base.ShouldOverrideUrlLoading(view, url);
+        }
 
         // NOTE: pulled fix from this unmerged PR - https://github.com/SKLn-Rad/Xam.Plugin.Webview/pull/104
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)

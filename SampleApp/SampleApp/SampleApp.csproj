@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-      <PackageReference Include="Xamarin.Forms" Version="3.4.0.1029999" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+      <PackageReference Include="Xamarin.Forms" Version="4.3.0.947036" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj" />

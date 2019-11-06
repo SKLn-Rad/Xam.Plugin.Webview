@@ -177,7 +177,7 @@ namespace Xam.Plugin.WebView.iOS
 
         [Foundation.Export("webView:didStartProvisionalNavigation:")]
         [ObjCRuntime.BindingImpl(ObjCRuntime.BindingImplOptions.GeneratedCode | ObjCRuntime.BindingImplOptions.Optimizable)]
-        public virtual void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
+        public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
         {
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;

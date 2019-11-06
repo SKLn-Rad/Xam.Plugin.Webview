@@ -45,7 +45,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidSupportedAbis>
+    </AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -59,25 +65,25 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>3.4.0.1029999</Version>
+      <Version>4.3.0.947036</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design">
-      <Version>28.0.0.1</Version>
+      <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v4">
-      <Version>28.0.0.1</Version>
+      <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
-      <Version>28.0.0.1</Version>
+      <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.CardView">
-      <Version>28.0.0.1</Version>
+      <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter">
-      <Version>28.0.0.1</Version>
+      <Version>28.0.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
