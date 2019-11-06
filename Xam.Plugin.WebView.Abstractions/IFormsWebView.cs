@@ -52,5 +52,6 @@ namespace Xam.Plugin.WebView.Abstractions
         Task<string> GetAllCookiesAsync();
         Task<string> GetCookieAsync(string key);
         Task<string> SetCookieAsync(Cookie cookie);
+        Task AddCookieAsync(System.Net.Cookie cookie);
     }
 }

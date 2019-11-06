@@ -1,4 +1,6 @@
-﻿using Android.OS;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
 using Android.Webkit;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,6 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewRenderer : ViewRenderer<FormsWebView, WebViewEx>
     {
-
         public static string MimeType = "text/html";
 
         public static string EncodingType = "UTF-8";
@@ -31,6 +32,14 @@ namespace Xam.Plugin.WebView.Droid
         public static bool IgnoreSSLGlobally { get; set; }
 
         public static event EventHandler<Android.Webkit.WebView> OnControlChanged;
+
+        JavascriptValueCallback _callback;
+
+        private Dictionary<string, int> _cookieDomains = new Dictionary<string, int>();
+
+        public FormsWebViewRenderer(Context context) : base(context)
+        {
+        }
 
         public static void Initialize()
         {
@@ -50,8 +59,7 @@ namespace Xam.Plugin.WebView.Droid
             if (e.OldElement != null)
                 DestroyElement(e.OldElement);
 
-            if (Element.UseWideViewPort)
-            {
+            if (Element.UseWideViewPort) {
                 Control.Settings.LoadWithOverviewMode = true;
                 Control.Settings.UseWideViewPort = true;
             }
@@ -64,14 +72,17 @@ namespace Xam.Plugin.WebView.Droid
             element.OnGetAllCookiesRequestedAsync += OnGetAllCookieRequestAsync;
             element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
             element.OnClearCookiesRequested += OnClearCookiesRequest;
+            element.OnAddCookieRequested += OnAddCookieRequested;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
             element.OnNavigationStarted += SetCurrentUrl;
             element.OnNavigationCompleted += OnNavigationCompleted;
+            element.OnPrintCookiesRequested += OnPrintCookiesRequested;
 
             SetSource();
         }
+
 
         void DestroyElement(FormsWebView element)
         {
@@ -81,33 +92,43 @@ namespace Xam.Plugin.WebView.Droid
             element.OnGetAllCookiesRequestedAsync -= OnGetAllCookieRequestAsync;
             element.OnGetCookieRequestedAsync -= OnGetCookieRequestAsync;
             element.OnSetCookieRequestedAsync -= OnSetCookieRequestAsync;
+            element.OnAddCookieRequested -= OnAddCookieRequested;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnPrintCookiesRequested -= OnPrintCookiesRequested;
             element.OnNavigationStarted -= SetCurrentUrl;
             element.OnNavigationCompleted -= OnNavigationCompleted;
 
             element.Dispose();
         }
 
+        IValueCallback mUploadMessage;
+        public static int FILECHOOSER_RESULTCODE = 1;
+        WebViewEx _webView = null;
         void SetupControl()
         {
-            var webView = new WebViewEx(Forms.Context);
+            _webView = new WebViewEx(Forms.Context);
+            _callback = new JavascriptValueCallback(this);
 
             // https://github.com/SKLn-Rad/Xam.Plugin.WebView.Webview/issues/11
-            webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+            _webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
             // Defaults
-            webView.Settings.JavaScriptEnabled = true;
-            webView.Settings.DomStorageEnabled = true;
-            webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
-            webView.SetWebViewClient(new FormsWebViewClient(this));
-            webView.SetWebChromeClient(new FormsWebViewChromeClient(this));
-            webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+            _webView.Settings.JavaScriptEnabled = true;
+            _webView.Settings.DomStorageEnabled = true;
+            _webView.Settings.AllowFileAccess = true;
+            _webView.Settings.AllowUniversalAccessFromFileURLs = true;
+            _webView.Settings.AllowFileAccessFromFileURLs = true;
+            _webView.AddJavascriptInterface(new FormsWebViewBridge(this), "bridge");
+            _webView.SetWebViewClient(new FormsWebViewClient(this));
+            _webView.SetWebChromeClient(new FormsWebViewChromeClient(this, (Activity)Forms.Context));
+            _webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
-            SetNativeControl(webView);
-            OnControlChanged?.Invoke(this, webView);
+
+            SetNativeControl(_webView);
+            OnControlChanged?.Invoke(this, _webView);
         }
 
         async void OnCallbackAdded(object sender, string e)
@@ -143,25 +164,22 @@ namespace Xam.Plugin.WebView.Droid
 
         void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
-            {
+            switch (e.PropertyName) {
                 case "Source":
                     SetSource();
                     break;
             }
         }
 
-        private async Task OnClearCookiesRequest()
+        private Task OnClearCookiesRequest()
         {
-            if (Control == null || Control.Disposed) return;
+            if (Control == null || Control.Disposed) return Task.CompletedTask;
 
-            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1)
-            {
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
                 CookieManager.Instance.RemoveAllCookies(null);
                 CookieManager.Instance.Flush();
-            }
-            else
-            {
+            } else {
+#pragma warning disable CS0618
                 //CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
                 CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
                 cookieSyncMngr.StartSync();
@@ -170,7 +188,70 @@ namespace Xam.Plugin.WebView.Droid
                 cookieManager.RemoveSessionCookie();
                 cookieSyncMngr.StopSync();
                 cookieSyncMngr.Sync();
+#pragma warning restore CS0618
             }
+            _cookieDomains.Clear();
+            return Task.CompletedTask;
+        }
+
+        private Task OnAddCookieRequested(System.Net.Cookie cookie)
+        {
+            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name))
+                return Task.CompletedTask;
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
+                SetCookie(cookie);
+                CookieManager.Instance.Flush();
+            } else {
+#pragma warning disable CS0618
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.StartSync();
+                SetCookie(cookie);
+                cookieSyncMngr.StopSync();
+                cookieSyncMngr.Sync();
+#pragma warning restore CS0618
+            }
+            return Task.CompletedTask;
+        }
+
+        private Task OnPrintCookiesRequested(IEnumerable<string> urls = null)
+        {
+            if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.LollipopMr1) {
+                CookieManager.Instance.Flush();
+            } else {
+#pragma warning disable CS0618
+                CookieSyncManager cookieSyncMngr = CookieSyncManager.CreateInstance(Context);
+                cookieSyncMngr.Sync();
+#pragma warning restore CS0618
+            }
+            if (!CookieManager.Instance.HasCookies)
+                return Task.CompletedTask;
+            if (urls == null)
+                System.Diagnostics.Debug.WriteLine("Android must be given the cookie urls to iterate over");
+            foreach (var url in urls) {
+                var cookie = CookieManager.Instance.GetCookie(url);
+                System.Diagnostics.Debug.WriteLine($"Cookie for {url}: {cookie}");
+            }
+            return Task.CompletedTask;
+        }
+
+        private void SetCookie(System.Net.Cookie cookie)
+        {
+            var cookieDomain = cookie.Domain;
+            var url = $"{cookieDomain}";
+            var cookieString = $"{cookie.ToString()}; Domain={cookieDomain}; Path={cookie.Path}";
+
+            //CookieSyncManager cookieSyncManager = CookieSyncManager.CreateInstance(_webView.Context);
+            CookieManager cookieManager = CookieManager.Instance;
+            CookieManager.Instance.SetAcceptCookie(true);
+            CookieManager.Instance.RemoveAllCookie();
+            System.Threading.Thread.Sleep(500);
+            CookieManager.Instance.SetCookie(url, cookieString);
+            //cookieSyncManager.Sync();
+
+            if (!_cookieDomains.ContainsKey(cookie.Domain)) {
+                _cookieDomains[cookie.Domain] = 0;
+            }
+            _cookieDomains[cookie.Domain] = _cookieDomains[cookie.Domain] + 1;
         }
 
 

@@ -30,12 +30,14 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <returns>Any string response from the DOM or string.Empty</returns>
         public delegate Task<string> JavascriptInjectionRequestDelegate(string js);
 
-
         /// <summary>
         /// Delegate to await clearing cookies. Will remove all temporary data on UWP
         /// </summary>
         public delegate Task ClearCookiesRequestDelegate();
 
+        public delegate Task AddCookieDelegate(System.Net.Cookie cookie);
+
+        public delegate Task PrintCookiesRequestDelegate(IEnumerable<string> urls);
 
         /// <summary>
         ///  Delegate to await getting all cookies. Returns string or string.Empty
@@ -89,6 +91,10 @@ namespace Xam.Plugin.WebView.Abstractions
 
         internal event ClearCookiesRequestDelegate OnClearCookiesRequested;
 
+        internal event AddCookieDelegate OnAddCookieRequested;
+
+        internal event PrintCookiesRequestDelegate OnPrintCookiesRequested;
+
         internal readonly Dictionary<string, Action<string>> LocalRegisteredCallbacks = new Dictionary<string, Action<string>>();
 
         /// <summary>
@@ -99,8 +105,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// The content type to attempt to load. By default this is Internet.
         /// </summary>
-        public WebViewContentType ContentType
-        {
+        public WebViewContentType ContentType {
             get => (WebViewContentType)GetValue(ContentTypeProperty);
             set => SetValue(ContentTypeProperty, value);
         }
@@ -121,8 +126,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// iOS and MacOS) Resources folder with BundleResource build property
         /// UWP) Project folder with content build property
         /// </summary>
-        public string BaseUrl
-        {
+        public string BaseUrl {
             get { return (string)GetValue(BaseUrlProperty); }
             set { SetValue(BaseUrlProperty, value); }
         }
@@ -154,8 +158,7 @@ namespace Xam.Plugin.WebView.Abstractions
         /// <summary>
         /// Bindable property which is true when the page is currently navigating.
         /// </summary>
-        public bool Navigating
-        {
+        public bool Navigating {
             get => (bool)GetValue(NavigatingProperty);
             internal set => SetValue(NavigatingProperty, value);
         }
@@ -277,6 +280,12 @@ namespace Xam.Plugin.WebView.Abstractions
                 await OnClearCookiesRequested.Invoke();
         }
 
+        public async Task AddCookieAsync(System.Net.Cookie cookie)
+        {
+            if (OnAddCookieRequested != null)
+                await OnAddCookieRequested.Invoke(cookie);
+        }
+
         /// <summary>
         /// Getting all cookies from the current domain from shared storage
         /// </summary>
@@ -384,6 +393,7 @@ namespace Xam.Plugin.WebView.Abstractions
             LocalRegisteredCallbacks.Clear();
         }
 
+
         /// <summary>
         /// Dispose of the WebView
         /// </summary>
@@ -391,6 +401,11 @@ namespace Xam.Plugin.WebView.Abstractions
         {
             LocalRegisteredCallbacks.Clear();
             LocalRegisteredHeaders.Clear();
+        }
+
+        public async Task PrintCookiesAsync(IEnumerable<string> urls)
+        {
+            await this.OnPrintCookiesRequested?.Invoke(urls);
         }
 
         // All code which should be hidden from the end user goes here
@@ -405,8 +420,7 @@ namespace Xam.Plugin.WebView.Abstractions
             if (validUri)
                 validScheme = uriResult.Scheme.StartsWith("http") || uriResult.Scheme.StartsWith("file");
 
-            var handler = new DecisionHandlerDelegate()
-            {
+            var handler = new DecisionHandlerDelegate() {
                 Uri = uri,
                 OffloadOntoDevice = validUri && !validScheme
             };

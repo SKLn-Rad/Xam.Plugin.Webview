@@ -9,10 +9,39 @@ using Android.Content;
 using Xamarin.Forms;
 using System.Collections.Generic;
 
+using System.Net.Http;
+using System.Diagnostics;
+
 namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewClient : WebViewClient
     {
+
+        //************************************************************************************************************************
+        // ADDED TO DECIDE AND HANDLE CONTENTTYPE (application/pdf) BY LOADING CONTENT IN SEPARATE HTTPCLIENT BEFORE SHOWING IN WEBVIEW
+        /// <summary>
+        /// Shoulds the intercept request. Raise OnContentTypeLoaded to webview with content type
+        /// </summary>
+        /// <returns>The intercept request.</returns>
+        /// <param name="view">View.</param>
+        /// <param name="request">Request.</param>
+        public override WebResourceResponse ShouldInterceptRequest(Android.Webkit.WebView view, IWebResourceRequest request)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return null;
+            if (renderer.Element == null) return null;
+
+            if (request == null || request.Url == null)
+                return null;
+
+            //It seems that post methods doesn't get captured by webviews OnPageStarted method. Needs to handle this manually to raise WhenNavigationStarted in WebViewPage
+            if (!string.IsNullOrEmpty(request.Method) && request.Method.Equals("POST")) {
+                renderer.Element.HandleNavigationStartRequest(request.Url.ToString());
+            }
+
+            return base.ShouldInterceptRequest(view, request);
+        }
+        //************************************************************************************************************************
+
 
         readonly WeakReference<FormsWebViewRenderer> Reference;
 
@@ -67,10 +96,16 @@ namespace Xam.Plugin.WebView.Droid
             renderer.Element.Navigating = false;
         }
 
-        //For Android < 5.0
         [Obsolete]
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, string url)
         {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+                return base.ShouldOverrideUrlLoading(view, url);
+
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer))
+                return base.ShouldOverrideUrlLoading(view, url);
+            if (renderer.Element == null)
+                return base.ShouldOverrideUrlLoading(view, url);
             if ((view as WebViewEx).Disposed)
                 return true;
 
@@ -78,8 +113,13 @@ namespace Xam.Plugin.WebView.Droid
 
             view.LoadUrl(url, FormsWebView.GlobalRegisteredHeaders);
 
-            return true;
-        }
+            if (response.Cancel || response.OffloadOntoDevice) {
+                if (response.OffloadOntoDevice)
+                    AttemptToHandleCustomUrlScheme(view, url);
+                view.StopLoading();
+                return true;
+                return base.ShouldOverrideUrlLoading(view, url);
+            }
 
         // NOTE: pulled fix from this unmerged PR - https://github.com/SKLn-Rad/Xam.Plugin.Webview/pull/104
         public override bool ShouldOverrideUrlLoading(Android.Webkit.WebView view, IWebResourceRequest request)
@@ -203,8 +243,7 @@ namespace Xam.Plugin.WebView.Droid
 
         bool AttemptToHandleCustomUrlScheme(Android.Webkit.WebView view, string url)
         {
-            if (url.StartsWith("mailto"))
-            {
+            if (url.StartsWith("mailto")) {
                 Android.Net.MailTo emailData = Android.Net.MailTo.Parse(url);
 
                 Intent email = new Intent(Intent.ActionSendto);
@@ -221,8 +260,7 @@ namespace Xam.Plugin.WebView.Droid
                 return true;
             }
 
-            if (url.StartsWith("http"))
-            {
+            if (url.StartsWith("http")) {
                 Intent webPage = new Intent(Intent.ActionView, Android.Net.Uri.Parse(url));
                 if (webPage.ResolveActivity(Forms.Context.PackageManager) != null)
                     Forms.Context.StartActivity(webPage);
@@ -238,13 +276,9 @@ namespace Xam.Plugin.WebView.Droid
             if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
             if (renderer.Element == null) return;
 
-            if (FormsWebViewRenderer.IgnoreSSLGlobally)
-            {
+            if (FormsWebViewRenderer.IgnoreSSLGlobally) {
                 handler.Proceed();
-            }
-
-            else
-            {
+            } else {
                 handler.Cancel();
                 renderer.Element.Navigating = false;
             }

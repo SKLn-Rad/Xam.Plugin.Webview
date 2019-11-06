@@ -1,27 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.Webkit;
 
 namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewChromeClient : WebChromeClient
     {
-
         readonly WeakReference<FormsWebViewRenderer> Reference;
 
-        public FormsWebViewChromeClient(FormsWebViewRenderer renderer)
+        public static int FILECHOOSER_RESULTCODE = 42;
+
+        Activity _activity;
+
+        public FormsWebViewChromeClient(FormsWebViewRenderer renderer, Activity activity)
         {
             Reference = new WeakReference<FormsWebViewRenderer>(renderer);
+            _activity = activity;
         }
 
+        public override bool OnShowFileChooser(Android.Webkit.WebView webView, IValueCallback filePathCallback, FileChooserParams fileChooserParams)
+        {
+            ((IWebViewChromeClientActivity)_activity).UploadMessage = filePathCallback;
+            Intent i = new Intent(Intent.ActionGetContent);
+            i.AddCategory(Intent.CategoryOpenable);
+            i.SetType("image/*");
+            _activity.StartActivityForResult(Intent.CreateChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+
+            return true;
+        }
     }
 }

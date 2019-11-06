@@ -31,8 +31,14 @@ namespace Xam.Plugin.WebView.iOS
 
         WKUserContentController _contentController;
 
-        public static void Initialize() {
+        private static WKProcessPool _processPool = null;
+
+        private Dictionary<string, int> _cookieDomains = new Dictionary<string, int>();
+
+        public static void Initialize()
+        {
             var dt = DateTime.Now;
+            _processPool = new WKProcessPool();
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<FormsWebView> e)
@@ -58,12 +64,14 @@ namespace Xam.Plugin.WebView.iOS
             element.OnGetAllCookiesRequestedAsync += OnGetAllCookiesRequestAsync;
             element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
             element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
+            element.OnAddCookieRequested += OnAddCookieRequested;
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
+            element.OnPrintCookiesRequested += OnPrintCookiesRequested;
 
             SetSource();
-		}
+        }
 
         void DestroyElement(FormsWebView element)
         {
@@ -73,9 +81,11 @@ namespace Xam.Plugin.WebView.iOS
             element.OnGetAllCookiesRequestedAsync += OnGetAllCookiesRequestAsync;
             element.OnGetCookieRequestedAsync += OnGetCookieRequestAsync;
             element.OnSetCookieRequestedAsync += OnSetCookieRequestAsync;
+            element.OnAddCookieRequested -= OnAddCookieRequested;
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnPrintCookiesRequested -= OnPrintCookiesRequested;
 
             element.Dispose();
         }
@@ -86,18 +96,32 @@ namespace Xam.Plugin.WebView.iOS
             _contentController = new WKUserContentController();
             _contentController.AddScriptMessageHandler(this, "invokeAction");
             _configuration = new WKWebViewConfiguration {
-                UserContentController = _contentController
+                UserContentController = _contentController,
             };
+            _configuration.ProcessPool = _processPool;
 
-
-            var wkWebView = new WKWebView(Frame, _configuration)
-            {
+            var wkWebView = new WKWebView(Frame, _configuration) {
                 Opaque = false,
                 UIDelegate = this,
                 NavigationDelegate = _navigationDelegate,
-            };
+            };        
 
             FormsWebView.CallbackAdded += OnCallbackAdded;
+
+            try
+            {
+                //Autoresize after rotation. Wrapped in try catch with no handling since untested
+                wkWebView.ContentMode = UIViewContentMode.ScaleAspectFit;
+                wkWebView.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+                wkWebView.SizeToFit();
+
+                if (wkWebView.ScrollView != null)
+                {
+                    wkWebView.ScrollView.Bounces = false;
+                }
+            }
+            catch { /*Do nothing right now*/}
+
 
             SetNativeControl(wkWebView);
             OnControlChanged?.Invoke(this, wkWebView);
@@ -112,13 +136,13 @@ namespace Xam.Plugin.WebView.iOS
         }
 
         void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
+        {
             switch (e.PropertyName) {
                 case "Source":
                     SetSource();
                     break;
             }
-		}
+        }
 
         private async Task OnClearCookiesRequest()
         {
@@ -230,9 +254,95 @@ namespace Xam.Plugin.WebView.iOS
 
             return string.Empty;
         }
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
+
+                var cookies = await store.GetAllCookiesAsync();
+                foreach (var c in cookies) {
+                    await store.DeleteCookieAsync(c);
+                }
+            }
+            foreach (var domain in _cookieDomains) {
+                var domainUrl = NSUrl.FromString(domain.Key);
+                foreach (var cookie in NSHttpCookieStorage.SharedStorage.CookiesForUrl(domainUrl)) {
+                    NSHttpCookieStorage.SharedStorage.DeleteCookie(cookie);
+                    _cookieDomains[domain.Key] = domain.Value - 1;
+                }
+            }
+#if DEBUG
+            await OnPrintCookiesRequested();
+#endif
+        }
+
+        private async Task OnPrintCookiesRequested(IEnumerable<string> urls = null)
+        {
+#if DEBUG
+            NSHttpCookie[] cookies;
+
+            System.Diagnostics.Debug.WriteLine("*** NSHttpCookieStorage.SharedStorage.Cookies ***");
+            cookies = NSHttpCookieStorage.SharedStorage.Cookies;
+            if (cookies != null) {
+                foreach (var nsCookie2 in cookies) {
+                    System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                }
+            }
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                System.Diagnostics.Debug.WriteLine("*** WKWebsiteDataStore.DefaultDataStore ***");
+                cookies = await WKWebsiteDataStore.DefaultDataStore?.HttpCookieStore.GetAllCookiesAsync();
+                if (cookies != null) {
+                    foreach (var nsCookie2 in cookies) {
+                        System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                    }
+                }
+
+                if (_configuration != Control?.Configuration) {
+                    System.Diagnostics.Debug.WriteLine("*** _configuration.WebsiteDataStore ***");
+                    cookies = await _configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookiesAsync();
+                    if (cookies != null) {
+                        foreach (var nsCookie2 in cookies) {
+                            System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                        }
+                    }
+                }
+
+                Control?.Configuration?.WebsiteDataStore?.HttpCookieStore?.GetAllCookies((NSHttpCookie[] cookieArray) => {
+                    System.Diagnostics.Debug.WriteLine("*** Control.Configuration.WebsiteDataStore ***");
+                    if (cookieArray != null) {
+                        foreach (var nsCookie2 in cookieArray) {
+                            System.Diagnostics.Debug.WriteLine($"Domain={nsCookie2.Domain}; Name={nsCookie2.Name}; Value={nsCookie2.Value};");
+                        }
+                    }
+                });
+            }
+#endif
+        }
+
+        private async Task OnAddCookieRequested(System.Net.Cookie cookie)
+        {
+            if (Control == null || cookie == null || String.IsNullOrEmpty(cookie.Domain) || String.IsNullOrEmpty(cookie.Name)) return;
+
+            var nsCookie = new NSHttpCookie(cookie);
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var store = _configuration.WebsiteDataStore.HttpCookieStore;
+                await store.SetCookieAsync(nsCookie);
+            }
+            NSHttpCookieStorage.SharedStorage.SetCookie(nsCookie);
+            foreach (var cookies in NSHttpCookieStorage.SharedStorage.Cookies) {
+                System.Diagnostics.Debug.WriteLine(cookie.ToString());
+            }
+
+            if (!_cookieDomains.ContainsKey(cookie.Domain)) {
+                _cookieDomains[cookie.Domain] = 0;
+            }
+            _cookieDomains[cookie.Domain] = _cookieDomains[cookie.Domain] + 1;
+#if DEBUG
+            await OnPrintCookiesRequested();
+#endif
+        }
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
-		{
+        {
             if (Control == null || Element == null) return string.Empty;
 
             var response = string.Empty;
@@ -242,11 +352,9 @@ namespace Xam.Plugin.WebView.iOS
                 var obj = await Control.EvaluateJavaScriptAsync(js).ConfigureAwait(true);
                 if (obj != null)
                     response = obj.ToString();
-            }
-
-            catch (Exception) { /* The Webview might not be ready... */ }
+            } catch (Exception) { /* The Webview might not be ready... */ }
             return response;
-		}
+        }
 
         void SetSource()
         {
@@ -299,19 +407,23 @@ namespace Xam.Plugin.WebView.iOS
                     headers.Add(key, new NSString(header.Value));
             }
 
-            if (Element.EnableGlobalHeaders)
-            {
-                foreach (var header in FormsWebView.GlobalRegisteredHeaders)
-                {
+            if (Element.EnableGlobalHeaders) {
+                foreach (var header in FormsWebView.GlobalRegisteredHeaders) {
                     var key = new NSString(header.Key);
                     if (!headers.ContainsKey(key))
                         headers.Add(key, new NSString(header.Value));
                 }
             }
 
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+                var cookieDictionary = NSHttpCookie.RequestHeaderFieldsWithCookies(NSHttpCookieStorage.SharedStorage.Cookies);
+                foreach (var item in cookieDictionary) {
+                    headers.SetValueForKey(item.Value, new NSString(item.Key.ToString()));
+                }
+            }
+
             var url = new NSUrl(Element.Source);
-            var request = new NSMutableUrlRequest(url)
-            {
+            var request = new NSMutableUrlRequest(url) {
                 Headers = headers
             };
 
@@ -356,7 +468,7 @@ namespace Xam.Plugin.WebView.iOS
             var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
-            
+
             completionHandler();
         }
 
@@ -366,19 +478,19 @@ namespace Xam.Plugin.WebView.iOS
         public void RunJavaScriptConfirmPanel(WKWebView webView, string message, WKFrameInfo frame, Action<bool> completionHandler)
         {
             var alertController = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
-            
+
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
 
                 completionHandler(true);
 
             }));
-            
+
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
 
                 completionHandler(false);
 
             }));
-            
+
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
         }
 
@@ -388,19 +500,19 @@ namespace Xam.Plugin.WebView.iOS
         public void RunJavaScriptTextInputPanel(WKWebView webView, string prompt, string defaultText, WebKit.WKFrameInfo frame, System.Action<string> completionHandler)
         {
             var alertController = UIAlertController.Create(null, prompt, UIAlertControllerStyle.Alert);
-            
+
             UITextField alertTextField = null;
             alertController.AddTextField(textField => {
                 textField.Placeholder = defaultText;
                 alertTextField = textField;
             });
-            
+
             alertController.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, okAction => {
 
                 completionHandler(alertTextField.Text);
 
             }));
-            
+
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Default, cancelAction => {
 
                 completionHandler(null);
@@ -412,3 +524,5 @@ namespace Xam.Plugin.WebView.iOS
 
     }
 }
+
+
