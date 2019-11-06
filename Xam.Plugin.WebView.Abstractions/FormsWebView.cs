@@ -169,7 +169,7 @@ namespace Xam.Plugin.WebView.Abstractions
         public bool CanGoBack
         {
             get => (bool)GetValue(CanGoBackProperty);
-            internal set => SetValue(CanGoBackProperty, value);
+            set => SetValue(CanGoBackProperty, value);
         }
 
         /// <summary>
