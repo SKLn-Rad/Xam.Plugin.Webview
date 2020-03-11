@@ -57,6 +57,20 @@ namespace Xam.Plugin.WebView.iOS
                     headers.SetValueForKey(item.Value, new NSString(item.Key.ToString()));
                 }
             }
+
+            // If navigation target frame is null, this can mean that the link contains target="_blank". Start loadrequest to perform the navigation
+            if (navigationAction.TargetFrame == null)
+            {
+                webView.LoadRequest(navigationAction.Request);
+                return;
+            }
+            // If the navigation event originates from another frame than main (iframe?) it's not a navigation event we care about
+            if (!navigationAction.TargetFrame.MainFrame)
+            {
+                decisionHandler(WKNavigationActionPolicy.Allow);
+                return;
+            }
+
             var response = renderer.Element.HandleNavigationStartRequest(navigationAction.Request.Url.ToString());
 
 

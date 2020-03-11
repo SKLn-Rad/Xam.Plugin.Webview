@@ -63,6 +63,12 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty UseWideViewPortProperty = BindableProperty.Create(nameof(UseWideViewPort), typeof(bool), typeof(FormsWebView), false);
 
         /// <summary>
+        /// A bindable property for the UserAgent property.
+        /// </summary>
+        public static readonly BindableProperty UserAgentProperty =
+            BindableProperty.Create(nameof(UserAgent), typeof(string), typeof(FormsWebView), "");
+
+        /// <summary>
         /// A bindable property for the SelectionClientBoundingRectangle property.
         /// </summary>
         public static readonly BindableProperty SelectionClientBoundingRectangleProperty = BindableProperty.Create(

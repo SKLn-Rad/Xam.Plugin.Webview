@@ -128,6 +128,7 @@ namespace Xam.Plugin.WebView.Droid
             FormsWebView.CallbackAdded += OnCallbackAdded;
 
             SetNativeControl(_webView);
+            SetUserAgent();
             OnControlChanged?.Invoke(this, _webView);
         }
 
@@ -493,6 +494,16 @@ namespace Xam.Plugin.WebView.Droid
 
                 Element.CurrentUrl = Control.Url;
             });
+        }
+
+        private void SetUserAgent(object sender = null, EventArgs e = null)
+        {
+            if (Element == null || Control == null || Control.Disposed) return;
+
+            if (Control != null && Element.UserAgent != null && Element.UserAgent.Length > 0)
+            {
+                Control.Settings.UserAgentString = Element.UserAgent;
+            }
         }
 
         private void OnNavigationCompleted(object sender, string e)

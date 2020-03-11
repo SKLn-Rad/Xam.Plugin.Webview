@@ -138,10 +138,10 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
+      <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.3.0.947036</Version>
+      <Version>4.4.0.991640</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +156,8 @@
     <ProjectReference Include="..\..\Xam.Plugin.WebView.iOS\Xam.Plugin.WebView.iOS.csproj">
       <Project>{F6331DD7-E1D3-4650-8D9B-36CA729C2B4B}</Project>
       <Name>Xam.Plugin.WebView.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ namespace Xam.Plugin.WebView.iOS
 
         public static event EventHandler<WKWebView> OnControlChanged;
 
-        public static string BaseUrl { get; set; } = NSBundle.MainBundle.BundlePath;
+        public static string BaseUrl { get; set; } = $"{NSBundle.MainBundle.BundlePath}/";
 
         FormsNavigationDelegate _navigationDelegate;
 
@@ -68,6 +68,7 @@ namespace Xam.Plugin.WebView.iOS
             element.OnBackRequested += OnBackRequested;
             element.OnForwardRequested += OnForwardRequested;
             element.OnRefreshRequested += OnRefreshRequested;
+            element.OnUserAgentChanged += SetUserAgent;
             element.OnPrintCookiesRequested += OnPrintCookiesRequested;
 
             SetSource();
@@ -85,6 +86,7 @@ namespace Xam.Plugin.WebView.iOS
             element.OnBackRequested -= OnBackRequested;
             element.OnForwardRequested -= OnForwardRequested;
             element.OnRefreshRequested -= OnRefreshRequested;
+            element.OnUserAgentChanged -= SetUserAgent;
             element.OnPrintCookiesRequested -= OnPrintCookiesRequested;
 
             element.Dispose();
@@ -98,6 +100,7 @@ namespace Xam.Plugin.WebView.iOS
             _configuration = new WKWebViewConfiguration
             {
                 UserContentController = _contentController,
+                AllowsInlineMediaPlayback = true
             };
             _configuration.ProcessPool = _processPool;
 
@@ -105,6 +108,7 @@ namespace Xam.Plugin.WebView.iOS
             {
                 Opaque = false,
                 UIDelegate = this,
+                BackgroundColor = UIColor.Clear,
                 NavigationDelegate = _navigationDelegate,
             };
 
@@ -126,6 +130,7 @@ namespace Xam.Plugin.WebView.iOS
 
 
             SetNativeControl(wkWebView);
+            SetUserAgent();
             OnControlChanged?.Invoke(this, wkWebView);
         }
 
@@ -532,7 +537,13 @@ namespace Xam.Plugin.WebView.iOS
 
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alertController, true, null);
         }
-
+        private void SetUserAgent(object sender = null, EventArgs e = null)
+        {
+            if (Control != null && Element.UserAgent != null && Element.UserAgent.Length > 0)
+            {
+                Control.CustomUserAgent = Element.UserAgent;
+            }
+        }
     }
 }
 
