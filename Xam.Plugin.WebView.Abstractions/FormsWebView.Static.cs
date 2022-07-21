@@ -42,6 +42,11 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(FormsWebView));
 
         /// <summary>
+        /// A bindable property cor the CurrentUrl property.
+        /// </summary>
+        public static readonly BindableProperty CurrentUrlProperty = BindableProperty.Create(nameof(CurrentUrl), typeof(string), typeof(FormsWebView));
+
+        /// <summary>
         /// A bindable property for the CanGoBack property.
         /// </summary>
         public static readonly BindableProperty CanGoBackProperty = BindableProperty.Create(nameof(CanGoBack), typeof(bool), typeof(FormsWebView), false);
@@ -68,12 +73,28 @@ namespace Xam.Plugin.WebView.Abstractions
         public static readonly BindableProperty UseWideViewPortProperty = BindableProperty.Create(nameof(UseWideViewPort), typeof(bool), typeof(FormsWebView), false);
 
         /// <summary>
+        /// A bindable property for the UserAgent property.
+        /// </summary>
+        public static readonly BindableProperty UserAgentProperty =
+            BindableProperty.Create(nameof(UserAgent), typeof(string), typeof(FormsWebView), "");
+
+        /// <summary>
+        /// A bindable property for the SelectionClientBoundingRectangle property.
+        /// </summary>
+        public static readonly BindableProperty SelectionClientBoundingRectangleProperty = BindableProperty.Create(
+            nameof(SelectionClientBoundingRectangle),
+            typeof(Rectangle?),
+            typeof(FormsWebView),
+            default(Rectangle?),
+            defaultBindingMode: BindingMode.OneWayToSource);
+
+        /// <summary>
         /// A dictionary used to add headers which are used throughout all instances of FormsWebView.
         /// </summary>
         public readonly static Dictionary<string, string> GlobalRegisteredHeaders = new Dictionary<string, string>();
 
         internal readonly static Dictionary<string, Action<string>> GlobalRegisteredCallbacks = new Dictionary<string, Action<string>>();
-        
+
         /// <summary>
         /// Adds a callback to every FormsWebView available in the application.
         /// </summary>

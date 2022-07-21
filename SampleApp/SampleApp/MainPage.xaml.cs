@@ -185,6 +185,13 @@ namespace SampleApp
                 Title = "Basic Auth Test",
                 Detail = "Testing Basic autorization on intenet resourse"
             });
+
+            Items.Add(new SelectionItem()
+            {
+                Identifier = 22,
+                Title = "Current URL",
+                Detail = "Bind to the current URL property"
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -284,7 +291,9 @@ namespace SampleApp
                 case 22:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new BasicAuthSample());
                     break;
-
+                case 22:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new CurrentUrlSample());
+                    break;
                 default:
                     break;
             }

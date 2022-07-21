@@ -6,7 +6,6 @@ namespace Xam.Plugin.WebView.Droid
 {
     public class FormsWebViewBridge : Java.Lang.Object
     {
-
         readonly WeakReference<FormsWebViewRenderer> Reference;
 
         public FormsWebViewBridge(FormsWebViewRenderer renderer)

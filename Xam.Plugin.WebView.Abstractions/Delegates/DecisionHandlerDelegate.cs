@@ -21,6 +21,5 @@
         /// Note: This is only supported in iOS and Android currently.
         /// </summary>
         public bool OffloadOntoDevice { get; set; }
-
     }
 }
