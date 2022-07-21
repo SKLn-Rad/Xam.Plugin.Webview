@@ -287,12 +287,11 @@ namespace SampleApp
                 case 21:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new ClearCookieSample());
                     break;
-
-                case 22:
-                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new BasicAuthSample());
-                    break;
                 case 22:
                     await ((NavigationPage)Application.Current.MainPage).PushAsync(new CurrentUrlSample());
+                    break;
+                case 23:
+                    await ((NavigationPage)Application.Current.MainPage).PushAsync(new BasicAuthSample());
                     break;
                 default:
                     break;

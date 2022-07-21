@@ -27,7 +27,7 @@ namespace SampleApp.Samples
             System.Diagnostics.Debug.WriteLine("Navigation has started");
         }
 
-        private void FormsWebView_OnNavigationCompleted(object sender, System.EventArgs e)
+        private void FormsWebView_OnNavigationCompleted(object sender, string e)
         {
             System.Diagnostics.Debug.WriteLine("Navigation has completed");
         }
