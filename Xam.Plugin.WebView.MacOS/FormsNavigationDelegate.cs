@@ -3,6 +3,7 @@ using Foundation;
 using WebKit;
 using Xam.Plugin.WebView.Abstractions;
 using AppKit;
+using Xamarin.Forms;
 
 namespace Xam.Plugin.WebView.MacOS
 {
@@ -77,5 +78,17 @@ namespace Xam.Plugin.WebView.MacOS
 			renderer.Element.Navigating = false;
 			renderer.Element.HandleContentLoaded();
 		}
-	}
+
+        [Foundation.Export("webView:didStartProvisionalNavigation:")]
+        [ObjCRuntime.BindingImpl(ObjCRuntime.BindingImplOptions.GeneratedCode | ObjCRuntime.BindingImplOptions.Optimizable)]
+        public virtual void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
+        {
+            if (Reference == null || !Reference.TryGetTarget(out FormsWebViewRenderer renderer)) return;
+            if (renderer.Element == null) return;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                renderer.Element.CurrentUrl = webView.Url.ToString();
+            });
+        }
+    }
 }

@@ -2,6 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/.idea
 /packages
 /.vs
 
@@ -54,3 +55,23 @@ SampleApp\.userprefs
 
 SampleApp/SampleApp\.MacOS/\.DS_Store
 *.vspscc
+.mfractor/
+/Xam.Plugin.WebView.CompuSport.2.1.10.21.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.20.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.19.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.18.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.17.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.16.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.27.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.26.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.25.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.24.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.23.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.22.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.28.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.34.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.33.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.32.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.31.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.30.nupkg
+/Xam.Plugin.WebView.CompuSport.2.1.10.29.nupkg

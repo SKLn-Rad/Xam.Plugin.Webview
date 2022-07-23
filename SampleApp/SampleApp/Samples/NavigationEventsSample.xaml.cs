@@ -92,7 +92,7 @@ namespace SampleApp.Samples
             e.Cancel = ViewModel.IsCancelled;
         }
 
-        private void FormsWebView_OnNavigationCompleted(object sender, System.EventArgs e)
+        private void FormsWebView_OnNavigationCompleted(object sender, string e)
         {
             System.Diagnostics.Debug.WriteLine("Navigation has completed");
         }

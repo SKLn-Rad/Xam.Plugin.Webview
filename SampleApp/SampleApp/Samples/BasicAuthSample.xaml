@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             x:Class="SampleApp.Samples.BasicAuthSample"
+             Title="Internet">
+
+    <webview:FormsWebView x:Name="internetContent" 
+                          Username="BasicUsername"
+                          Password="BasicPassword"
+                          ContentType="Internet"
+                          Source="https://google.com/" />
+
+</ContentPage>

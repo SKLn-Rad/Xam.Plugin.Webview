@@ -20,7 +20,7 @@
             <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
 
-        <webview:FormsWebView x:Name="WebContent" ContentType="Internet" Source="https://httpbin.org/headers" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" />
+        <webview:FormsWebView x:Name="WebContent" ContentType="Internet" Source="http://192.168.1.51/App" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" />
 
         <Entry x:Name="GlobalKey" Placeholder="Global Key" Grid.Row="1" Grid.Column="0" />
         <Entry x:Name="GlobalValue" Placeholder="Global Value" Grid.Row="1" Grid.Column="1" />
